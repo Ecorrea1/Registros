@@ -15,7 +15,12 @@
     <p class="lead text-center">
         Todos los registros de nuestro clientes
       </p>
-
+    <div class="container">
+        <button type="button" class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#myModal">
+            Ingresa nuevo regsitro
+          </button>
+    </div>
+     
     <h2 class="text-center">Listado de Clientes</h2>
 
         <table class="table container user-select-auto">
@@ -112,24 +117,24 @@
 
 
     <!-- Vertically centered modal -->
-    <div class="modal-dialog modal-dialog-centered invisible">
-        <div class="modal-dialog">
+    <div class="modal fade modal-xl" id="myModal" tabindex="-1" aria-labelledby="myModalLabel" aria-hidden="true">
+        <div class="modal-dialog modal-dialog-centered">
             <div class="modal-content">
               <div class="modal-header">
-                <h5 class="modal-title">Modal title</h5>
+                <h5 class="modal-title">Ingrese Registro</h5>
                 <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
               </div>
               <div class="modal-body">
                 <form class="row g-2 container">
-                    <div class="col-md-4">
-                      <label for="dateAttention" class="form-label">Fecha Atencion</label>
-                      <input type="date" class="form-control" id="dateAttention" placeholder="Ingrese fecha de atencion al cliente" required>
-                    </div>
-                    <div class="col-md-4">
+                    <label class="h2">Datos del Cliente</label>
+                    <div class="col-md-12">
                       <label for="validationDefault01" class="form-label">Nombre</label>
-                      <input type="text" class="form-control" id="validationDefault01" value="Ingrese Nombre Completo" required>
+                      <input type="text" class="form-control" id="validationDefault01" placeholder="Ingrese Nombre Completo" required>
                     </div>
-        
+                    <div class="col-md-4">
+                        <label for="dateAttention" class="form-label">Fecha Atencion</label>
+                        <input type="date" class="form-control" id="dateAttention" placeholder="Ingrese fecha de atencion al cliente" required>
+                      </div>
                     <div class="col-md-4">
                       <label for="age" class="form-label">Edad</label>
                       <input type="number" min="1" max="99" class="form-control" id="age" value="18" required>
@@ -140,7 +145,8 @@
                       <!-- <span class="input-group-text" id="basic-addon1">@</span> -->
                       <input type="text" class="form-control" id="validationDefault03" placeholder="+569123456768" required>
                     </div>
-        
+                    <hr>
+                    <label class="h2">Datos del Costo</label>
                     <div class="col-md-4">
                       <label for="valueTotal" class="form-label">Valor</label>
                       <input type="number" min="1" class="form-control" id="valueTotal" required>
@@ -154,8 +160,18 @@
                       <label for="saldoTotal" class="form-label">Saldo</label>
                       <input type="number" min="1" class="form-control" id="saldoTotal" required>
                     </div>
-                    
-                    <div class="col-md-3">
+                    <hr>
+                    <label class="h2">Datos del Lente</label>
+                    <div class="col-md-12 ms-auto">
+                      <label for="typeCristal" class="form-label">Caracteristicas del lente</label>
+                      <select class="form-select" id="typeCristal" required>
+                        <option selected value="Cerca">CERCA</option>
+                        <option value="Lejos">LEJOS</option>
+                        <option value="Bifocales">BIFOCALES</option>
+                      </select>
+                    </div>
+
+                    <div class="col-md-12 ms-auto">
                       <label for="typeCristal" class="form-label">Cristal</label>
                       <select class="form-select" id="typeCristal" required>
                         <option selected value="">Tipos de cristales</option>
@@ -166,12 +182,8 @@
                       </select>
                     </div>
         
-                    <div class="col-md-4">
-                      <label for="typeCristalEspecial" class="form-label">Tratamiento Especial</label>
-                      <input type="text" class="form-control" id="typeCristalEspecial" value="Ingrese tratamiento especial" disabled>
-                    </div>
-        
-                    <div class="col-md-3">
+                    
+                    <div class="col-md-12 ms-auto">
                       <label for="tratamiento" class="form-label">Tratamiento</label>
                       <select class="form-select" id="tratamiento" required>
                         <option selected value="">Tipos de tratamientos</option>
@@ -181,29 +193,34 @@
                         <option value="ESPECIAL">ESPECIAL</option>
                       </select>
                     </div>
-        
-                    <div class="col-md-4">
+                    
+                    <div class="col-md-12 invisible">
+                        <label for="typeCristalEspecial" class="form-label">Tratamiento Especial</label>
+                        <input type="text" class="form-control" id="typeCristalEspecial" placeholder="Ingrese tratamiento especial">
+                      </div>
+          
+                    <div class="col-md-4 invisible">
                       <label for="tratamientoEspecial" class="form-label">Tratamiento Especial</label>
-                      <input type="text" class="form-control" id="tratamientoEspecial" value="Ingrese tratamiento especial" disabled>
+                      <input type="text" class="form-control" id="tratamientoEspecial" placeholder="Ingrese tratamiento especial">
                     </div>
         
-                    <div class="col-md-4">
+                    <div class="col-md-12">
                       <label for="armazon" class="form-label">Armazon</label>
-                      <input type="text" class="form-control" id="armazon" value="Ingrese Modelo" required>
+                      <input type="text" class="form-control" id="armazon" placeholder="Ingrese Modelo" required>
                     </div>
         
-                    <div class="col-md-4">
+                    <div class="col-md-12">
+                      <label for="profesionAttention" class="form-label">Profesional</label>
+                      <input type="text" class="form-control" id="profesionAttention" placeholder="Ingrese nombre de profesional de atencion" required>
+                    </div>
+
+                    <div class="col-md-12">
                       <label for="observations" class="form-label">Observaciones</label>
-                      <input type="text" class="form-control" id="observations" value="Ingrese Modelo" required>
+                      <textarea class="form-control" id="observations"></textarea>
                     </div>
         
-                    <div class="col-md-4">
-                      <label for="observations" class="form-label">Profesional</label>
-                      <input type="text" class="form-control" id="observations" value="Ingrese nombre de profesional de atencion" required>
-                    </div>
-        
-                    <div class="col-12">
-                      <button class="btn btn-primary" type="submit">Ingresar</button>
+                    <div class="col-sm-12">
+                      <button class="btn btn-primary" type="submit">Guardar Registro</button>
                     </div>
                   </form>
               </div>
