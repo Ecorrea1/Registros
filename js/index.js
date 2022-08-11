@@ -1,20 +1,14 @@
-const api = 'asdasd';
-
+const api = 'https://montecarlos-register.herokuapp.com';
+const allRegister = api + '/api/registers';
 const getData = async () => {
-    const response = await fetch(api);
+    const response = await fetch(allRegister);
     const data = await response.json();
     return data;
 } 
 
-
-const submitNewData = async (data) => {
-    const response = await fetch(api, {
-        method: 'POST',
-        body: JSON.stringify(data)
-    });
-    const data = await response.json();
-    return data;
-}
+getData().then(data => {
+    console.log(data);
+})
 
 const exampleModal = document.getElementById('myModal')
 exampleModal.addEventListener('show.bs.modal', event => {
