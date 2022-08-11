@@ -1,14 +1,22 @@
-const api = 'https://montecarlos-register.herokuapp.com';
-const allRegister = api + '/api/registers';
-const getData = async () => {
-    const response = await fetch(allRegister);
-    const data = await response.json();
-    return data;
-} 
+const api = 'https://montecarlos-register.herokuapp.com/api/';
 
-getData().then(data => {
-    console.log(data);
-})
+const consulta = (url) => {
+  return new Promise((resolve, reject) => {
+      const requestOptions = { method: 'GET', redirect: 'follow' };
+
+      fetch(url, requestOptions)
+          .then(response => response.json())
+          .then(data => { resolve(JSON.parse(JSON.stringify(data))); })
+          .catch(err => console.log(err))
+  });
+}
+
+const allRegisters = async () => {
+  const registers = await consulta(api + 'registers');
+  console.log('registers', registers);
+  return registers;
+}
+
 
 const exampleModal = document.getElementById('myModal')
 exampleModal.addEventListener('show.bs.modal', event => {
