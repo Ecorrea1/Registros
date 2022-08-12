@@ -25,7 +25,7 @@ async function imprimirLista( data ) {
   for (const i in data ) {
       const { id, name, age, phone, total, payment, balance, cristal, treatment, frame, observation, professional, date_attention, created_at, updated_at } = data[i];
       let rowClass  = 'text-right';
-      let customRow = `<td>${ [ id, name, age, '+569'+phone, total, payment, balance, cristal, treatment, frame, observation, professional, date_attention, created_at, updated_at ].join('</td><td>') }</td>`;
+      let customRow = `<td>${ [ id, name, age, `+569${phone}`, `$${total}`, `$${payment}`, `$${balance}`, cristal, treatment, frame, observation, professional, date_attention.substring(0,10), created_at.substring(0,10) ].join('</td><td>') }</td>`;
       let row       = `<tr class="${ rowClass }">${ customRow }</tr>`;
       document.getElementById("list_row").innerHTML += row;
   }
