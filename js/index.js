@@ -58,7 +58,7 @@ createRegister.addEventListener('submit', async (e) => {
 
   const total = parseInt(document.getElementById('total').value);
   const payment = parseInt(document.getElementById('payment').value);
-  if (total < payment) return document.getElementById('total').placeholder = 'Total must be greater than payment';
+  if (total < payment) return document.getElementById('total').placeholder = 'Total no puede ser menor que el Abono';
 
   const data = {
     name: document.getElementById('name').value,
