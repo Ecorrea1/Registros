@@ -3,9 +3,7 @@ const api = modeDevelop ? 'http://192.168.1.15:3000/api/' : 'https://montecarlos
 
 function consulta  ( url ) {
   return new Promise(( resolve, reject ) => {
-    const requestOptions = { method: 'GET', redirect: 'follow' };
-    console.log(`${url}`);
-    fetch( url, requestOptions )
+    fetch( url, { method: 'GET', redirect: 'follow' } )
     .then( response => response.json() )
     .then( data => { resolve( JSON.parse( JSON.stringify( data ) ) ); })
     .catch( err => console.log( err ) )
@@ -49,3 +47,46 @@ exampleModal.addEventListener('show.bs.modal', event => {
   modalTitle.textContent = `New message to ${recipient}`
   modalBodyInput.value = recipient
 })
+
+
+const createRegister = document.getElementById('createRegister');
+createRegister.addEventListener('submit', async (e) => {
+  e.preventDefault();
+  //Modal data
+  const exampleModal = document.getElementById('myModal');
+  const modalTitle = exampleModal.querySelector('.modal-title');
+
+  const total = parseInt(document.getElementById('total').value);
+  const payment = parseInt(document.getElementById('payment').value);
+  if (total < payment) return document.getElementById('total').placeholder = 'Total must be greater than payment';
+
+  const data = {
+    name: document.getElementById('name').value,
+    age: document.getElementById('age').value,
+    phone: document.getElementById('phone').value,
+    total: total,
+    payment: payment,
+    balance: total - payment,
+    cristal: document.getElementById('cristal').value,
+    treatment: document.getElementById('treatment').value,
+    frame: document.getElementById('frame').value,
+    observation: document.getElementById('observation').value,
+    professional: document.getElementById('professional').value,
+    date_attention: document.getElementById('date_attention').value
+  };
+
+  const response = await fetch( api + 'registers', {
+    method: 'POST',
+    headers: { 'Content-Type': 'application/json'},
+    body: JSON.stringify(data)
+  } );
+  console.log(response.ok);
+  if (!response.ok) return modalTitle.textContent = `No pudimos ingresar registro de ${data.name}`;
+  modalTitle.textContent = `Nuevo registro ingresado de ${data.name}`;
+  show_registers();
+  //limpiar formulario
+  createRegister.reset();
+  //cerrar modal completamente
+  exampleModal.hide();
+} 
+);
