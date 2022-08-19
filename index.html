@@ -10,8 +10,22 @@
     <title>Registro Optica Montecarlos</title>
 </head>
 <body class="m-4">
+  <div id="alert-msg" class="alert" role="alert" invisible></div>
+  
     <h1 class="text-center">OPTICA MONTECARLOS</h1>
     <p class="lead text-center">Todos los registros de nuestro clientes</p>
+
+    <div class="container justify-content-center">
+      <form class="d-flex" role="search" id="form-search">
+        <input class="form-control me-2" type="search" id="nameSearch" placeholder="Ingresa Nombre" aria-label="Search">
+        <input class="form-control me-2" type="number" id="rutSearch" placeholder="Ingresa Rut" aria-label="Search">
+        <input class="form-control me-2" type="number" id="phoneSearch" placeholder="Ingresa Telefono" aria-label="Search">
+        <input type="date" class="form-control me-2" id="dateAttentionSearch" placeholder="Atencion" aria-label="Search">
+        <button class="btn btn-primary" type="submit">Buscar</button>
+      </form>
+    </div>
+
+    <br>
     <div class="container">
         <button type="button" class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#myModal">
           Ingresa nuevo registro
@@ -41,9 +55,20 @@
                 <!-- <th scope="col">Actualizacion Registro</th> -->
               </tr>
             </thead>
-            <tbody id="list_row">        
-            </tbody>
+            <tbody id="list_row"></tbody>
           </table>
+          <nav aria-label="Page navigation example">
+            <ul class="pagination justify-content-end">
+              <li class="page-item disabled">
+                <a class="page-link">Previous</a>
+              </li>
+              <li class="page-item"><a class="page-link" href="#">1</a></li>
+              <li class="page-item">
+                <a class="page-link" href="#">Next</a>
+              </li>
+            </ul>
+          </nav>
+        </tfoot>
     </div>
 
     <!-- Vertically centered modal -->
@@ -72,7 +97,7 @@
         
                     <div class="col-md-4">
                       <label for="phone" class="form-label">Telefono</label>
-                      <input type="text" class="form-control" id="phone" name="phone" placeholder="+569XXXXXXXX" required>
+                      <input type="text" min="8" max="8" class="form-control" id="phone" name="phone" placeholder="+569XXXXXXXX" required>
                     </div>
                     <hr>
                     <label class="h2">Datos del Costo</label>
@@ -100,11 +125,7 @@
                     <div class="col-md-12 ms-auto">
                       <label for="cristal" class="form-label">Cristal</label>
                       <select class="form-select" id="cristal" name="cristal" required>
-                        <option selected value="">Tipos de cristales</option>
-                        <option value="1">CR</option>
-                        <option value="2">POLY</option>
-                        <option value="3">MINERAL</option>
-                        <option value="4">ESPECIAL</option>
+                        <option value="">Tipos de cristales</option>
                       </select>
                     </div>
         
@@ -113,45 +134,29 @@
                       <label for="treatment" class="form-label">Tratamiento</label>
                       <select class="form-select" id="treatment" name="treatment" required>
                         <option selected value="">Tipos de tratamientos</option>
-                        <option value="1">CR</option>
-                        <option value="2">POLY</option>
-                        <option value="3">MINERAL</option>
-                        <option value="4">ESPECIAL</option>
                       </select>
                     </div>
                     
-                    <!-- <div class="col-md-12 invisible">
-                        <label for="typeCristalEspecial" class="form-label">Tratamiento Especial</label>
-                        <input type="text" class="form-control" id="typeCristalEspecial" placeholder="Ingrese tratamiento especial">
-                      </div>
-           -->
-                    <!-- <div class="col-md-4 invisible">
-                      <label for="tratamientoEspecial" class="form-label">Tratamiento Especial</label>
-                      <input type="text" class="form-control" id="tratamientoEspecial" placeholder="Ingrese tratamiento especial">
-                    </div> -->
-                    <hr>
-                    <label class="h2">Datos de Atencion</label>
                     <div class="col-md-12">
                       <label for="frame" class="form-label">Armazon</label>
                       <input type="text" class="form-control" id="frame" name="frame" placeholder="Ingrese Modelo" required>
                     </div>
 
+                    <hr>
+                    <label class="h2">Datos de Atencion</label>
                     <div class="col-md-12 ms-auto">
                       <label for="professional" class="form-label">Profesional</label>
                       <select class="form-select" id="professional" name="professional" required>
                         <option value="">Elegir profesional de atencion</option>
-                        <option selected value="1">Andrea Gutierrea Urrutia</option>
-                        <option value="2">Emmanuel Correa</option>
                       </select>
                     </div>
-
                     <div class="col-md-12">
                       <label for="observation" class="form-label">Observaciones</label>
                       <textarea class="form-control" id="observation" name="observation"></textarea>
                     </div>
         
                     <div class="col-sm-12">
-                      <button class="btn btn-primary btn-lg" type="submit" value="enviar" id="enviar">Guardar Registro</button>
+                      <button class="btn btn-primary btn-lg" type="submit" id="save_register">Guardar Registro</button>
                     </div>
                   </form>
               </div>
