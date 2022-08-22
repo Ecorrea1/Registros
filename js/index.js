@@ -77,7 +77,7 @@ function consulta  ( url ) {
 
 const printList = async ( data ) =>{
   table.innerHTML ="";
-  if( data.length >= 0 ) {
+  if( data.length == 0 ) {
     showMessegeAlert(false, 'No se encontraron registros');
     return table.innerHTML = `<tr><td colspan="14" class="text-center">No hay registros</td></tr>`;
   }
