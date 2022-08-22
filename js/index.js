@@ -1,5 +1,6 @@
-const modeDevelop = true; 
+const modeDevelop = window.location.port == '5500'; 
 const api = modeDevelop ? 'http://192.168.1.83:3000/api/' : 'https://montecarlos-register.herokuapp.com/api/';
+console.log(window.location);
 
 let nameValidator = false;
 let ageValidator = false;
