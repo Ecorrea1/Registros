@@ -1,5 +1,16 @@
-const modeDevelop = false; 
-const api = modeDevelop ? 'http://192.168.1.15:3000/api/' : 'https://montecarlos-register.herokuapp.com/api/';
+const modeDevelop = true; 
+const api = modeDevelop ? 'http://192.168.1.83:3000/api/' : 'https://montecarlos-register.herokuapp.com/api/';
+
+let nameValidator = false;
+let ageValidator = false;
+let phoneValidator = false;
+let dateAttentionValidator = false;
+let totalValidator = false;
+let paymentValidator = false;
+let cristalValidator = false;
+let treatmentValidator = false;
+let frameValidator = false;
+let professionalValidator = false;
 
 // Show Alert
 const alert = document.getElementById('alert-msg');
@@ -46,7 +57,6 @@ const divErrorAge = document.getElementById('divErrorAge');
 const divErrorPhone = document.getElementById('divErrorPhone');
 const divErrorTotal = document.getElementById('divErrorTotal');
 const divErrorPayment = document.getElementById('divErrorPayment');
-const divErrorBalance = document.getElementById('divErrorBalance');
 const divErrorCristal = document.getElementById('divErrorCristal');
 const divErrorTreatment = document.getElementById('divErrorTreatment');
 const divErrorFrame = document.getElementById('divErrorFrame');
@@ -156,78 +166,23 @@ modalRegister.addEventListener('show.bs.modal', () => {
 });
 
 
-document.querySelector('#save_register').addEventListener('click', async (e) => {
-  e.preventDefault();
+document.querySelector('#createRegister').addEventListener('submit', async (e) => {
   // nameInput.addEventListener('input', (e) => e.target.value);
+  e.preventDefault();
 
   //Verificar que los campos esten llenos
-  if(verifyIsFilled(nameInput, divErrorName)){
-    validateLetters(nameInput) ? showError(nameInput, divErrorName, '', false) : showError(nameInput, divErrorName, 'Solo se permiten letras');
-  } else {
-    showError(nameInput, divErrorName, 'Este campo es obligatorio');
-  }
+    // nameValidator = validateAllfields(nameInput, divErrorName);
+    // ageValidator = validateAllfields(ageInput, divErrorAge, true);
+    // phoneValidator = validateAllfields(phoneInput, divErrorPhone, true);
+    // dateAttentionValidator = validateAllfields(totalInput, divErrorTotal, true);
+    // totalValidator = validateAllfields(totalInput, divErrorTotal, true);
+    // paymentValidator = validateAllfields(paymentInput, divErrorPayment, true);
+    // cristalValidator = validateAllfields(cristalInput, divErrorCristal, true);
+    // treatmentValidator = validateAllfields(treatmentInput, divErrorTreatment, true);
+    // frameValidator = validateAllfields(frameInput, divErrorFrame, true);
+    // professionalValidator = validateAllfields(professionalInput, divErrorProfessional, true);
 
-  if(verifyIsFilled(ageInput, divErrorAge)){
-    validateNumber(ageInput) ? showError(ageInput, divErrorAge, '', false) : showError(ageInput, divErrorAge, 'Solo se permiten numeros');
-  }else{
-    showError(ageInput, divErrorAge, 'Este campo es obligatorio');
-  }
-
-  if(verifyIsFilled(phoneInput, divErrorPhone)){
-    validateNumber(phoneInput) ? showError(phoneInput, divErrorPhone, '', false) : showError(phoneInput, divErrorPhone, 'Solo se permiten numeros');
-  }else {
-    showError(phoneInput, divErrorPhone, 'Este campo es obligatorio');
-  }
-
-  if(verifyIsFilled(totalInput, divErrorTotal)){
-    validateNumber(totalInput) ? showError(totalInput, divErrorTotal, '', false) : showError(totalInput, divErrorTotal, 'Solo se permiten numeros');
-  } else {
-    showError(totalInput, divErrorTotal, 'Este campo es obligatorio');
-  }
-
-  if(verifyIsFilled(paymentInput, divErrorPayment)){
-    validateNumber(paymentInput) ? showError(paymentInput, divErrorPayment, '', false) : showError(paymentInput, divErrorPayment, 'Solo se permiten numeros');
-  } else {
-    showError(paymentInput, divErrorPayment, 'Este campo es obligatorio');
-  }
-
-  if(verifyIsFilled(cristalInput, divErrorCristal)){
-    validateNumber(cristalInput) ? showError(cristalInput, divErrorCristal, '', false) : showError(cristalInput, divErrorCristal, 'Solo se permiten numeros');
-  } else { 
-    showError(cristalInput, divErrorCristal, 'Este campo es obligatorio');
-  }
-
-  if(verifyIsFilled(treatmentInput, divErrorTreatment)){
-    validateNumber(treatmentInput) ? showError(treatmentInput, divErrorTreatment, '', false) : showError(treatmentInput, divErrorTreatment, 'Solo se permiten numeros');
-  } else {
-    showError(treatmentInput, divErrorTreatment, 'Este campo es obligatorio');
-  }
-
-  if(verifyIsFilled(frameInput, divErrorFrame)){
-    validateNumber(frameInput) ? showError(frameInput, divErrorFrame, '', false) : showError(frameInput, divErrorFrame, 'Solo se permiten numeros');
-  } else {
-    showError(frameInput, divErrorFrame, 'Este campo es obligatorio');
-  }
-
-  if(verifyIsFilled(observationInput, divErrorObservation)){
-    validateLetters(observationInput) ? showError(observationInput, divErrorObservation, '', false) : showError(observationInput, divErrorObservation, 'Solo se permiten letras');
-  } else {
-    showError(observationInput, divErrorObservation, 'Este campo es obligatorio');
-  }
-
-  if(verifyIsFilled(professionalInput, divErrorProfessional)){
-    validateLetters(professionalInput) ? showError(professionalInput, divErrorProfessional, '', false) : showError(professionalInput, divErrorProfessional, 'Solo se permiten letras');
-  } else {
-    showError(professionalInput, divErrorProfessional, 'Este campo es obligatorio');
-  }
-
-  if(verifyIsFilled(dateAttentionInput, divErrorDateAttention)){
-    validateDate(dateAttentionInput) ? showError(dateAttentionInput, divErrorDateAttention, '', false) : showError(dateAttentionInput, divErrorDateAttention, 'Solo se permiten letras');
-  } else {
-    showError(dateAttentionInput, divErrorDateAttention, 'Este campo es obligatorio');
-  }
-
-  if(verifyIsFilled(nameInput, divErrorName) && verifyIsFilled(ageInput, divErrorAge) && verifyIsFilled(phoneInput, divErrorPhone) && verifyIsFilled(totalInput, divErrorTotal) && verifyIsFilled(paymentInput, divErrorPayment) && verifyIsFilled(balanceInput, divErrorBalance) && verifyIsFilled(cristalInput, divErrorCristal) && verifyIsFilled(treatmentInput, divErrorTreatment) && verifyIsFilled(frameInput, divErrorFrame) && verifyIsFilled(observationInput, divErrorObservation) && verifyIsFilled(professionalInput, divErrorProfessional) && verifyIsFilled(dateAttentionInput, divErrorDateAttention)){
+    // if (nameValidator, ageValidator, phoneValidator, dateAttentionValidator, totalValidator, paymentValidator, cristalValidator, treatmentValidator, frameValidator, professionalValidator) {
     
     const data = {
       name: nameInput.value,
@@ -253,13 +208,13 @@ document.querySelector('#save_register').addEventListener('click', async (e) => 
         //Close modal
         bootstrap.Modal.getInstance(modalRegister).hide();
         showMessegeAlert( false, `Nuevo registro ingresado`);
-        // modalRegister.modal('hide');
+        console.log(response.data);
       }
     }).catch(err => {
       console.log(err)
       showMessegeAlert(true, 'Error al crear el registro');
     });
-  }
+  // }
 });
 
 //Funciones de muestra de mensajes de alerta
@@ -278,7 +233,7 @@ function showMessegeAlert ( isErro = false, message, time = 3000 ) {
   } , time);
 }
 
-function showError( divInput, divError ,messageError = '', show = true ) {
+function showError( divInput, divError, messageError = '', show = true ) {
   if (show){
     divError.innerHTML = messageError;
     divInput.style.borderColor = '#ff0000';
@@ -303,4 +258,27 @@ function  validateLetters(input) {
   //Validar que solo sean letras
   const regex = /[A-z]/g;
   return regex.test(input.value) ? true : false;
+}
+
+function validateAllfields(divInput, divError, fieldNumber = false ) {
+  if(verifyIsFilled(divInput, divError)){
+    if (fieldNumber) {
+      if (validateNumber(divInput)) {
+        showError(divInput, divError, '', false);
+        return true;
+      } 
+      showError(divInput, divError, 'Solo se permiten numeros');
+      return false;
+    } else {
+      if(validateLetters(divInput)) {
+        showError(divInput, divError, '', false);
+        return true;
+      }
+      showError(divInput, divError, 'Solo se permiten letras');
+      return false;
+    }
+  } else {
+    showError(divInput, divError, 'Este campo es obligatorio');
+    return false;
+  }
 }
