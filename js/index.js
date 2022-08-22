@@ -1,6 +1,7 @@
 const modeDevelop = window.location.port == '5500'; 
-const api = modeDevelop ? 'http://192.168.1.83:3000/api/' : 'https://montecarlos-register.herokuapp.com/api/';
-console.log(window.location);
+const trying = false;
+const api = modeDevelop && trying  ? 'http://192.168.1.83:3000/api/' : 'https://montecarlos-register.herokuapp.com/api/';
+// console.log(window.location);
 
 let nameValidator = false;
 let ageValidator = false;
@@ -12,6 +13,8 @@ let cristalValidator = false;
 let treatmentValidator = false;
 let frameValidator = false;
 let professionalValidator = false;
+
+let quantityRowsOfTable = 13;
 
 // Show Alert
 const alert = document.getElementById('alert-msg');
@@ -29,8 +32,10 @@ const rutSearchError = document.getElementById('rutSearchError');
 const phoneSearchError = document.getElementById('phoneSearchError');
 
 // Show table 
+const titlesTable = [ 'ID', 'Nombre', 'Edad', 'Teléfono', 'Total', 'Pago', 'Saldo', 'Cristal', 'Tratamiento', 'Marco', 'Profesional', 'Fecha de atención', 'Fecha de creación' ];
+const tableTitles = document.getElementById('list_titles');
+const trTitles = document.getElementById('list_titles_tr');
 const table = document.getElementById('list_row');
-
 // Show pagination elements
 const pageItem = document.getElementsByClassName('page-item');
 
@@ -67,6 +72,15 @@ const divErrorObservation = document.getElementById('divErrorObservation');
 const divErrorProfessional = document.getElementById('divErrorProfessional');
 const divErrorDateAttention = document.getElementById('divErrorDateAttention');
 
+// Show titles of table
+const showTitlesTable = () => {
+    let titles = '';
+    for (let i = 0; i < titlesTable.length; i++) {
+        titles += `<th>${titlesTable[i]}</th>`;
+    }
+    tableTitles.innerHTML = `<tr>${titles}</tr>`;
+}
+
 function consulta  ( url ) {
   return new Promise(( resolve, reject ) => {
     fetch( url, { method: 'GET', redirect: 'follow' } )
@@ -80,12 +94,12 @@ const printList = async ( data ) =>{
   table.innerHTML ="";
   if( data.length == 0 ) {
     showMessegeAlert(false, 'No se encontraron registros');
-    return table.innerHTML = `<tr><td colspan="14" class="text-center">No hay registros</td></tr>`;
+    return table.innerHTML = `<tr><td colspan="${ titlesTable.length + 1 }" class="text-center">No hay registros</td></tr>`;
   }
   for (const i in data ) {
     const { id, name, age, phone, total, payment, balance, cristal, treatment, frame, observation, professional, date_attention, created_at, updated_at } = data[i];
     let rowClass  = 'text-right';
-    let customRow = `<td>${ [ id, name, age, `+569${phone}`, `$${total}`, `$${payment}`, `$${balance}`, cristal, treatment, frame, observation, professional, date_attention.substring(0,10), created_at.substring(0,10) ].join('</td><td>') }</td>`;
+    let customRow = `<td>${ [ id, name, age, `+569${phone}`, `$${total}`, `$${payment}`, `$${balance}`, cristal, treatment, frame, professional, date_attention.substring(0,10), created_at.substring(0,10) ].join('</td><td>') }</td>`;
     let row       = `<tr class="${ rowClass }">${ customRow }</tr>`;
     table.innerHTML += row;
   }
@@ -136,6 +150,7 @@ const showTablePagination = async ( page = 1, limit = 10 ) => {
 
 async function initState () {
   dateAttentionInputSearch.max = new Date().toISOString().substring(0,10);
+  showTitlesTable();
   showTablePagination();
   // showInitModal();
 }
@@ -149,10 +164,10 @@ const searchRegister = async ( searchQuery ) => {
 
 formSearch.addEventListener('submit', (e) => {
   e.preventDefault();
-  if ( nameSearchInput.value === '' && rutSearchInput.value === '' && phoneSearchInput.value === '' && dateAttentionInputSearch.value === '' ) {
+  if ( nameSearchInput.value === '' && phoneSearchInput.value === '' && dateAttentionInputSearch.value === '' ) {
     showTablePagination();
   } else {
-    const searchQuery = '&name=' + nameSearchInput.value + '&rut=' + rutSearchInput.value + '&phone=' + phoneSearchInput.value + '&date_attention=' + dateAttentionInputSearch.value;
+    const searchQuery = '&name=' + nameSearchInput.value + '&phone=' + phoneSearchInput.value + '&date_attention=' + dateAttentionInputSearch.value;
     searchRegister( searchQuery );
     // formSearch.reset();
   }

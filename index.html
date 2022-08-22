@@ -18,7 +18,7 @@
     <div class="container justify-content-center">
       <form class="d-flex" role="search" id="form-search">
         <input class="form-control me-2" type="search" id="nameSearch" placeholder="Ingresa Nombre" aria-label="Search">
-        <input class="form-control me-2" type="number" id="rutSearch" placeholder="Ingresa Rut" aria-label="Search">
+        <!-- <input class="form-control me-2" type="number" id="rutSearch" placeholder="Ingresa Rut" aria-label="Search"> -->
         <input class="form-control me-2" type="number" id="phoneSearch" placeholder="Ingresa Telefono" aria-label="Search">
         <input type="date" class="form-control me-2" id="dateAttentionSearch" placeholder="Atencion" aria-label="Search">
         <button class="btn btn-primary" type="submit">Buscar</button>
@@ -36,9 +36,9 @@
 
     <div class="container">
       <table class="table table-sm table-bordered table-hover table-responsive">
-            <thead class="table-dark">
-              <tr>
-                <th scope="col">Folio</th>
+            <thead id="list_titles" class="table-dark">
+              <!-- <tr id="list_titles_tr"> -->
+                <!-- <th scope="col">Folio</th>
                 <th scope="col">Nombre</th>
                 <th scope="col">Edad</th>
                 <th scope="col">Telefono</th>
@@ -48,12 +48,12 @@
                 <th scope="col">Cristal</th>
                 <th scope="col">Tratamiento</th>
                 <th scope="col">Armazon</th>
-                <th scope="col">Observaciones</th>
+                <<th scope="col">Observaciones</th> 
                 <th scope="col">Profesional</th>
                 <th scope="col">Atencion</th>
                 <th scope="col">Registro</th>
-                <!-- <th scope="col">Actualizacion Registro</th> -->
-              </tr>
+                <th scope="col">Actualizacion Registro</th> -->
+              <!-- </tr> -->
             </thead>
             <tbody id="list_row"></tbody>
           </table>
