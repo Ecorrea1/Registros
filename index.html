@@ -72,8 +72,8 @@
     </div>
 
     <!-- Vertically centered modal -->
-    <div class="modal fade modal-xl" id="myModal" tabindex="-1" aria-labelledby="myModalLabel" aria-hidden="true">
-        <div class="modal-dialog modal-dialog-centered">
+    <div class="modal" id="myModal" tabindex="-1" aria-labelledby="myModalLabel" aria-hidden="true">
+        <div class="modal-dialog modal-fullscreen-xl-down modal-xl">
             <div class="modal-content">
               <div class="modal-header">
                 <h5 class="modal-title"></h5>
@@ -99,21 +99,30 @@
                     </div>
         
                     <div class="col-md-4">
-                      <label for="phone" class="form-label">Telefono</label>
-                      <input type="text" min="8" max="8" class="form-control" id="phone" name="phone" placeholder="+569XXXXXXXX" required>
+                      <label for="phone" class="form-label ">Telefono</label>
+                      <div class="input-group">
+                        <span class="input-group-text" id="inputGroupPrepend3">+569</span>
+                        <input type="tel" min="8" max="8" class="form-control" id="phone" name="phone" placeholder="12345678" required>
                       <div id="divErrorPhone"></div>
+                      </div>
                     </div>
                     <hr>
                     <label class="h2">Datos del Costo</label>
                     <div class="col-md-6">
                       <label for="total" class="form-label">Valor</label>
-                      <input type="number" min="1" class="form-control" id="total" name="total" required>
-                      <div id="divErrorTotal"></div>
+                      <div class="input-group">
+                        <span class="input-group-text" id="inputGroupPrepend3">$</span>
+                        <input type="number" min="1" class="form-control" id="total" name="total" required>
+                        <div id="divErrorTotal"></div>
+                      </div>  
                     </div>
         
                     <div class="col-md-6">
                       <label for="payment" class="form-label">Abono</label>
-                      <input type="number" min="1" class="form-control" id="payment" name="payment">
+                      <div class="input-group">
+                        <span class="input-group-text" id="inputGroupPrepend3">$</span>
+                        <input type="number" min="1" class="form-control" id="payment" name="payment">
+                      </div>
                       <div id="divErrorPayment"></div>
                     </div>
 
@@ -167,6 +176,7 @@
         
                     <div class="col-sm-12">
                       <button class="btn btn-primary btn-lg" type="submit" id="save_register">Guardar Registro</button>
+                      <input type="reset">
                     </div>
                   </form>
               </div>

@@ -37,6 +37,8 @@ const pageItem = document.getElementsByClassName('page-item');
 const modalRegister = document.getElementById('myModal');
 const modalTitle = modalRegister.querySelector('.modal-title');
 
+const formRegister = document.getElementById('createRegister');
+
 // Inputs of Modal to create register
 const nameInput = document.getElementById('name');
 const ageInput = document.getElementById('age');
@@ -75,6 +77,10 @@ function consulta  ( url ) {
 
 const printList = async ( data ) =>{
   table.innerHTML ="";
+  if( data.length >= 0 ) {
+    showMessegeAlert(false, 'No se encontraron registros');
+    return table.innerHTML = `<tr><td colspan="14" class="text-center">No hay registros</td></tr>`;
+  }
   for (const i in data ) {
     const { id, name, age, phone, total, payment, balance, cristal, treatment, frame, observation, professional, date_attention, created_at, updated_at } = data[i];
     let rowClass  = 'text-right';
@@ -171,19 +177,21 @@ document.querySelector('#createRegister').addEventListener('submit', async (e) =
   e.preventDefault();
 
   //Verificar que los campos esten llenos
-    // nameValidator = validateAllfields(nameInput, divErrorName);
-    // ageValidator = validateAllfields(ageInput, divErrorAge, true);
-    // phoneValidator = validateAllfields(phoneInput, divErrorPhone, true);
-    // dateAttentionValidator = validateAllfields(totalInput, divErrorTotal, true);
-    // totalValidator = validateAllfields(totalInput, divErrorTotal, true);
-    // paymentValidator = validateAllfields(paymentInput, divErrorPayment, true);
-    // cristalValidator = validateAllfields(cristalInput, divErrorCristal, true);
-    // treatmentValidator = validateAllfields(treatmentInput, divErrorTreatment, true);
-    // frameValidator = validateAllfields(frameInput, divErrorFrame, true);
-    // professionalValidator = validateAllfields(professionalInput, divErrorProfessional, true);
+    nameValidator = validateAllfields(nameInput, divErrorName);
+    ageValidator = validateAllfields(ageInput, divErrorAge, true);
+    phoneValidator = validateAllfields(phoneInput, divErrorPhone, true);
+    dateAttentionValidator = validateAllfields(totalInput, divErrorTotal, true);
+    totalValidator = validateAllfields(totalInput, divErrorTotal, true);
+    paymentValidator = validateAllfields(paymentInput, divErrorPayment, true);
+    cristalValidator = validateAllfields(cristalInput, divErrorCristal, true);
+    treatmentValidator = validateAllfields(treatmentInput, divErrorTreatment, true);
+    frameValidator = validateAllfields(frameInput, divErrorFrame, true);
+    professionalValidator = validateAllfields(professionalInput, divErrorProfessional, true);
 
-    // if (nameValidator, ageValidator, phoneValidator, dateAttentionValidator, totalValidator, paymentValidator, cristalValidator, treatmentValidator, frameValidator, professionalValidator) {
-    
+
+    if (nameValidator, ageValidator, phoneValidator, dateAttentionValidator, totalValidator, paymentValidator, cristalValidator, treatmentValidator, frameValidator, professionalValidator) {
+      console.log('All inputs are valid');
+    }
     const data = {
       name: nameInput.value,
       age: parseInt(ageInput.value),
@@ -203,12 +211,14 @@ document.querySelector('#createRegister').addEventListener('submit', async (e) =
       if(response.status === 201){
         showRegisters();
         // reset of Formulary
-        modalRegister.reset();
+        formRegister.reset();
+        // clearForm();
+        // modalRegister.reset();
         // modalTitle.textContent = `Nuevo registro ingresado de ${data.name}`;
         //Close modal
         bootstrap.Modal.getInstance(modalRegister).hide();
-        showMessegeAlert( false, `Nuevo registro ingresado`);
         console.log(response.data);
+        showMessegeAlert( false, `Nuevo registro ingresado`);
       }
     }).catch(err => {
       console.log(err)
