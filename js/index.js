@@ -1,7 +1,6 @@
 const modeDevelop = window.location.port == '5500'; 
 const trying = false;
 const api = modeDevelop && trying  ? 'http://192.168.1.83:3000/api/' : 'https://montecarlos-register.herokuapp.com/api/';
-// console.log(window.location);
 
 let nameValidator = false;
 let ageValidator = false;
@@ -32,14 +31,21 @@ const rutSearchError = document.getElementById('rutSearchError');
 const phoneSearchError = document.getElementById('phoneSearchError');
 
 // Show table 
-const titlesTable = [ 'ID', 'Nombre', 'Edad', 'Teléfono', 'Total', 'Pago', 'Saldo', 'Cristal', 'Tratamiento', 'Marco', 'Profesional', 'Fecha de atención', 'Fecha de creación' ];
+const titlesTable = [ 'ID', 'Nombre', 'Edad', 'Teléfono', 'Total', 'Pago', 'Saldo', 'Cristal', 'Tratamiento', 'Marco', 'Profesional', 'Fecha de atención', 'Fecha de creación', 'Acciones' ];
 const tableTitles = document.getElementById('list_titles');
 const trTitles = document.getElementById('list_titles_tr');
 const table = document.getElementById('list_row');
+// const btnEditRegister = document.getElementById('editRegister');
+// const btnShowRegister = document.getElementById('showRegister');
+
 // Show pagination elements
 const pageItem = document.getElementsByClassName('page-item');
 
 // Show modal to create register
+const myModal = new bootstrap.Modal('#myModal', {
+  keyboard: false
+})
+
 const modalRegister = document.getElementById('myModal');
 const modalTitle = modalRegister.querySelector('.modal-title');
 
@@ -96,11 +102,19 @@ const printList = async ( data ) =>{
     showMessegeAlert(false, 'No se encontraron registros');
     return table.innerHTML = `<tr><td colspan="${ titlesTable.length + 1 }" class="text-center">No hay registros</td></tr>`;
   }
+
+  
   for (const i in data ) {
     const { id, name, age, phone, total, payment, balance, cristal, treatment, frame, observation, professional, date_attention, created_at, updated_at } = data[i];
-    let rowClass  = 'text-right';
-    let customRow = `<td>${ [ id, name, age, `+569${phone}`, `$${total}`, `$${payment}`, `$${balance}`, cristal, treatment, frame, professional, date_attention.substring(0,10), created_at.substring(0,10) ].join('</td><td>') }</td>`;
-    let row       = `<tr class="${ rowClass }">${ customRow }</tr>`;
+    const actions = [
+      `<button type="button" id='btnShowRegister' value=${id} class="btn btn-primary">VER</button>`,
+      `<button type="button" id='btnEditRegister' value=${id} class="btn btn-success">EDITAR</button>`,
+      // `<button type="button" class="btn btn-danger">ELIMINAR</button>`
+    ]
+
+    const rowClass  = 'text-center';
+    const customRow = `<td>${ [ id, name, age, `+569${phone}`, `$${total}`, `$${payment}`, `$${balance}`, cristal, treatment, frame, professional, date_attention.substring(0,10), created_at.substring(0,10), actions ].join('</td><td>') }</td>`;
+    const row       = `<tr class="${ rowClass }">${ customRow }</tr>`;
     table.innerHTML += row;
   }
 }
@@ -148,15 +162,6 @@ const showTablePagination = async ( page = 1, limit = 10 ) => {
   printList( registers.data );
 }
 
-async function initState () {
-  dateAttentionInputSearch.max = new Date().toISOString().substring(0,10);
-  showTitlesTable();
-  showTablePagination();
-  // showInitModal();
-}
-
-initState();
-
 const searchRegister = async ( searchQuery ) => {
   const register = await consulta( api + 'registers/search?page=1' + searchQuery );
   printList( register.data );
@@ -173,9 +178,18 @@ formSearch.addEventListener('submit', (e) => {
   }
 });
 
-const createNewRegister = async (data) => {
+async function initState () {
+  dateAttentionInputSearch.max = new Date().toISOString().substring(0,10);
+  showTitlesTable();
+  await showTablePagination();
+  // showInitModal();
+}
+
+initState();
+
+const createEditRegister = async (data, method ='POST') => {
   return await fetch( api + 'registers', {
-    method: 'POST',
+    method: method,
     headers: { 'Content-Type': 'application/json'},
     body: JSON.stringify(data)
   } );
@@ -223,17 +237,14 @@ document.querySelector('#createRegister').addEventListener('submit', async (e) =
       date_attention: dateAttentionInput.value
     };
     
-    createNewRegister(data).then(response => {
+    createEditRegister(data, 'POST').then(response => {
       if(response.status === 201){
         showRegisters();
         // reset of Formulary
         formRegister.reset();
-        // clearForm();
-        // modalRegister.reset();
         // modalTitle.textContent = `Nuevo registro ingresado de ${data.name}`;
         //Close modal
         bootstrap.Modal.getInstance(modalRegister).hide();
-        console.log(response.data);
         showMessegeAlert( false, `Nuevo registro ingresado`);
       }
     }).catch(err => {
@@ -242,6 +253,26 @@ document.querySelector('#createRegister').addEventListener('submit', async (e) =
     });
   // }
 });
+
+
+
+document.querySelector('#btnShowRegister').addEventListener('click', (e) => {
+  console.log('Estoy dentro x2');
+  myModal.show();
+  
+});
+
+// document.getElementById('editRegister').addEventListener('click', (e) => {
+//   modalRegister.modal('show');
+// });
+
+// function showModalF() {
+  
+//   console.log('Estoy dentro');
+//   myModal.show();
+  
+// }
+
 
 //Funciones de muestra de mensajes de alerta
 function showMessegeAlert ( isErro = false, message, time = 3000 ) {
