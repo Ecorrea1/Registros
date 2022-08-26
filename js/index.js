@@ -1,5 +1,5 @@
 const modeDevelop = window.location.port == '5500'; 
-const trying = false;
+const trying = true;
 const api = modeDevelop && trying  ? 'http://192.168.1.83:3000/api/' : 'https://montecarlos-register.herokuapp.com/api/';
 
 let nameValidator = false;
@@ -141,10 +141,21 @@ const showRegistersForFilters = async ( filters ) => {
 
 // Show options in select 
 const showOptions = async ( select, url ) => {
-  const options = await consulta( url );
+
+  let data;
+
+  if (!localStorage.getItem(select)) {
+    console.log('Estoy dentro porque no existe en el localStorage');
+    const result = await consulta( url );
+    data = result.data;
+    localStorage.setItem(select, JSON.stringify(result.data));
+  }
+  
+  const options = data ?? JSON.parse(localStorage.getItem(select));
+
   document.getElementById(select).innerHTML = "";
-  for (const i in options.data ) {
-    const { id, name } = options.data[i];
+  for (const i in options ) {
+    const { id, name } = options[i];
     const option = `<option value="${id}">${name}</option>`;
     document.getElementById(select).innerHTML += option;
   }
@@ -202,6 +213,8 @@ modalRegister.addEventListener('show.bs.modal', () => {
   dateAttentionInput.max = new Date().toISOString().substring(0,10);
   btnSaveRegister.classList.remove("d-none");
   btnReset.classList.remove('d-none');
+  addDisabledOrRemove(false, 'disabled');
+  formRegister.reset();
   showInitModal();
 });
 
@@ -258,26 +271,29 @@ document.querySelector('#createRegister').addEventListener('submit', async (e) =
   // }
 });
 
-
-
-// document.querySelector('#btnShowRegister').addEventListener('click', (e) => {
-//   console.log('Estoy dentro x2');
-//   myModal.show();
+async function showModalF(uid) {
   
-// });
-
-// document.getElementById('editRegister').addEventListener('click', (e) => {
-//   modalRegister.modal('show');
-// });
-
-function showModalF(uid) {
-  
-  console.log('Estoy dentro con ' + uid );
   myModal.show();
 
   toggleMenu(btnSaveRegister.id);
   toggleMenu(btnReset.id);
+  addDisabledOrRemove(true, 'disabled');
+
+  const register = await consulta( api + 'registers/' + uid );
+  const { name, age, phone, total, payment, balance, cristal, treatment, frame, observation, professional, date_attention, created_at, updated_at } = register.data;
   
+  nameInput.value =  name;
+  dateAttentionInput.type = 'text';
+  dateAttentionInput.value = date_attention.substring(0,10);
+  ageInput.value = age;
+  phoneInput.value = phone;
+  totalInput.value = total;
+  paymentInput.value = payment;
+  cristalInput.value = cristal;
+  treatmentInput.value = treatment;
+  frameInput.value = frame;
+  observationInput.value = observation;
+  professionalInput.value = professional;
 }
 
 
@@ -349,4 +365,18 @@ function validateAllfields( divInput, divError, fieldNumber = false ) {
 
 function toggleMenu(id) {
   document.getElementById(id).classList.add("d-none");
+}
+
+function addDisabledOrRemove(disabled = true, attribute = 'readonly') {
+  disabled ? nameInput.setAttribute(attribute, true) : nameInput.removeAttribute(attribute);
+  disabled ? ageInput.setAttribute(attribute, true) : ageInput.removeAttribute(attribute);
+  disabled ? dateAttentionInput.setAttribute(attribute, true) : dateAttentionInput.removeAttribute(attribute);
+  disabled ? phoneInput.setAttribute(attribute, true) : phoneInput.removeAttribute(attribute);
+  disabled ? totalInput.setAttribute(attribute, true) : totalInput.removeAttribute(attribute);
+  disabled ? paymentInput.setAttribute(attribute, true) : paymentInput.removeAttribute(attribute);
+  disabled ? treatmentInput.setAttribute(attribute, true) : treatmentInput.removeAttribute(attribute);
+  disabled ? cristalInput.setAttribute(attribute, true) : cristalInput.removeAttribute(attribute);
+  disabled ? professionalInput.setAttribute(attribute, true) : professionalInput.removeAttribute(attribute);
+  disabled ? frameInput.setAttribute(attribute, true) : frameInput.removeAttribute(attribute);
+  disabled ? observationInput.setAttribute(attribute, true) : observationInput.removeAttribute(attribute);
 }
