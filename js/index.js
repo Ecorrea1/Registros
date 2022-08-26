@@ -64,6 +64,8 @@ const observationInput = document.getElementById('observation');
 const professionalInput = document.getElementById('professional');
 const dateAttentionInput = document.getElementById('date_attention');
 const idInput = document.getElementById('id');
+const btnSaveRegister = document.getElementById('save_register');
+const btnReset = document.getElementById('btnReset');
 
 // Div to show error
 const divErrorName = document.getElementById('divErrorName');
@@ -96,7 +98,7 @@ function consulta  ( url ) {
   });
 }
 
-const printList = async ( data ) =>{
+const printList = async ( data ) => {
   table.innerHTML ="";
   if( data.length == 0 ) {
     showMessegeAlert(false, 'No se encontraron registros');
@@ -107,7 +109,7 @@ const printList = async ( data ) =>{
   for (const i in data ) {
     const { id, name, age, phone, total, payment, balance, cristal, treatment, frame, observation, professional, date_attention, created_at, updated_at } = data[i];
     const actions = [
-      `<button type="button" id='btnShowRegister' value=${id} class="btn btn-primary">VER</button>`,
+      `<button type="button" id='btnShowRegister' onClick='showModalF(${id})' value=${id} class="btn btn-primary">VER</button>`,
       `<button type="button" id='btnEditRegister' value=${id} class="btn btn-success">EDITAR</button>`,
       // `<button type="button" class="btn btn-danger">ELIMINAR</button>`
     ]
@@ -198,6 +200,8 @@ const createEditRegister = async (data, method ='POST') => {
 //Change date to max date to today
 modalRegister.addEventListener('show.bs.modal', () => {
   dateAttentionInput.max = new Date().toISOString().substring(0,10);
+  btnSaveRegister.classList.remove("d-none");
+  btnReset.classList.remove('d-none');
   showInitModal();
 });
 
@@ -256,22 +260,25 @@ document.querySelector('#createRegister').addEventListener('submit', async (e) =
 
 
 
-document.querySelector('#btnShowRegister').addEventListener('click', (e) => {
-  console.log('Estoy dentro x2');
-  myModal.show();
+// document.querySelector('#btnShowRegister').addEventListener('click', (e) => {
+//   console.log('Estoy dentro x2');
+//   myModal.show();
   
-});
+// });
 
 // document.getElementById('editRegister').addEventListener('click', (e) => {
 //   modalRegister.modal('show');
 // });
 
-// function showModalF() {
+function showModalF(uid) {
   
-//   console.log('Estoy dentro');
-//   myModal.show();
+  console.log('Estoy dentro con ' + uid );
+  myModal.show();
+
+  toggleMenu(btnSaveRegister.id);
+  toggleMenu(btnReset.id);
   
-// }
+}
 
 
 //Funciones de muestra de mensajes de alerta
@@ -317,7 +324,7 @@ function  validateLetters(input) {
   return regex.test(input.value) ? true : false;
 }
 
-function validateAllfields(divInput, divError, fieldNumber = false ) {
+function validateAllfields( divInput, divError, fieldNumber = false ) {
   if(verifyIsFilled(divInput, divError)){
     if (fieldNumber) {
       if (validateNumber(divInput)) {
@@ -338,4 +345,8 @@ function validateAllfields(divInput, divError, fieldNumber = false ) {
     showError(divInput, divError, 'Este campo es obligatorio');
     return false;
   }
+}
+
+function toggleMenu(id) {
+  document.getElementById(id).classList.add("d-none");
 }
