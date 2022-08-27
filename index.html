@@ -24,7 +24,7 @@
 
     <br>
     <div class="container-fluid">
-        <button type="button" class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#myModal">Ingresa nuevo registro</button>
+        <button id="create_register" type="button" class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#myModal">Ingresa nuevo registro</button>
     </div>
    <br>
     <div class="container-fluid">
@@ -150,8 +150,12 @@
                       <textarea class="form-control" id="observation" name="observation"></textarea>
                     </div>
                     <br>
+                    
+                    <input type="text" class="d-none" id="uid" name="uid">
+
                     <div class="col-sm-12 d-grid gap-2">
                       <button class="btn btn-primary btn-lg" type="submit" id="save_register">Guardar Registro</button>
+                      <button class="btn btn-primary btn-lg d-none" type="button" id="edit_register">Editar Registro</button>
                       <input class="btn btn-secondary btn-lg" type="reset" id="btnReset">
                     </div>
                   </form>

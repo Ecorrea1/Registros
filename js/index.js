@@ -1,5 +1,5 @@
 const modeDevelop = window.location.port == '5500'; 
-const trying = true;
+const trying = false;
 const api = modeDevelop && trying  ? 'http://192.168.1.83:3000/api/' : 'https://montecarlos-register.herokuapp.com/api/';
 
 let nameValidator = false;
@@ -63,9 +63,14 @@ const frameInput = document.getElementById('frame');
 const observationInput = document.getElementById('observation');
 const professionalInput = document.getElementById('professional');
 const dateAttentionInput = document.getElementById('date_attention');
-const idInput = document.getElementById('id');
+const idInput = document.getElementById('uid');
+
+const btnCreateRegister = document.getElementById('create_register');
 const btnSaveRegister = document.getElementById('save_register');
+const btnEditRegister = document.getElementById('edit_register');
 const btnReset = document.getElementById('btnReset');
+
+let btnSelected = 'save_register';
 
 // Div to show error
 const divErrorName = document.getElementById('divErrorName');
@@ -109,8 +114,8 @@ const printList = async ( data ) => {
   for (const i in data ) {
     const { id, name, age, phone, total, payment, balance, cristal, treatment, frame, observation, professional, date_attention, created_at, updated_at } = data[i];
     const actions = [
-      `<button type="button" id='btnShowRegister' onClick='showModalF(${id})' value=${id} class="btn btn-primary">VER</button>`,
-      `<button type="button" id='btnEditRegister' value=${id} class="btn btn-success">EDITAR</button>`,
+      `<button type="button" id='btnShowRegister' onClick='showModalCreateOrEdit(${id})' value=${id} class="btn btn-primary">VER</button>`,
+      `<button type="button" id='btnEditRegister' onClick='showModalCreateOrEdit(${id}, false)' value=${id} class="btn btn-success">EDITAR</button>`,
       // `<button type="button" class="btn btn-danger">ELIMINAR</button>`
     ]
 
@@ -200,8 +205,9 @@ async function initState () {
 
 initState();
 
-const createEditRegister = async (data, method ='POST') => {
-  return await fetch( api + 'registers', {
+const createEditRegister = async (data, method ='POST', uid = '') => {
+  const query = uid == '' ? 'registers' : `registers/edit/${uid}`
+  return await fetch( api + query , {
     method: method,
     headers: { 'Content-Type': 'application/json'},
     body: JSON.stringify(data)
@@ -210,18 +216,21 @@ const createEditRegister = async (data, method ='POST') => {
 
 //Change date to max date to today
 modalRegister.addEventListener('show.bs.modal', () => {
+  console.log(`${btnSelected = 'save_register' ? 'Estamos Agregando datos' : 'Estamos editando'}`)
   dateAttentionInput.max = new Date().toISOString().substring(0,10);
-  btnSaveRegister.classList.remove("d-none");
-  btnReset.classList.remove('d-none');
+  toggleMenu(btnSaveRegister.id);
+  toggleMenu(btnEditRegister.id, true);
+  toggleMenu(btnReset.id);
   addDisabledOrRemove(false, 'disabled');
   formRegister.reset();
   showInitModal();
 });
 
 
-document.querySelector('#createRegister').addEventListener('submit', async (e) => {
+document.querySelector(`#create_register`).addEventListener('submit', async (e) => {
   // nameInput.addEventListener('input', (e) => e.target.value);
   e.preventDefault();
+  console.log(`${btnSelected = 'save_register' ? 'Estamos Agregando datos' : 'Estamos editando'}`)
 
   //Verificar que los campos esten llenos
     nameValidator = validateAllfields(nameInput, divErrorName);
@@ -254,8 +263,9 @@ document.querySelector('#createRegister').addEventListener('submit', async (e) =
       date_attention: dateAttentionInput.value
     };
     
-    createEditRegister(data, 'POST').then(response => {
+    createEditRegister(data, 'POST' ).then(response => {
       if(response.status === 201){
+        console.log('Estoy dentro del formulario de creado');
         showRegisters();
         // reset of Formulary
         formRegister.reset();
@@ -271,17 +281,77 @@ document.querySelector('#createRegister').addEventListener('submit', async (e) =
   // }
 });
 
-async function showModalF(uid) {
+document.querySelector(`#edit_register`).addEventListener('click', async (e) => {
+  e.preventDefault();
+  console.log('Estoy enviando datos para editar')
+
+  //Verificar que los campos esten llenos
+    // nameValidator = validateAllfields(nameInput, divErrorName);
+    // ageValidator = validateAllfields(ageInput, divErrorAge, true);
+    // phoneValidator = validateAllfields(phoneInput, divErrorPhone, true);
+    // dateAttentionValidator = validateAllfields(totalInput, divErrorTotal, true);
+    // totalValidator = validateAllfields(totalInput, divErrorTotal, true);
+    // paymentValidator = validateAllfields(paymentInput, divErrorPayment, true);
+    // cristalValidator = validateAllfields(cristalInput, divErrorCristal, true);
+    // treatmentValidator = validateAllfields(treatmentInput, divErrorTreatment, true);
+    // frameValidator = validateAllfields(frameInput, divErrorFrame, true);
+    // professionalValidator = validateAllfields(professionalInput, divErrorProfessional, true);
+
+
+    // if (nameValidator, ageValidator, phoneValidator, dateAttentionValidator, totalValidator, paymentValidator, cristalValidator, treatmentValidator, frameValidator, professionalValidator) {
+    //   console.log('All inputs are valid');
+    // }
+    const data = {
+      name: nameInput.value,
+      age: parseInt(ageInput.value),
+      phone: parseInt(phoneInput.value),
+      total: parseInt(totalInput.value),
+      payment: parseInt(paymentInput.value),
+      balance: parseInt(totalInput.value) - parseInt(paymentInput.value),
+      cristal: parseInt(cristalInput.value),
+      treatment: parseInt(treatmentInput.value),
+      frame: parseInt(frame.value),
+      observation: observationInput.value,
+      professional: parseInt(professional.value),
+      date_attention: dateAttentionInput.value
+    };
+    
+    createEditRegister(data, 'POST', idInput.value ).then(response => {
+      if(response.status === 200){
+        showRegisters();
+        // reset of Formulary
+        formRegister.reset();
+        modalTitle.textContent = `Registro editado de ${data.name}`;
+        //Close modal
+        bootstrap.Modal.getInstance(modalRegister).hide();
+        showMessegeAlert( false, `Registro Editado`);
+      }
+    }).catch(err => {
+      console.log(err)
+      showMessegeAlert(true, 'Error al editar el registro');
+    });
+  // }
+});
+
+async function showModalCreateOrEdit(uid, isReadOnly = true) {
   
   myModal.show();
 
-  toggleMenu(btnSaveRegister.id);
-  toggleMenu(btnReset.id);
-  addDisabledOrRemove(true, 'disabled');
+  if (isReadOnly) toggleMenu(btnSaveRegister.id);
+  if (isReadOnly) toggleMenu(btnReset.id);
+  if (isReadOnly) toggleMenu(btnEditRegister.id);
+  if (!isReadOnly) {
+    btnSelected = 'edit_register';
+    toggleMenu(btnEditRegister.id, true);
+    
+    console.log(`${btnSelected = 'save_register' ? 'Estamos Agregando datos desde el boton' : 'Estamos editando desde el boton'}`)
+  }
+
+  addDisabledOrRemove( isReadOnly ?? false , 'disabled');
 
   const register = await consulta( api + 'registers/' + uid );
   const { name, age, phone, total, payment, balance, cristal, treatment, frame, observation, professional, date_attention, created_at, updated_at } = register.data;
-  
+  idInput.value = uid;
   nameInput.value =  name;
   dateAttentionInput.type = 'text';
   dateAttentionInput.value = date_attention.substring(0,10);
@@ -363,8 +433,8 @@ function validateAllfields( divInput, divError, fieldNumber = false ) {
   }
 }
 
-function toggleMenu(id) {
-  document.getElementById(id).classList.add("d-none");
+function toggleMenu(id, enabled = false) {
+  enabled ? document.getElementById(id).classList.remove('d-none') : document.getElementById(id).classList.add("d-none");
 }
 
 function addDisabledOrRemove(disabled = true, attribute = 'readonly') {
