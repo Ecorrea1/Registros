@@ -123,7 +123,7 @@ function consulta  ( url ) {
 }
 
 const printList = async ( data ) => {
-  table.innerHTML ="";
+  table.innerHTML = "";
   if( data.length == 0 ) {
     showMessegeAlert(false, 'No se encontraron registros');
     return table.innerHTML = `<tr><td colspan="${ titlesTable.length + 1 }" class="text-center">No hay registros</td></tr>`;
@@ -138,7 +138,7 @@ const printList = async ( data ) => {
       // `<button type="button" class="btn btn-danger">ELIMINAR</button>`
     ]
 
-    const rowClass  = 'text-center';
+    const rowClass  = 'text-right';
     const customRow = `<td>${ [ id, name, age, `+569${phone}`, cristal, treatment, frame, professional, date_attention.substring(0,10), created_at.substring(0,10), actions ].join('</td><td>') }</td>`;
     const row       = `<tr class="${ rowClass }">${ customRow }</tr>`;
     table.innerHTML += row;
