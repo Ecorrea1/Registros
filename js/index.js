@@ -89,8 +89,6 @@ const btnSaveRegister = document.getElementById('save_register');
 const btnEditRegister = document.getElementById('edit_register');
 const btnReset = document.getElementById('btnReset');
 
-let btnSelected = 'save_register';
-
 // Div to show error
 const divErrorName = document.getElementById('divErrorName');
 const divErrorAge = document.getElementById('divErrorAge');
@@ -133,8 +131,8 @@ const printList = async ( data ) => {
   for (const i in data ) {
     const { id, name, age, phone, cristal, treatment, frame, professional, date_attention, created_at } = data[i];
     const actions = [
-      `<button type="button" id='btnShowRegister' onClick='showModalCreateOrEdit(${id})' value=${id} class="btn btn-primary">VER</button>`,
-      `<button type="button" id='btnEditRegister' onClick='showModalCreateOrEdit(${id}, false)' value=${id} class="btn btn-success">EDITAR</button>`,
+      `<button type="button" id='btnShowRegister' onClick="showModalCreateOrEdit(${id}, true, 'save_register')" value=${id} class="btn btn-primary">VER</button>`,
+      `<button type="button" id='btnEditRegister' onClick="showModalCreateOrEdit(${id}, false, 'edit_register')" value=${id} class="btn btn-success">EDITAR</button>`,
       // `<button type="button" class="btn btn-danger">ELIMINAR</button>`
     ]
 
@@ -172,10 +170,10 @@ const showOptions = async ( select, url ) => {
     console.log('Estoy dentro porque no existe en el localStorage');
     const result = await consulta( url );
     data = result.data;
-    localStorage.setItem(select, JSON.stringify(result.data));
+    localStorage.setItem( select, JSON.stringify(result.data) );
   }
   
-  const options = data ?? JSON.parse(localStorage.getItem(select));
+  const options = data ?? JSON.parse( localStorage.getItem( select ) );
 
   document.getElementById(select).innerHTML = "";
   for (const i in options ) {
@@ -233,24 +231,16 @@ const createEditRegister = async (data, method ='POST', uid = '') => {
   } );
 }
 
-//Change date to max date to today
 modalRegister.addEventListener('show.bs.modal', () => {
-  console.log(`${btnSelected = 'save_register' ? 'Estamos Agregando datos' : 'Estamos editando'}`)
   dateAttentionInput.max = new Date().toISOString().substring(0,10);
-  toggleMenu(btnSaveRegister.id);
-  toggleMenu(btnEditRegister.id, true);
   toggleMenu(btnReset.id);
   addDisabledOrRemove(false, 'disabled');
   formRegister.reset();
-  showInitModal();
 });
-
 
 document.querySelector(`#create_register`).addEventListener('submit', async (e) => {
   // nameInput.addEventListener('input', (e) => e.target.value);
   e.preventDefault();
-  console.log(`${btnSelected = 'save_register' ? 'Estamos Agregando datos' : 'Estamos editando'}`)
-
   //Verificar que los campos esten llenos
     nameValidator = validateAllfields(nameInput, divErrorName);
     ageValidator = validateAllfields(ageInput, divErrorAge, true);
@@ -316,10 +306,14 @@ document.querySelector(`#create_register`).addEventListener('submit', async (e) 
   // }
 });
 
+btnCreateRegister.addEventListener('click', () => {
+  showBtnOfForm('save_register');
+});
+
 document.querySelector(`#edit_register`).addEventListener('click', async (e) => {
   e.preventDefault();
-  console.log('Estoy enviando datos para editar');
-
+  btnSelected = 'edit_register';
+  console.log('Estoy entrando con el boton de editar y que pasa');
     const data = {
       name: nameInput.value,
       age: parseInt(ageInput.value),
@@ -368,18 +362,19 @@ document.querySelector(`#edit_register`).addEventListener('click', async (e) => 
   // }
 });
 
-async function showModalCreateOrEdit(uid, isReadOnly = true) {
+async function showModalCreateOrEdit( uid, isReadOnly = true, btnAction ) {
   
   myModal.show();
 
-  if (isReadOnly) toggleMenu(btnSaveRegister.id);
-  if (isReadOnly) toggleMenu(btnReset.id);
-  if (isReadOnly) toggleMenu(btnEditRegister.id);
-  if (!isReadOnly) {
-    btnSelected = 'edit_register';
-    toggleMenu(btnEditRegister.id, true);
-    
-    console.log(`${ btnSelected = 'save_register' ? 'Estamos Agregando datos desde el boton' : 'Estamos editando desde el boton' }`)
+  if (isReadOnly) {
+    toggleMenu(btnSaveRegister.id);
+    toggleMenu(btnReset.id);
+    toggleMenu(btnEditRegister.id);
+  } 
+  
+  if (isReadOnly == false) {
+    console.log(`${ btnAction == 'save_register' ? 'Estamos Agregando datos desde el boton' : 'Estamos editando desde el boton' }`);
+    showBtnOfForm(btnAction);
   }
 
   addDisabledOrRemove( isReadOnly ?? false , 'disabled');
@@ -480,7 +475,7 @@ function showError( divInput, divError, messageError = '', show = true ) {
 }
 
 // Funciones verificadores de campos
-function verifyIsFilled(input, divError) {
+function verifyIsFilled( input, divError ) {
   if (input.value == '') {
     divError.style.display = 'block';
     return false;
@@ -490,7 +485,7 @@ function verifyIsFilled(input, divError) {
   }
 }
 
-function  validateLetters(input) {
+function  validateLetters( input ) {
   //Validar que solo sean letras
   const regex = /[A-z]/g;
   return regex.test(input.value) ? true : false;
@@ -519,11 +514,11 @@ function validateAllfields( divInput, divError, fieldNumber = false ) {
   }
 }
 
-function toggleMenu(id, enabled = false) {
+function toggleMenu( id, enabled = false) {
   enabled ? document.getElementById(id).classList.remove('d-none') : document.getElementById(id).classList.add("d-none");
 }
 
-function addDisabledOrRemove(disabled = true, attribute = 'readonly') {
+function addDisabledOrRemove( disabled = true, attribute = 'readonly' ) {
   disabled ? nameInput.setAttribute(attribute, true) : nameInput.removeAttribute(attribute);
   disabled ? ageInput.setAttribute(attribute, true) : ageInput.removeAttribute(attribute);
   disabled ? dateAttentionInput.setAttribute(attribute, true) : dateAttentionInput.removeAttribute(attribute);
@@ -553,5 +548,13 @@ function addDisabledOrRemove(disabled = true, attribute = 'readonly') {
   disabled ? nearEyeLeftCylinderInput.setAttribute(attribute, true) : nearEyeLeftCylinderInput.removeAttribute(attribute);
   disabled ? nearEyeLeftGradeInput.setAttribute(attribute, true) : nearEyeLeftGradeInput.removeAttribute(attribute);
   disabled ? nearEyeLeftPupillaryDistanceInput.setAttribute(attribute, true) : nearEyeLeftPupillaryDistanceInput.removeAttribute(attribute);
+}
 
+function showBtnOfForm( btnOption ) {
+  const btnActionSelected = btnOption == 'save_register' ? btnSaveRegister.id : btnEditRegister.id;
+  const btnActionNotSelected = btnOption == 'save_register' ? btnEditRegister.id : btnSaveRegister.id;
+
+  console.log(btnOption);
+  toggleMenu(btnActionSelected, true);
+  toggleMenu(btnActionNotSelected, false );
 }
