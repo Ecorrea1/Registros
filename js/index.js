@@ -1,5 +1,5 @@
 const modeDevelop = window.location.port == '5500';
-const trying = false;
+const trying = true;
 const api = modeDevelop && trying  ? 'http://192.168.1.15:3000/api/' : 'https://registersapi.onrender.com/api/';
 
 let nameValidator = false;
@@ -7,7 +7,7 @@ let ageValidator = false;
 let phoneValidator = false;
 let dateAttentionValidator = false;
 let totalValidator = false;
-let paymentValidator = false;
+// let paymentValidator = false;
 let cristalValidator = false;
 let treatmentValidator = false;
 let frameValidator = false;
@@ -56,7 +56,7 @@ const nameInput = document.getElementById('name');
 const ageInput = document.getElementById('age');
 const phoneInput = document.getElementById('phone');
 const totalInput = document.getElementById('total');
-const paymentInput = document.getElementById('payment');
+// const paymentInput = document.getElementById('payment');
 const cristalInput = document.getElementById('cristal');
 const treatmentInput = document.getElementById('treatment');
 const frameInput = document.getElementById('frame');
@@ -88,6 +88,7 @@ const btnCreateRegister = document.getElementById('create_register');
 const btnSaveRegister = document.getElementById('save_register');
 const btnEditRegister = document.getElementById('edit_register');
 const btnReset = document.getElementById('btnReset');
+const btnClearSearch = document.getElementById('btn-clear-search');
 
 let btnSelected = 'save_register';
 
@@ -96,7 +97,7 @@ const divErrorName = document.getElementById('divErrorName');
 const divErrorAge = document.getElementById('divErrorAge');
 const divErrorPhone = document.getElementById('divErrorPhone');
 const divErrorTotal = document.getElementById('divErrorTotal');
-const divErrorPayment = document.getElementById('divErrorPayment');
+// const divErrorPayment = document.getElementById('divErrorPayment');
 const divErrorCristal = document.getElementById('divErrorCristal');
 const divErrorTreatment = document.getElementById('divErrorTreatment');
 const divErrorFrame = document.getElementById('divErrorFrame');
@@ -107,10 +108,10 @@ const divErrorDateAttention = document.getElementById('divErrorDateAttention');
 // Show titles of table
 const showTitlesTable = () => {
     let titles = '';
-    for (let i = 0; i < titlesTable.length; i++) {
-        titles += `<th>${titlesTable[i]}</th>`;
+    for (const i in titlesTable ) {
+      titles += `<th>${ titlesTable[i] }</th>`;
     }
-    tableTitles.innerHTML = `<tr>${titles}</tr>`;
+    tableTitles.innerHTML = `<tr>${ titles }</tr>`;
 }
 
 function consulta  ( url ) {
@@ -125,21 +126,20 @@ function consulta  ( url ) {
 const printList = async ( data ) => {
   table.innerHTML = "";
   if( data.length == 0 ) {
-    showMessegeAlert(false, 'No se encontraron registros');
+    showMessegeAlert( false, 'No se encontraron registros' );
     return table.innerHTML = `<tr><td colspan="${ titlesTable.length + 1 }" class="text-center">No hay registros</td></tr>`;
   }
 
-  
   for (const i in data ) {
     const { id, name, age, phone, cristal, treatment, frame, professional, date_attention, created_at } = data[i];
     const actions = [
-      `<button type="button" id='btnShowRegister' onClick='showModalCreateOrEdit(${id})' value=${id} class="btn btn-primary">VER</button>`,
-      `<button type="button" id='btnEditRegister' onClick='showModalCreateOrEdit(${id}, false)' value=${id} class="btn btn-success">EDITAR</button>`,
+      `<button type="button" id='btnShowRegister' onClick='showModalCreateOrEdit(${ id })' value=${ id } class="btn btn-primary">VER</button>`,
+      `<button type="button" id='btnEditRegister' onClick='showModalCreateOrEdit(${ id }, false)' value=${ id } class="btn btn-success">EDITAR</button>`,
       // `<button type="button" class="btn btn-danger">ELIMINAR</button>`
     ]
 
     const rowClass  = 'text-right';
-    const customRow = `<td>${ [ id, name, age, `+569${phone}`, cristal, treatment, frame, professional, date_attention.substring(0,10), created_at.substring(0,10), actions ].join('</td><td>') }</td>`;
+    const customRow = `<td>${ [ id, name, age, `+569${ phone }`, cristal, treatment, frame, professional, date_attention.substring(0,10), created_at.substring(0,10), actions ].join('</td><td>') }</td>`;
     const row       = `<tr class="${ rowClass }">${ customRow }</tr>`;
     table.innerHTML += row;
   }
@@ -190,7 +190,7 @@ const showInitModal = async () => {
   // showOptions('frame', api + 'registers/table/frames');
   showOptions('treatment', api + 'registers/table/treatment');
   showOptions('cristal', api + 'registers/table/cristals');
-  showOptions('professional', api + 'registers/table/professionals');
+  // showOptions('professional', api + 'registers/table/professionals');
 }
 
 // Show table with registers with pagination
@@ -257,7 +257,7 @@ document.querySelector(`#create_register`).addEventListener('submit', async (e) 
     phoneValidator = validateAllfields(phoneInput, divErrorPhone, true);
     dateAttentionValidator = validateAllfields(totalInput, divErrorTotal, true);
     totalValidator = validateAllfields(totalInput, divErrorTotal, true);
-    paymentValidator = validateAllfields(paymentInput, divErrorPayment, true);
+    // paymentValidator = validateAllfields(paymentInput, divErrorPayment, true);
     cristalValidator = validateAllfields(cristalInput, divErrorCristal, true);
     treatmentValidator = validateAllfields(treatmentInput, divErrorTreatment, true);
     frameValidator = validateAllfields(frameInput, divErrorFrame, true);
@@ -272,13 +272,13 @@ document.querySelector(`#create_register`).addEventListener('submit', async (e) 
       age: parseInt(ageInput.value),
       phone: parseInt(phoneInput.value),
       total: parseInt(totalInput.value),
-      payment: parseInt(paymentInput.value),
+      // payment: parseInt(paymentInput.value),
       balance: parseInt(totalInput.value) - parseInt(paymentInput.value),
       cristal: parseInt(cristalInput.value),
       treatment: parseInt(treatmentInput.value),
-      frame: parseInt(frame.value),
+      frame: frame.value,
       observation: observationInput.value,
-      professional: parseInt(professional.value),
+      professional: professional.value,
       date_attention: dateAttentionInput.value,
       far_eye_right_sphere: parseFloat(farEyeRightSphereInput.value),
       far_eye_right_cylinder: parseFloat(farEyeRightCylinderInput.value),
@@ -311,7 +311,7 @@ document.querySelector(`#create_register`).addEventListener('submit', async (e) 
       }
     }).catch(err => {
       console.log(err)
-      showMessegeAlert(true, 'Error al crear el registro');
+      showMessegeAlert( true, 'Error al crear el registro');
     });
   // }
 });
@@ -325,13 +325,13 @@ document.querySelector(`#edit_register`).addEventListener('click', async (e) => 
       age: parseInt(ageInput.value),
       phone: parseInt(phoneInput.value),
       total: parseInt(totalInput.value),
-      payment: parseInt(paymentInput.value),
+      // payment: parseInt(paymentInput.value),
       balance: parseInt(totalInput.value) - parseInt(paymentInput.value),
       cristal: parseInt(cristalInput.value),
       treatment: parseInt(treatmentInput.value),
-      frame: parseInt(frame.value),
+      frame: frame.value,
       observation: observationInput.value,
-      professional: parseInt(professional.value),
+      professional: professional.value,
       date_attention: dateAttentionInput.value,
       far_eye_right_sphere: parseFloat(farEyeRightSphereInput.value),
       far_eye_right_cylinder: parseFloat(farEyeRightCylinderInput.value),
@@ -363,7 +363,7 @@ document.querySelector(`#edit_register`).addEventListener('click', async (e) => 
       }
     }).catch(err => {
       console.log(err)
-      showMessegeAlert(true, 'Error al editar el registro');
+      showMessegeAlert( true, 'Error al editar el registro');
     });
   // }
 });
@@ -393,7 +393,7 @@ async function showModalCreateOrEdit(uid, isReadOnly = true) {
     age, 
     phone,
     total, 
-    payment,
+    // payment,
     cristal, 
     treatment, 
     frame, 
@@ -426,7 +426,7 @@ async function showModalCreateOrEdit(uid, isReadOnly = true) {
   ageInput.value = age;
   phoneInput.value = phone;
   totalInput.value = total;
-  paymentInput.value = payment;
+  // paymentInput.value = payment;
   cristalInput.value = cristal;
   treatmentInput.value = treatment;
   frameInput.value = frame;
@@ -529,7 +529,7 @@ function addDisabledOrRemove(disabled = true, attribute = 'readonly') {
   disabled ? dateAttentionInput.setAttribute(attribute, true) : dateAttentionInput.removeAttribute(attribute);
   disabled ? phoneInput.setAttribute(attribute, true) : phoneInput.removeAttribute(attribute);
   disabled ? totalInput.setAttribute(attribute, true) : totalInput.removeAttribute(attribute);
-  disabled ? paymentInput.setAttribute(attribute, true) : paymentInput.removeAttribute(attribute);
+  // disabled ? paymentInput.setAttribute(attribute, true) : paymentInput.removeAttribute(attribute);
   disabled ? treatmentInput.setAttribute(attribute, true) : treatmentInput.removeAttribute(attribute);
   disabled ? cristalInput.setAttribute(attribute, true) : cristalInput.removeAttribute(attribute);
   disabled ? professionalInput.setAttribute(attribute, true) : professionalInput.removeAttribute(attribute);
@@ -555,3 +555,6 @@ function addDisabledOrRemove(disabled = true, attribute = 'readonly') {
   disabled ? nearEyeLeftPupillaryDistanceInput.setAttribute(attribute, true) : nearEyeLeftPupillaryDistanceInput.removeAttribute(attribute);
 
 }
+
+// Funcion que limpia los campos de busqeuda
+btnClearSearch.addEventListener('click', () => showRegisters());

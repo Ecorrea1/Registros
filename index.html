@@ -19,6 +19,7 @@
         <input class="form-control me-2" type="number" id="phoneSearch" placeholder="Ingresa Telefono" aria-label="Search">
         <input type="date" class="form-control me-2" id="dateAttentionSearch" placeholder="Atencion" aria-label="Search">
         <button class="btn btn-primary" type="submit">Buscar</button>
+        <button id="btn-clear-search"class="btn btn-secondary" type="reset">Limpiar</button>
       </form>
     </div>
 
@@ -86,26 +87,18 @@
                       </div>  
                     </div>
         
-                    <div class="col-md-6">
+                    <!-- <div class="col-md-6">
                       <label for="payment" class="form-label">Abono</label>
                       <div class="input-group">
                         <span class="input-group-text" id="inputGroupPrepend3">$</span>
                         <input type="number" min="1" class="form-control" id="payment" name="payment">
                       </div>
                       <div id="divErrorPayment"></div>
-                    </div>
-
-                    <hr>
-                    <label class="h2">Informe de Cristal</label>
-                    <!-- <div class="col-md-12 ms-auto">
-                      <label for="tipeGlasses" class="form-label">Tipos de Cristal</label>
-                      <select class="form-select" id="tipeGlasses" name="tipeGlasses" required>
-                        <option selected value="1">MONOFOCAL</option>
-                        <option value="2">BIFOCAL</option>
-                        <option value="3">MULTIFOCAL</option>
-                      </select>
                     </div> -->
 
+                    <hr>
+
+                    <label class="h2">Informe de Cristal</label>
                     <label class="h4">LEJOS</label>
                     <label class="h6">OJO DERECHO</label>
                     <div class="col-md-3">
@@ -263,9 +256,7 @@
                     <label class="h2">Datos de Atencion</label>
                     <div class="col-md-12 ms-auto">
                       <label for="professional" class="form-label">Profesional</label>
-                      <select class="form-select" id="professional" name="professional" required>
-                        <option value="">Elegir profesional de atencion</option>
-                      </select>
+                      <input type="text" class="form-control" id="professional" name="professional" placeholder="Ingrese Profesional de Atencion" required>
                       <div id="divErrorProfessional"></div>
                     </div>
                     <div class="col-md-12">
