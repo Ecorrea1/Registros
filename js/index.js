@@ -72,13 +72,6 @@ const farEyeLeftGradeInput = document.getElementById('farEyeLeftGrade');
 const farEyeLeftPupillaryDistanceInput = document.getElementById('farEyeLeftPupillaryDistance');
 
 const nearEyeRightSphereInput = document.getElementById('nearEyeRightSphere');
-// const nearEyeRightCylinderInput = document.getElementById('nearEyeRightCylinder');
-// const nearEyeRightGradeInput = document.getElementById('nearEyeRightGrade');
-// const nearEyeRightPupillaryDistanceInput = document.getElementById('nearEyeRightPupillaryDistance');
-// const nearEyeLeftSphereInput = document.getElementById('nearEyeLeftSphere');
-// const nearEyeLeftCylinderInput = document.getElementById('nearEyeLeftCylinder');
-// const nearEyeLeftGradeInput = document.getElementById('nearEyeLeftGrade');
-// const nearEyeLeftPupillaryDistanceInput = document.getElementById('nearEyeLeftPupillaryDistance');
 
 const idInput = document.getElementById('uid');
 
@@ -275,14 +268,7 @@ document.querySelector(`#save_register`).addEventListener('click', async (e) => 
       far_eye_left_cylinder: parseFloat(farEyeLeftCylinderInput.value),
       far_eye_left_grade: parseInt(farEyeLeftGradeInput.value),
       far_eye_left_pupillary_distance: parseInt(farEyeLeftPupillaryDistanceInput.value),
-      near_eye_right_sphere: parseFloat(nearEyeRightSphereInput.value),
-      // near_eye_right_cylinder: parseFloat(nearEyeRightCylinderInput.value),
-      // near_eye_right_grade: parseInt(nearEyeRightGradeInput.value),
-      // near_eye_right_pupillary_distance: parseInt(nearEyeRightPupillaryDistanceInput.value),
-      // near_eye_left_sphere: parseFloat(nearEyeLeftSphereInput.value),
-      // near_eye_left_cylinder: parseFloat(nearEyeLeftCylinderInput.value),
-      // near_eye_left_grade: parseInt(nearEyeLeftGradeInput.value),
-      // near_eye_left_pupillary_distance: parseInt(nearEyeLeftPupillaryDistanceInput.value)
+      near_eye_right_sphere: parseFloat(nearEyeRightSphereInput.value)
     };
     
     createEditRegister(data, 'POST' ).then(response => {
@@ -306,14 +292,11 @@ document.querySelector(`#save_register`).addEventListener('click', async (e) => 
 document.querySelector(`#edit_register`).addEventListener('click', async (e) => {
   e.preventDefault();
   btnSelected = 'edit_register';
-  console.log('Estoy entrando con el boton de editar y que pasa');
     const data = {
       name: nameInput.value,
       age: parseInt(ageInput.value),
       phone: parseInt(phoneInput.value),
       total: parseInt(totalInput.value),
-      // payment: parseInt(paymentInput.value),
-      // balance: parseInt(totalInput.value) - parseInt(paymentInput.value),
       cristal: parseInt(cristalInput.value),
       treatment: parseInt(treatmentInput.value),
       frame: frame.value,
@@ -328,14 +311,7 @@ document.querySelector(`#edit_register`).addEventListener('click', async (e) => 
       far_eye_left_cylinder: parseFloat(farEyeLeftCylinderInput.value),
       far_eye_left_grade: parseInt(farEyeLeftGradeInput.value),
       far_eye_left_pupillary_distance: parseInt(farEyeLeftPupillaryDistanceInput.value),
-      near_eye_right_sphere: parseFloat(nearEyeRightSphereInput.value),
-      // near_eye_right_cylinder: parseFloat(nearEyeRightCylinderInput.value),
-      // near_eye_right_grade: parseInt(nearEyeRightGradeInput.value),
-      // near_eye_right_pupillary_distance: parseInt(nearEyeRightPupillaryDistanceInput.value),
-      // near_eye_left_sphere: parseFloat(nearEyeLeftSphereInput.value),
-      // near_eye_left_cylinder: parseFloat(nearEyeLeftCylinderInput.value),
-      // near_eye_left_grade: parseInt(nearEyeLeftGradeInput.value),
-      // near_eye_left_pupillary_distance: parseInt(nearEyeLeftPupillaryDistanceInput.value)
+      near_eye_right_sphere: parseFloat(nearEyeRightSphereInput.value)
     };
     
     createEditRegister(data, 'POST', idInput.value ).then(response => {
@@ -358,8 +334,8 @@ document.querySelector(`#edit_register`).addEventListener('click', async (e) => 
 async function showModalCreateOrEdit( uid, isReadOnly = true, btnAction ) {
   
   myModal.show();
-  // clearForm();
   formRegister.reset();
+
   if (isReadOnly) {
     toggleMenu(btnSaveRegister.id);
     toggleMenu(btnReset.id);
@@ -388,8 +364,7 @@ async function showModalCreateOrEdit( uid, isReadOnly = true, btnAction ) {
     name, 
     age, 
     phone,
-    total, 
-    // payment,
+    total,
     cristal, 
     treatment, 
     frame, 
@@ -404,14 +379,7 @@ async function showModalCreateOrEdit( uid, isReadOnly = true, btnAction ) {
     far_eye_left_grade,
     far_eye_right_pupillary_distance,
     far_eye_left_pupillary_distance,
-    near_eye_right_sphere,
-    // near_eye_left_sphere,
-    // near_eye_right_cylinder,
-    // near_eye_left_cylinder,
-    // near_eye_right_grade,
-    // near_eye_left_grade,
-    // near_eye_right_pupillary_distance,
-    // near_eye_left_pupillary_distance
+    near_eye_right_sphere
  } = register.data;
 
   dateAttentionInput.type = 'text';
@@ -422,7 +390,6 @@ async function showModalCreateOrEdit( uid, isReadOnly = true, btnAction ) {
   ageInput.value = age;
   phoneInput.value = phone;
   totalInput.value = total;
-  // paymentInput.value = payment;
   cristalInput.value = cristal;
   treatmentInput.value = treatment;
   frameInput.value = frame;
@@ -439,13 +406,6 @@ async function showModalCreateOrEdit( uid, isReadOnly = true, btnAction ) {
   farEyeLeftPupillaryDistanceInput.value = far_eye_left_pupillary_distance;
   
   nearEyeRightSphereInput.value = near_eye_right_sphere;
-  // nearEyeLeftSphereInput.value = near_eye_left_sphere;
-  // nearEyeRightCylinderInput.value = near_eye_right_cylinder;
-  // nearEyeLeftCylinderInput.value = near_eye_left_cylinder;
-  // nearEyeRightGradeInput.value = near_eye_right_grade;
-  // nearEyeLeftGradeInput.value = near_eye_left_grade;
-  // nearEyeRightPupillaryDistanceInput.value = near_eye_right_pupillary_distance;
-  // nearEyeLeftPupillaryDistanceInput.value = near_eye_left_pupillary_distance;
 
 }
 
@@ -531,7 +491,6 @@ function addDisabledOrRemove( disabled = true, attribute = 'readonly' ) {
   disabled ? dateAttentionInput.setAttribute(attribute, true) : dateAttentionInput.removeAttribute(attribute);
   disabled ? phoneInput.setAttribute(attribute, true) : phoneInput.removeAttribute(attribute);
   disabled ? totalInput.setAttribute(attribute, true) : totalInput.removeAttribute(attribute);
-  // disabled ? paymentInput.setAttribute(attribute, true) : paymentInput.removeAttribute(attribute);
   disabled ? treatmentInput.setAttribute(attribute, true) : treatmentInput.removeAttribute(attribute);
   disabled ? cristalInput.setAttribute(attribute, true) : cristalInput.removeAttribute(attribute);
   disabled ? professionalInput.setAttribute(attribute, true) : professionalInput.removeAttribute(attribute);
@@ -548,13 +507,6 @@ function addDisabledOrRemove( disabled = true, attribute = 'readonly' ) {
   disabled ? farEyeLeftPupillaryDistanceInput.setAttribute(attribute, true) : farEyeLeftPupillaryDistanceInput.removeAttribute(attribute);
   
   disabled ? nearEyeRightSphereInput.setAttribute(attribute, true) : nearEyeRightSphereInput.removeAttribute(attribute);
-  // disabled ? nearEyeRightCylinderInput.setAttribute(attribute, true) : nearEyeRightCylinderInput.removeAttribute(attribute);
-  // disabled ? nearEyeRightGradeInput.setAttribute(attribute, true) : nearEyeRightGradeInput.removeAttribute(attribute);
-  // disabled ? nearEyeRightPupillaryDistanceInput.setAttribute(attribute, true) : nearEyeRightPupillaryDistanceInput.removeAttribute(attribute);
-  // disabled ? nearEyeLeftSphereInput.setAttribute(attribute, true) : nearEyeLeftSphereInput.removeAttribute(attribute);
-  // disabled ? nearEyeLeftCylinderInput.setAttribute(attribute, true) : nearEyeLeftCylinderInput.removeAttribute(attribute);
-  // disabled ? nearEyeLeftGradeInput.setAttribute(attribute, true) : nearEyeLeftGradeInput.removeAttribute(attribute);
-  // disabled ? nearEyeLeftPupillaryDistanceInput.setAttribute(attribute, true) : nearEyeLeftPupillaryDistanceInput.removeAttribute(attribute);
 }
 
 function clearForm() {
