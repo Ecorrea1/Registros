@@ -1,5 +1,5 @@
 const modeDevelop = window.location.port == '5500';
-const trying = false;
+const trying = true;
 const api = modeDevelop && trying  ? 'http://192.168.1.15:3000/api/' : 'https://registersapi.onrender.com/api/';
 
 let nameValidator = false;
@@ -212,6 +212,59 @@ async function initState () {
 
 initState();
 
+const sendInfo = async (uid = '', btnAction) => {
+  nameValidator = validateAllfields(nameInput, divErrorName);
+  ageValidator = validateAllfields(ageInput, divErrorAge, true);
+  phoneValidator = validateAllfields(phoneInput, divErrorPhone, true);
+  dateAttentionValidator = validateAllfields(totalInput, divErrorTotal, true);
+  totalValidator = validateAllfields(totalInput, divErrorTotal, true);
+  cristalValidator = validateAllfields(cristalInput, divErrorCristal, true);
+  treatmentValidator = validateAllfields(treatmentInput, divErrorTreatment, true);
+  frameValidator = validateAllfields(frameInput, divErrorFrame);
+  professionalValidator = validateAllfields(professionalInput, divErrorProfessional);
+
+  if (!nameValidator, !ageValidator, !phoneValidator, !dateAttentionValidator, !totalValidator, !cristalValidator, !treatmentValidator, !frameValidator, !professionalValidator) {
+    return console.log('Hay input con problemas');
+  }
+  const data = {
+    name: nameInput.value.toUpperCase(),
+    age: parseInt(ageInput.value),
+    phone: parseInt(phoneInput.value),
+    total: parseInt(totalInput.value),
+    cristal: parseInt(cristalInput.value),
+    treatment: parseInt(treatmentInput.value),
+    frame: frame.value.toUpperCase(),
+    observation: observationInput.value.toUpperCase(),
+    professional: professional.value.toUpperCase(),
+    date_attention: dateAttentionInput.value,
+    far_eye_right_sphere: parseFloat(farEyeRightSphereInput.value),
+    far_eye_right_cylinder: parseFloat(farEyeRightCylinderInput.value),
+    far_eye_right_grade: parseInt(farEyeRightGradeInput.value),
+    far_eye_right_pupillary_distance: parseInt(farEyeRightPupillaryDistanceInput.value),
+    far_eye_left_sphere: parseFloat(farEyeLeftSphereInput.value),
+    far_eye_left_cylinder: parseFloat(farEyeLeftCylinderInput.value),
+    far_eye_left_grade: parseInt(farEyeLeftGradeInput.value),
+    far_eye_left_pupillary_distance: parseInt(farEyeLeftPupillaryDistanceInput.value),
+    near_eye_right_sphere: parseFloat(nearEyeRightSphereInput.value)
+  };
+
+  createEditRegister(data, 'POST', uid ).then(response => {
+    if(response.status === 200){
+      showRegisters();
+      // reset of Formulary
+      formRegister.reset();
+      modalTitle.textContent = btnAction == 'edit_register' ? `Registro editado de ${data.name}` : 'Registro Creado';
+      //Close modal
+      bootstrap.Modal.getInstance(modalRegister).hide();
+      showMessegeAlert( false, 'edit_register' ? `Registro Editado` : 'Registro Creado');
+    }
+  }).catch(err => {
+    console.log(err)
+    showMessegeAlert( true, 'Error al editar el registro');
+  });
+
+}
+
 const createEditRegister = async (data, method ='POST', uid = '') => {  
   const query = uid == '' ? 'registers' : `registers/edit/${ uid }`
   return await fetch( api + query , {
@@ -231,104 +284,16 @@ modalRegister.addEventListener('show.bs.modal', () => {
 btnCreateRegister.addEventListener('click', () => clearForm());
 
 document.querySelector(`#save_register`).addEventListener('click', async (e) => {
-
-  // nameInput.addEventListener('input', (e) => e.target.value);
   e.preventDefault();
+  btnSelected = 'save_register';
   //Verificar que los campos esten llenos
-    nameValidator = validateAllfields(nameInput, divErrorName);
-    ageValidator = validateAllfields(ageInput, divErrorAge, true);
-    phoneValidator = validateAllfields(phoneInput, divErrorPhone, true);
-    dateAttentionValidator = validateAllfields(totalInput, divErrorTotal, true);
-    totalValidator = validateAllfields(totalInput, divErrorTotal, true);
-    cristalValidator = validateAllfields(cristalInput, divErrorCristal, true);
-    treatmentValidator = validateAllfields(treatmentInput, divErrorTreatment, true);
-    frameValidator = validateAllfields(frameInput, divErrorFrame);
-    professionalValidator = validateAllfields(professionalInput, divErrorProfessional);
-
-
-    if (!nameValidator, !ageValidator, !phoneValidator, !dateAttentionValidator, !totalValidator, !cristalValidator, !treatmentValidator, !frameValidator, !professionalValidator) {
-      return console.log('All inputs are valid');
-    }
-    const data = {
-      name: nameInput.value,
-      age: parseInt(ageInput.value),
-      phone: parseInt(phoneInput.value),
-      total: parseInt(totalInput.value),
-      cristal: parseInt(cristalInput.value),
-      treatment: parseInt(treatmentInput.value),
-      frame: frame.value,
-      observation: observationInput.value,
-      professional: professional.value,
-      date_attention: dateAttentionInput.value,
-      far_eye_right_sphere: parseFloat(farEyeRightSphereInput.value),
-      far_eye_right_cylinder: parseFloat(farEyeRightCylinderInput.value),
-      far_eye_right_grade: parseInt(farEyeRightGradeInput.value),
-      far_eye_right_pupillary_distance: parseInt(farEyeRightPupillaryDistanceInput.value),
-      far_eye_left_sphere: parseFloat(farEyeLeftSphereInput.value),
-      far_eye_left_cylinder: parseFloat(farEyeLeftCylinderInput.value),
-      far_eye_left_grade: parseInt(farEyeLeftGradeInput.value),
-      far_eye_left_pupillary_distance: parseInt(farEyeLeftPupillaryDistanceInput.value),
-      near_eye_right_sphere: parseFloat(nearEyeRightSphereInput.value)
-    };
-    
-    createEditRegister(data, 'POST' ).then(response => {
-      if(response.status === 201){
-        console.log('Estoy dentro del formulario de creado');
-        showRegisters();
-        // reset of Formulary
-        formRegister.reset();
-        // modalTitle.textContent = `Nuevo registro ingresado de ${data.name}`;
-        //Close modal
-        bootstrap.Modal.getInstance(modalRegister).hide();
-        showMessegeAlert( false, `Nuevo registro ingresado`);
-      }
-    }).catch(err => {
-      console.log(err)
-      showMessegeAlert( true, 'Error al crear el registro');
-    });
-  // }
+ sendInfo('', btnSelected)
 });
 
 document.querySelector(`#edit_register`).addEventListener('click', async (e) => {
   e.preventDefault();
   btnSelected = 'edit_register';
-    const data = {
-      name: nameInput.value,
-      age: parseInt(ageInput.value),
-      phone: parseInt(phoneInput.value),
-      total: parseInt(totalInput.value),
-      cristal: parseInt(cristalInput.value),
-      treatment: parseInt(treatmentInput.value),
-      frame: frame.value,
-      observation: observationInput.value,
-      professional: professional.value,
-      date_attention: dateAttentionInput.value,
-      far_eye_right_sphere: parseFloat(farEyeRightSphereInput.value),
-      far_eye_right_cylinder: parseFloat(farEyeRightCylinderInput.value),
-      far_eye_right_grade: parseInt(farEyeRightGradeInput.value),
-      far_eye_right_pupillary_distance: parseInt(farEyeRightPupillaryDistanceInput.value),
-      far_eye_left_sphere: parseFloat(farEyeLeftSphereInput.value),
-      far_eye_left_cylinder: parseFloat(farEyeLeftCylinderInput.value),
-      far_eye_left_grade: parseInt(farEyeLeftGradeInput.value),
-      far_eye_left_pupillary_distance: parseInt(farEyeLeftPupillaryDistanceInput.value),
-      near_eye_right_sphere: parseFloat(nearEyeRightSphereInput.value)
-    };
-    
-    createEditRegister(data, 'POST', idInput.value ).then(response => {
-      if(response.status === 200){
-        showRegisters();
-        // reset of Formulary
-        formRegister.reset();
-        modalTitle.textContent = `Registro editado de ${data.name}`;
-        //Close modal
-        bootstrap.Modal.getInstance(modalRegister).hide();
-        showMessegeAlert( false, `Registro Editado`);
-      }
-    }).catch(err => {
-      console.log(err)
-      showMessegeAlert( true, 'Error al editar el registro');
-    });
-  // }
+  sendInfo(idInput.value, btnSelected);
 });
 
 async function showModalCreateOrEdit( uid, isReadOnly = true, btnAction ) {
@@ -465,14 +430,14 @@ function validateAllfields( divInput, divError, fieldNumber = false ) {
         showError(divInput, divError, '', false);
         return true;
       } 
-      showError(divInput, divError, 'Solo se permiten numeros');
+      showError(divInput, divError, 'Solo se permiten numeros', true);
       return false;
     } else {
       if(validateLetters(divInput)) {
         showError(divInput, divError, '', false);
         return true;
       }
-      showError(divInput, divError, 'Solo se permiten letras');
+      showError(divInput, divError, 'Solo se permiten letras', true);
       return false;
     }
   } else {
@@ -481,9 +446,7 @@ function validateAllfields( divInput, divError, fieldNumber = false ) {
   }
 }
 
-function toggleMenu( id, enabled = false) {
-  enabled ? document.getElementById(id).classList.remove('d-none') : document.getElementById(id).classList.add("d-none");
-}
+const toggleMenu = ( id, enabled = false) => enabled ? document.getElementById(id).classList.remove('d-none') : document.getElementById(id).classList.add("d-none");
 
 function addDisabledOrRemove( disabled = true, attribute = 'readonly' ) {
   disabled ? nameInput.setAttribute(attribute, true) : nameInput.removeAttribute(attribute);
@@ -510,6 +473,7 @@ function addDisabledOrRemove( disabled = true, attribute = 'readonly' ) {
 }
 
 function clearForm() {
+  modalTitle.textContent = ''
   nameInput.value = ''
   ageInput.value = '18'
   dateAttentionInput.value = ''
