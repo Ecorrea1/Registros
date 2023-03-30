@@ -256,6 +256,7 @@ const sendInfo = async (uid = '', btnAction) => {
       modalTitle.textContent = btnAction == 'edit_register' ? `Registro editado de ${data.name}` : 'Registro Creado';
       //Close modal
       bootstrap.Modal.getInstance(modalRegister).hide();
+      modalTitle.textContent = '';
       showMessegeAlert( false, 'edit_register' ? `Registro Editado` : 'Registro Creado');
     }
   }).catch(err => {
@@ -392,10 +393,10 @@ function showMessegeAlert ( isErro = false, message, time = 3000 ) {
 
 function showError( divInput, divError, messageError = '', show = true ) {
   if (show){
-    divError.innerHTML = messageError;
+    divError.innerText = messageError;
     divInput.style.borderColor = '#ff0000';
-  }else{
-    divError.innerHTML = messageError;
+  } else {
+    divError.innerText = messageError;
     divInput.style.borderColor = 'hsl(270, 3%, 87%)';
   }
 }
