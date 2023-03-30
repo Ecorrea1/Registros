@@ -1,5 +1,5 @@
 const modeDevelop = window.location.port == '5500';
-const trying = true;
+const trying = false;
 const api = modeDevelop && trying  ? 'http://192.168.1.15:3000/api/' : 'https://registersapi.onrender.com/api/';
 
 let nameValidator = false;
