@@ -1,6 +1,6 @@
 const modeDevelop = window.location.port == '5500';
 const trying = false;
-const api = modeDevelop && trying  ? 'http://192.168.1.15:3000/api/' : 'https://registersapi.onrender.com/api/';
+const api = modeDevelop && trying  ? 'http://192.168.1.23:3000/api/' : 'https://registersapi.onrender.com/api/';
 
 let nameValidator = false;
 let ageValidator = false;
@@ -113,7 +113,8 @@ function consulta  ( url ) {
 
 const printList = async ( data ) => {
   table.innerHTML = "";
-  if( data.length == 0 ) {
+  console.log(data)
+  if( data.length == 0 || !data ) {
     showMessegeAlert( false, 'No se encontraron registros' );
     return table.innerHTML = `<tr><td colspan="${ titlesTable.length + 1 }" class="text-center">No hay registros</td></tr>`;
   }
@@ -249,7 +250,7 @@ const sendInfo = async (uid = '', btnAction) => {
   };
 
   createEditRegister(data, 'POST', uid ).then(response => {
-    if(response.status === 200){
+    if(response.ok){
       showRegisters();
       // reset of Formulary
       formRegister.reset();
