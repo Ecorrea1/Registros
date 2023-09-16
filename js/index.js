@@ -349,7 +349,7 @@ async function showModalCreateOrEdit( uid, isReadOnly = true, btnAction ) {
     near_eye_right_sphere
  } = register.data;
 
-  dateAttentionInput.type = 'text';
+  // dateAttentionInput.type = 'text';
 
   idInput.value = uid;
   nameInput.value =  name;
