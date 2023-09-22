@@ -44,8 +44,16 @@ function consulta  ( url ) {
       .catch( err => console.log( err ) )
     });
   }
+
+async function paginado( paginas, limit = 10){
+  const totalPages =  paginas > 32 ? 32 : paginas
+  for (let index = 0; index < totalPages; index++ ) {
+      document.getElementById("indice").innerHTML+= `<li class="page-item"><button class="page-link" onclick="printList(${ index * limit })">${ index + 1}</button></li>`;
+  }
+
+}
   
-  const printList = async ( data ) => {
+  const printList = async ( data, limit = 10 ) => {
     table.innerHTML = "";
     console.log(data)
     if( data.length == 0 || !data ) {
@@ -64,6 +72,7 @@ function consulta  ( url ) {
       const row       = `<tr class="${ rowClass }">${ customRow }</tr>`;
       table.innerHTML += row;
     }
+    paginado( Math.ceil( data.length / limit ) );
   }
   
   // Show all registers in the table
@@ -95,8 +104,8 @@ const showOptions = async ( select, url ) => {
   }
 
   function downloadCSV(csv, filename) {
-    var csvFile;
-    var downloadLink;
+    let csvFile;
+    let downloadLink;
 
     // CSV file
     csvFile = new Blob([csv], {type: "text/csv"});
@@ -121,13 +130,13 @@ const showOptions = async ( select, url ) => {
 }
 
 function exportTableToCSV(filename) {
-    var csv = [];
-    var rows = document.querySelectorAll("table tr");
+    const csv = [];
+    const rows = document.querySelectorAll("table tr");
     
-    for (var i = 0; i < rows.length; i++) {
-        var row = [], cols = rows[i].querySelectorAll("td, th");
+    for (let i = 0; i < rows.length; i++) {
+        let row = [], cols = rows[i].querySelectorAll("td, th");
         
-        for (var j = 0; j < cols.length; j++) 
+        for (let j = 0; j < cols.length; j++ ) 
             row.push(cols[j].innerText);
         
         csv.push(row.join(","));        
@@ -167,7 +176,6 @@ function exportTableToExcel(tableID, filename = ''){
         downloadLink.click();
     }
 }
-
 
 // Funcion que limpia los campos de busqeuda
 //btnClearSearch.addEventListener('click', () => showRegisters());
