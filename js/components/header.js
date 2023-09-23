@@ -14,10 +14,10 @@ class Header extends HTMLElement {
               <div class="collapse navbar-collapse" id="navbarNav">
                 <ul class="navbar-nav">
                   <li class="nav-item">
-                    <a class="nav-link" aria-current="page" href="/registros/index.html">Incio</a>
+                    <a id="url" class="nav-link" aria-current="page" href="/index.html">Incio</a>
                   </li>
                   <li class="nav-item">
-                    <a class="nav-link" href="/registros/history.html">Historial</a>
+                    <a id="url" class="nav-link" href="/history.html">Historial</a>
                   </li>
                 </ul>
               </div>
