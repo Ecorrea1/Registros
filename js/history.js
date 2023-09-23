@@ -179,8 +179,18 @@ function exportTableToExcel(tableID, filename = ''){
 
 // Funcion que limpia los campos de busqeuda
 //btnClearSearch.addEventListener('click', () => showRegisters());
-showTitlesTable();
-showRegisters();
+
+// Al abrir la pagina
+window.addEventListener("load", async() => {
+
+  showTitlesTable();
+  await showRegisters();
+
+
+  const fader = document.getElementById('fader');
+  fader.classList.add("close");
+  fader.style.display = 'none';
+})
 
 btnExportTableToCSV.addEventListener('click', () => exportTableToCSV('registros-optica.csv'));
 btnExportTableToExcel.addEventListener('click', () => exportTableToExcel('table_registros','registros-optica.csv'));
