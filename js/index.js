@@ -36,9 +36,7 @@ const table = document.getElementById('list_row');
 const pageItem = document.getElementsByClassName('page-item');
 
 // Show modal to create register
-const myModal = new bootstrap.Modal('#myModal', {
-  keyboard: false
-})
+const myModal = new bootstrap.Modal('#myModal', { keyboard: false });
 
 const modalRegister = document.getElementById('myModal');
 const modalTitle = modalRegister.querySelector('.modal-title');
@@ -50,7 +48,6 @@ const nameInput = document.getElementById('name');
 const ageInput = document.getElementById('age');
 const phoneInput = document.getElementById('phone');
 const totalInput = document.getElementById('total');
-// const paymentInput = document.getElementById('payment');
 const cristalInput = document.getElementById('cristal');
 const treatmentInput = document.getElementById('treatment');
 const frameInput = document.getElementById('frame');
@@ -91,11 +88,11 @@ const divErrorDateAttention = document.getElementById('divErrorDateAttention');
 
 // Show titles of table
 const showTitlesTable = () => {
-    let titles = '';
-    for (const i in titlesTable ) {
-      titles += `<th>${ titlesTable[i] }</th>`;
-    }
-    tableTitles.innerHTML = `<tr>${ titles }</tr>`;
+  let titles = '';
+  for (const i in titlesTable ) {
+    titles += `<th>${ titlesTable[i] }</th>`;
+  }
+  tableTitles.innerHTML = `<tr>${ titles }</tr>`;
 }
 
 function consulta  ( url ) {
@@ -103,11 +100,19 @@ function consulta  ( url ) {
     fetch( url, { method: 'GET', redirect: 'follow' } )
     .then( response => response.json() )
     .then( data => { resolve( JSON.parse( JSON.stringify( data ) ) ); })
-    .catch( err => console.log( err ) )
+    .catch( err => { console.log( err ) } )
   });
 }
 
-const printList = async ( data ) => {
+async function paginado( paginas, limit = 10){
+  const totalPages =  paginas > 32 ? 32 : paginas
+  for (let index = 0; index < totalPages; index++ ) {
+      document.getElementById("indice").innerHTML+= `<li class="page-item"><button class="page-link" onclick="printList(${ index * limit })">${ index + 1}</button></li>`;
+  }
+
+}
+
+const printList = async ( data, limit = 10 ) => {
   table.innerHTML = "";
   console.log(data)
   if( data.length == 0 || !data ) {
@@ -128,6 +133,7 @@ const printList = async ( data ) => {
     const row       = `<tr class="${ rowClass }">${ customRow }</tr>`;
     table.innerHTML += row;
   }
+  paginado( Math.ceil( data.length / limit ) );
 }
 
 // Show all registers in the table
@@ -150,7 +156,6 @@ const showRegistersForFilters = async ( filters ) => {
 
 // Show options in select 
 const showOptions = async ( select, url ) => {
-
   let data;
 
   if (!localStorage.getItem(select)) {
@@ -164,16 +169,14 @@ const showOptions = async ( select, url ) => {
 
   document.getElementById(select).innerHTML = "";
   for (const i in options ) {
-    const { id, name } = options[i];
-    const option = `<option value="${id}">${name}</option>`;
-    document.getElementById(select).innerHTML += option;
+    const { id, name } = options[ i ];
+    const option = `<option value="${ id }">${ name }</option>`;
+    document.getElementById( select ).innerHTML += option;
   }
 }
 
 // Show frames options in select
 const showInitModal = async () => {
-  // showOptions('frame', api + 'registers/table/frames');
-  // showOptions('professional', api + 'registers/table/professionals');
   showOptions('treatment', api + 'registers/table/treatment');
   showOptions('cristal', api + 'registers/table/cristals');
 }
@@ -196,18 +199,21 @@ formSearch.addEventListener('submit', (e) => {
   } else {
     const searchQuery = '&name=' + nameSearchInput.value + '&phone=' + phoneSearchInput.value + '&date_attention=' + dateAttentionInputSearch.value;
     searchRegister( searchQuery );
-    // formSearch.reset();
   }
 });
 
-async function initState () {
+// Al abrir la pagina
+window.addEventListener("load", async() => {
   dateAttentionInputSearch.max = new Date().toISOString().substring(0,10);
   showTitlesTable();
   await showTablePagination();
   showInitModal();
-}
 
-initState();
+  const fader = document.getElementById('fader');
+  fader.classList.add("close");
+  fader.style.display = 'none';
+
+})
 
 const sendInfo = async (uid = '', btnAction) => {
   nameValidator = validateAllfields(nameInput, divErrorName);
@@ -260,7 +266,6 @@ const sendInfo = async (uid = '', btnAction) => {
     console.log(err)
     showMessegeAlert( true, 'Error al editar el registro');
   });
-
 }
 
 const createEditRegister = async (data, method ='POST', uid = '') => {  
@@ -269,7 +274,7 @@ const createEditRegister = async (data, method ='POST', uid = '') => {
     method: method,
     headers: { 'Content-Type': 'application/json'},
     body: JSON.stringify(data)
-  } );
+  });
 }
 
 modalRegister.addEventListener('show.bs.modal', () => {
@@ -285,7 +290,7 @@ document.querySelector(`#save_register`).addEventListener('click', async (e) => 
   e.preventDefault();
   btnSelected = 'save_register';
   //Verificar que los campos esten llenos
- sendInfo('', btnSelected)
+  sendInfo('', btnSelected)
 });
 
 document.querySelector(`#edit_register`).addEventListener('click', async (e) => {
@@ -295,25 +300,24 @@ document.querySelector(`#edit_register`).addEventListener('click', async (e) => 
 });
 
 async function showModalCreateOrEdit( uid, isReadOnly = true, btnAction ) {
-  
   myModal.show();
   formRegister.reset();
 
-  if (isReadOnly) {
-    toggleMenu(btnSaveRegister.id);
-    toggleMenu(btnReset.id);
-    toggleMenu(btnEditRegister.id);
+  if ( isReadOnly ) {
+    toggleMenu( btnSaveRegister.id );
+    toggleMenu( btnReset.id );
+    toggleMenu( btnEditRegister.id );
   } 
   
-  if (isReadOnly == false) {
+  if ( isReadOnly == false ) {
     console.log(`${ btnAction == 'save_register' ? 'Estamos Agregando datos desde el boton' : 'Estamos editando desde el boton' }`);
-    if(btnAction == 'edit_register') {
-      toggleMenu(btnEditRegister.id, true );
-      toggleMenu(btnSaveRegister.id);
+    if( btnAction == 'edit_register' ) {
+      toggleMenu( btnEditRegister.id, true );
+      toggleMenu( btnSaveRegister.id );
     }
-    if(btnAction == 'save_register') {
-      toggleMenu(btnEditRegister.id, false );
-      toggleMenu(btnSaveRegister.id, true);
+    if( btnAction == 'save_register' ) {
+      toggleMenu( btnEditRegister.id, false );
+      toggleMenu( btnSaveRegister.id, true );
     }
   }
 
@@ -345,8 +349,6 @@ async function showModalCreateOrEdit( uid, isReadOnly = true, btnAction ) {
     near_eye_right_sphere
  } = register.data;
 
-  // dateAttentionInput.type = 'text';
-
   idInput.value = uid;
   nameInput.value =  name;
   dateAttentionInput.value = date_attention.substring(0,10);
@@ -369,7 +371,6 @@ async function showModalCreateOrEdit( uid, isReadOnly = true, btnAction ) {
   farEyeLeftPupillaryDistanceInput.value = far_eye_left_pupillary_distance;
   
   nearEyeRightSphereInput.value = near_eye_right_sphere;
-
 }
 
 //Funciones de muestra de mensajes de alerta
@@ -385,7 +386,7 @@ function showMessegeAlert ( isErro = false, message, time = 3000 ) {
   alert.style.display = 'block';
   setTimeout(() => {
     alert.style.display = 'none';
-  } , time);
+  }, time);
 }
 
 function showError( divInput, divError, messageError = '', show = true ) {
@@ -444,7 +445,7 @@ function validateAllfields( divInput, divError, fieldNumber = false ) {
   }
 }
 
-const toggleMenu = ( id, enabled = false) => enabled ? document.getElementById(id).classList.remove('d-none') : document.getElementById(id).classList.add("d-none");
+const toggleMenu = ( id, enabled = false) => enabled ? document.getElementById( id ).classList.remove('d-none') : document.getElementById( id ).classList.add("d-none");
 
 function addDisabledOrRemove( disabled = true, attribute = 'readonly' ) {
   disabled ? nameInput.setAttribute(attribute, true) : nameInput.removeAttribute(attribute);
@@ -515,7 +516,6 @@ function clearForm() {
   divErrorFrame.innerText = ''
   divErrorProfessional.innerText = ''
   divErrorDateAttention.innerText = ''
-
 }
 
 btnCreateRegister.addEventListener('click', () => {

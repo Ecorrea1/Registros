@@ -1,45 +1,67 @@
-body {
-    background-color: #f2f2f2;
-    width: 100%;
-    height: 100%;
+@import 'loader.css';
+
+html{
+  height: 100%;
+}
+
+body{
+  display: flex;
+  flex-direction: column;
+  min-height: 100%;
+  background-color: #e1e2e1;
+}
+
+.fader{
+  width: 100%;
+  height: 100%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  min-height: 100vh;
+  background-color: black;
+}
+
+.fader .message{
+  color: #7cd6ec;
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  animation: message 1s alternate infinite ease-in-out
+}
+
+.container-search{
+  width: 85%;
+  padding-top: 2%;
+  padding-bottom: 1%;
+}
+
+.btn-ingreso{
+  padding-top: 1%;
+  padding-bottom: 1%;
+}
+
+.btn{
+  margin-left: 2px;
+}
+
+.close{
+  opacity: 0;
+  transition: 1.5;
+}
+
+.hidden{
+  overflow: hidden;
 }
 
 footer {
-    background-color: #2196f3;
-    width: 100%;
-    /* padding-top: auto; */
-    padding: 0.5% 0.5% 0.5% 0.5%;
-    color: #fff;
-    bottom: 0;
-    position: absolute;
-}
-   
-footer section {
-  float: left;
+  margin-top: auto;
+  background-color: #2196f3;
+  color: #fff;
 }
 
-footer a {
-  margin: 0px 1px;
-  color: white;
-  text-decoration: none;
-}
-
-footer a:hover {
-  /* padding-top: 0px; */
-  box-shadow: inset 0 -2px 0 0 #333;
-  
-}
-
-.copyright {
-  color : #C7C7C7;
-  float : right;
-  /* margin : 0; */
-}
-
-.copyright a{
-  text-decoration     : none;
-  color               : white;
-  font-weight         : bold;
-  padding-inline-end  : 0.5rem;
-  padding-inline-end  : 0px;
+.copyright{
+  padding-top: 10px ;
+  padding-bottom: 10px ;
+  text-align: center;
 }

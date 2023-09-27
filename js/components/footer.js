@@ -5,10 +5,10 @@ class Footer extends HTMLElement {
 
     connectedCallback() {
         this.innerHTML = `
-        <footer class="">
-          <div class="copyright">
-            © Derechos Reservados 2023 | <a href="https://impulsandonegocios.cl">ImpulsandoNegocios</a>
-          </div>
+        <footer>
+          <p class="copyright">
+            © Derechos Reservados 2023 | OPTICA MONTENCARLOS</a>
+          </p>
         </footer>
       `;
     }
