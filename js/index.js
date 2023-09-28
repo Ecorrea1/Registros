@@ -1,9 +1,11 @@
+//Como agregar el modo estricto js
+"use strict";
+
 let nameValidator = false;
 let ageValidator = false;
 let phoneValidator = false;
 let dateAttentionValidator = false;
 let totalValidator = false;
-// let paymentValidator = false;
 let cristalValidator = false;
 let treatmentValidator = false;
 let frameValidator = false;

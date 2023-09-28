@@ -37,20 +37,17 @@ const showTitlesTable = () => {
 }
 
 function consulta  ( url ) {
-    return new Promise(( resolve, reject ) => {
-      fetch( url, { method: 'GET', redirect: 'follow' } )
-      .then( response => response.json() )
-      .then( data => { resolve( JSON.parse( JSON.stringify( data ) ) ); })
-      .catch( err => console.log( err ) )
-    });
-  }
+  return new Promise(( resolve, reject ) => {
+    fetch( url, { method: 'GET', redirect: 'follow' } )
+    .then( response => response.json() )
+    .then( data => { resolve( JSON.parse( JSON.stringify( data ) ) ); })
+    .catch( err => { console.log( err ) } )
+  });
+}
 
 async function paginado( paginas, limit = 10){
   const totalPages =  paginas > 32 ? 32 : paginas
-  for (let index = 0; index < totalPages; index++ ) {
-      document.getElementById("indice").innerHTML+= `<li class="page-item"><button class="page-link" onclick="printList(${ index * limit })">${ index + 1}</button></li>`;
-  }
-
+  for (let index = 0; index < totalPages; index++ ) document.getElementById("indice").innerHTML+= `<li class="page-item"><button class="page-link" onclick="printList(${ index * limit })">${ index + 1}</button></li>`;
 }
   
   const printList = async ( data, limit = 10 ) => {
@@ -63,10 +60,6 @@ async function paginado( paginas, limit = 10){
   
     for (const i in data ) {
       const { id, name, age, phone, cristal, treatment, frame, professional, date_attention, created_at } = data[i];
-      const actions = [
-        `<button type="button" id='btnShowRegister' onClick='showModalCreateOrEdit(${ id },${true}, "show_register")' value=${ id } class="btn btn-primary">VER</button>`,
-      ]
-  
       const rowClass  = 'text-right';
       const customRow = `<td>${ [ id, name, age, `+569${ phone }`, cristal, treatment, frame, professional, date_attention.substring(0,10), created_at.substring(0,10) ].join('</td><td>') }</td>`;
       const row       = `<tr class="${ rowClass }">${ customRow }</tr>`;
