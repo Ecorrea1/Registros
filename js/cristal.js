@@ -14,6 +14,7 @@ const btnNewCristals =document.getElementById('btn_create_cristals');
 const btnEditCristals =document.getElementById('btnEditRegister');
 
 const myModal = new bootstrap.Modal('#myModal', { keyboard: false });
+const modalRegister = document.getElementById('myModal');
 const btnCreateRegister = document.getElementById(`save_register`);
 const btnEditRegister = document.getElementById(`edit_register`);
 
@@ -94,7 +95,7 @@ const sendInfo = async (idCristal = '', action = 'CREATE'|'EDIT') => {
   const result = await createEditCristal( data, idCristal );
   if (!result) return showMessegeAlert( true, 'Error al editar el registro');
   await showCristals();
-//   bootstrap.Modal.getInstance(myModal).hide();
+  bootstrap.Modal.getInstance(modalRegister).hide();
   showMessegeAlert( false, action == 'EDIT' ? `Registro Editado` : 'Registro Creado');
 }
 

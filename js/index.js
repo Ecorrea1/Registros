@@ -142,18 +142,9 @@ const showRegistersForFilters = async ( filters ) => {
 
 // Show options in select 
 const showOptions = async ( select, url ) => {
-  let data;
-
-  if (!localStorage.getItem(select)) {
-    console.log('Estoy dentro porque no existe en el localStorage');
-    const result = await consulta( url );
-    data = result.data;
-    localStorage.setItem( select, JSON.stringify(result.data) );
-  }
-  
-  const options = data ?? JSON.parse( localStorage.getItem( select ) );
-
   document.getElementById(select).innerHTML = "";
+  const result = await consulta( url );
+  const options = result.data;
   for (const i in options ) {
     const { id, name } = options[ i ];
     const option = `<option value="${ id }">${ name }</option>`;
