@@ -1,4 +1,3 @@
-//Como agregar el modo estricto js
 "use strict";
 
 let nameValidator = false;
@@ -10,8 +9,6 @@ let cristalValidator = false;
 let treatmentValidator = false;
 let frameValidator = false;
 let professionalValidator = false;
-
-let quantityRowsOfTable = 13;
 
 // Show Alert
 const alert = document.getElementById('alert-msg');
@@ -29,7 +26,7 @@ const rutSearchError = document.getElementById('rutSearchError');
 const phoneSearchError = document.getElementById('phoneSearchError');
 
 // Show table 
-const titlesTable = [ 'ID', 'Nombre', 'Edad', 'Teléfono', 'Cristal', 'Tratamiento', 'Marco', 'Profesional', 'Fecha de atención', 'Fecha de creación', 'Acciones' ];
+const titlesTable = [ 'ID', 'Rut', 'Nombre', 'Teléfono', 'Cristal', 'Tratamiento', 'Marco', 'Profesional', 'Fecha de atención', 'Fecha de creación', 'Acciones' ];
 const tableTitles = document.getElementById('list_titles');
 const trTitles = document.getElementById('list_titles_tr');
 const table = document.getElementById('list_row');
@@ -91,9 +88,7 @@ const divErrorDateAttention = document.getElementById('divErrorDateAttention');
 // Show titles of table
 const showTitlesTable = () => {
   let titles = '';
-  for (const i in titlesTable ) {
-    titles += `<th>${ titlesTable[i] }</th>`;
-  }
+  for (const i in titlesTable ) titles += `<th>${ titlesTable[i] }</th>`;
   tableTitles.innerHTML = `<tr>${ titles }</tr>`;
 }
 
@@ -105,15 +100,6 @@ function consulta  ( url ) {
     .catch( err => { console.log( err ) } )
   });
 }
-
-async function paginado( paginas, limit = 10){
-  const totalPages =  paginas > 32 ? 32 : paginas
-  for (let index = 0; index < totalPages; index++ ) {
-      document.getElementById("indice").innerHTML+= `<li class="page-item"><button class="page-link" onclick="printList(${ index * limit })">${ index + 1}</button></li>`;
-  }
-
-}
-
 const printList = async ( data, limit = 10 ) => {
   table.innerHTML = "";
   console.log(data)
@@ -127,15 +113,13 @@ const printList = async ( data, limit = 10 ) => {
     const actions = [
       `<button type="button" id='btnShowRegister' onClick='showModalCreateOrEdit(${ id },${true}, "show_register")' value=${ id } class="btn btn-primary">VER</button>`,
       `<button type="button" id='btnEditRegister' onClick='showModalCreateOrEdit(${ id }, ${false}, "edit_register")' value=${ id } class="btn btn-success">EDITAR</button>`,
-      // `<button type="button" class="btn btn-danger">ELIMINAR</button>`
     ]
 
     const rowClass  = 'text-right';
-    const customRow = `<td>${ [ id, name, age, `+569${ phone }`, cristal, treatment, frame, professional, date_attention.substring(0,10), created_at.substring(0,10), actions ].join('</td><td>') }</td>`;
+    const customRow = `<td>${ [ id, age,name, `+569${ phone }`, cristal, treatment, frame, professional, date_attention.substring(0,10), created_at.substring(0,10), actions ].join('</td><td>') }</td>`;
     const row       = `<tr class="${ rowClass }">${ customRow }</tr>`;
     table.innerHTML += row;
   }
-  paginado( Math.ceil( data.length / limit ) );
 }
 
 // Show all registers in the table
@@ -179,8 +163,8 @@ const showOptions = async ( select, url ) => {
 
 // Show frames options in select
 const showInitModal = async () => {
-  showOptions('treatment', api + 'registers/table/treatment');
-  showOptions('cristal', api + 'registers/table/cristals');
+  await showOptions('treatment', api + 'registers/table/treatment');
+  await showOptions('cristal', api + 'registers/table/cristals');
 }
 
 // Show table with registers with pagination
@@ -231,6 +215,7 @@ const sendInfo = async (uid = '', btnAction) => {
   if (!nameValidator, !ageValidator, !phoneValidator, !dateAttentionValidator, !totalValidator, !cristalValidator, !treatmentValidator, !frameValidator, !professionalValidator) {
     return console.log('Hay input con problemas');
   }
+
   const data = {
     name: nameInput.value.toUpperCase(),
     age: parseInt(ageInput.value),
@@ -290,15 +275,13 @@ btnCreateRegister.addEventListener('click', () => clearForm());
 
 document.querySelector(`#save_register`).addEventListener('click', async (e) => {
   e.preventDefault();
-  btnSelected = 'save_register';
   //Verificar que los campos esten llenos
-  sendInfo('', btnSelected)
+  sendInfo('', 'save_register')
 });
 
 document.querySelector(`#edit_register`).addEventListener('click', async (e) => {
   e.preventDefault();
-  btnSelected = 'edit_register';
-  sendInfo(idInput.value, btnSelected);
+  sendInfo(idInput.value, 'edit_register');
 });
 
 async function showModalCreateOrEdit( uid, isReadOnly = true, btnAction ) {
@@ -326,8 +309,6 @@ async function showModalCreateOrEdit( uid, isReadOnly = true, btnAction ) {
   addDisabledOrRemove( isReadOnly ?? false , 'disabled');
 
   const register = await consulta( api + 'registers/' + uid );
-  console.log(register.data);
-  console.log(register.msg);
   
   const { 
     name, 
@@ -476,7 +457,7 @@ function addDisabledOrRemove( disabled = true, attribute = 'readonly' ) {
 function clearForm() {
   modalTitle.textContent = ''
   nameInput.value = ''
-  ageInput.value = '18'
+  ageInput.value = ''
   dateAttentionInput.value = ''
   phoneInput.value = ''
   totalInput.value = ''

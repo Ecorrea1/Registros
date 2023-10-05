@@ -19,6 +19,9 @@ class Header extends HTMLElement {
                   <li class="nav-item">
                     <a id="url" class="nav-link" href="/history.html">Historial</a>
                   </li>
+                  <li class="nav-item">
+                    <a id="url" class="nav-link" href="/cristal.html">Cristal</a>
+                  </li>
                 </ul>
               </div>
             </div>
