@@ -16,20 +16,20 @@ class Modal extends HTMLElement {
                   <div class="modal-body">
                     <form class="row g-2 container" id="createRegister">
                         <label class="h2">Datos del Cliente</label>
+                        <div class="col-md-4">
+                          <label for="age" class="form-label">RUT</label>
+                          <input type="text" maxlength="10" placeholder="11111111" class="form-control" id="age" name="age" value="" required>
+                          <div id="divErrorAge"></div>
+                        </div>
                         <div class="col-md-12">
                           <label for="name" class="form-label">Nombre</label>
                           <input type="text" class="form-control" id="name" name="name" placeholder="Ingrese Nombre Completo" required>
                           <div id="divErrorName"></div> 
                         </div>
                         <div class="col-md-4">
-                            <label for="dateAttention" class="form-label">Fecha Atencion</label>
-                            <input type="date" class="form-control" id="date_attention" name="date_attention" placeholder="Ingrese fecha de atencion al cliente" required>
-                            <div id="divErrorDateAttention"></div>                  
-                          </div>
-                        <div class="col-md-4">
-                          <label for="age" class="form-label">Edad</label>
-                          <input type="number" min="1" max="99" class="form-control" id="age" name="age" value="18" required>
-                          <div id="divErrorAge"></div>
+                          <label for="dateAttention" class="form-label">Fecha Atencion</label>
+                          <input type="date" class="form-control" id="date_attention" name="date_attention" placeholder="Ingrese fecha de atencion al cliente" required>
+                          <div id="divErrorDateAttention"></div>                  
                         </div>
             
                         <div class="col-md-4">

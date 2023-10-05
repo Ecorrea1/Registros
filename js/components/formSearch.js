@@ -7,6 +7,7 @@ class FormSearch extends HTMLElement {
         this.innerHTML = `
         <div class=" container-search container">
           <form class="d-flex" role="search" id="form-search">
+            <input class="form-control me-2" type="search" id="rutSearch" placeholder="Ingresa Rut" aria-label="Search">
             <input class="form-control me-2" type="search" id="nameSearch" placeholder="Ingresa Nombre" aria-label="Search">
             <input class="form-control me-2" type="number" id="phoneSearch" placeholder="Ingresa Telefono" aria-label="Search">
             <input type="date" class="form-control me-2" id="dateAttentionSearch" placeholder="Atencion" aria-label="Search">

@@ -171,10 +171,10 @@ const searchRegister = async ( searchQuery ) => {
 
 formSearch.addEventListener('submit', (e) => {
   e.preventDefault();
-  if ( nameSearchInput.value === '' && phoneSearchInput.value === '' && dateAttentionInputSearch.value === '' ) {
+  if ( rutSearchInput.value === '' && nameSearchInput.value === '' && phoneSearchInput.value === '' && dateAttentionInputSearch.value === '' ) {
     showTablePagination();
   } else {
-    const searchQuery = '&name=' + nameSearchInput.value + '&phone=' + phoneSearchInput.value + '&date_attention=' + dateAttentionInputSearch.value;
+    const searchQuery = '&age=' + parseInt(rutSearchInput.value) + '&name=' + nameSearchInput.value + '&phone=' + phoneSearchInput.value + '&date_attention=' + dateAttentionInputSearch.value;
     searchRegister( searchQuery );
   }
 });
