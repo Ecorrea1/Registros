@@ -73,7 +73,7 @@ const printList = async ( data, limit = 10 ) => {
 
 // Show all registers in the table
 const showCristals = async () => {
-  const registers = await consulta( api + 'treatment');
+  const registers = await consulta( api + 'cristals');
   printList( registers.data );
 }
 
@@ -100,7 +100,7 @@ const sendInfo = async (idCristal = '', action = 'CREATE'|'EDIT') => {
 }
 
 const createEditCristal = async ( data, uid = '') => {  
-  const query = uid == '' ? 'treatment' : `treatment/edit/${ uid }`
+  const query = uid == '' ? 'cristals' : `cristals/edit/${ uid }`
   return await fetch( api + query , {
     method: 'POST',
     headers: { 'Content-Type': 'application/json'},
