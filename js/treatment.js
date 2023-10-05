@@ -10,8 +10,8 @@ const divErrorEnabled = document.getElementById('divErrorEnabled');
 // Show Alert
 const alertMessage = document.getElementById('alert-msg');
 
-const btnNewTreatment =document.getElementById('btn_create_cristals');
-const btnEditTreatment =document.getElementById('btnEditRegister');
+const btnNewCristals =document.getElementById('btn_create_treatments');
+const btnEditCristals =document.getElementById('btnEditRegister');
 
 const myModal = new bootstrap.Modal('#myModal', { keyboard: false });
 const modalRegister = document.getElementById('myModal');
@@ -25,7 +25,7 @@ const trTitles = document.getElementById('list_titles_tr');
 const table = document.getElementById('list_row');
 
 const formRegister = document.getElementById('createRegister');
-const idInput = document.getElementById('uid');
+const idTreatmentInput = document.getElementById('uid');
 const nameInput = document.getElementById('name');
 const descriptionInput = document.getElementById('description');
 const enabledInput = document.getElementById('enabled');
@@ -123,13 +123,13 @@ async function showModalCreateOrEdit( uid, btnAction ) {
     myModal.show();
     formRegister.reset();
   
-    const register = await consulta( api + 'cristals/' + uid );
+    const register = await consulta( api + 'treatment/' + uid );
     toggleMenu('edit_register', true);
     toggleMenu('save_register', false);
     
     const { name, description, enabled } = register.data;
   
-    idInput.value = uid;
+    idTreatmentInput.value = uid;
     nameInput.value =  name;
     descriptionInput.value = description;
     enabledInput.value = enabled;
@@ -284,13 +284,13 @@ function showMessegeAlert ( isErro = false, message, time = 3000 ) {
   }
 
 function clearForm() {
-  idInput.value = '';
+  idTreatmentInput.value = '';
   nameInput.value = '';
   descriptionInput.value = '';
   enabledInput.value = 1;
 }
 
-btnNewTreatment.addEventListener('click', () => {
+btnNewCristals.addEventListener('click', () => {
     clearForm()
     toggleMenu('edit_register', false);
     toggleMenu('save_register', true);
@@ -301,7 +301,7 @@ document.querySelector(`#save_register`).addEventListener('click', async (e) => 
   await sendInfo('', 'CREATE');
 });
 
-btnEditRegister.addEventListener('click', async (e) => await sendInfo(idInput.value, 'EDIT'));
+btnEditRegister.addEventListener('click', async (e) => await sendInfo(idTreatmentInput.value, 'EDIT'));
 
 // Al abrir la pagina
 window.addEventListener("load", async() => {
