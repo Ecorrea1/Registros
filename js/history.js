@@ -1,5 +1,4 @@
-let quantityRowsOfTable = 13;
-
+"use strict";
 const btnExportTableToCSV = document.getElementById('export_csv');
 const btnExportTableToExcel = document.getElementById('export_excel');
 
@@ -19,7 +18,7 @@ const rutSearchError = document.getElementById('rutSearchError');
 const phoneSearchError = document.getElementById('phoneSearchError');
 
 // Show table 
-const titlesTable = [ 'ID', 'Nombre', 'Edad', 'Teléfono', 'Cristal', 'Tratamiento', 'Marco', 'Profesional', 'Fecha de atención', 'Fecha de creación' ];
+const titlesTable = [ 'ID', 'Rut', 'Nombre', 'Teléfono', 'Cristal', 'Tratamiento', 'Marco', 'Profesional', 'Fecha de atención', 'Fecha de creación' ];
 const tableTitles = document.getElementById('list_titles');
 const trTitles = document.getElementById('list_titles_tr');
 const table = document.getElementById('list_row');
@@ -29,11 +28,9 @@ const pageItem = document.getElementsByClassName('page-item');
 
 // Show titles of table
 const showTitlesTable = () => {
-    let titles = '';
-    for (const i in titlesTable ) {
-      titles += `<th>${ titlesTable[i] }</th>`;
-    }
-    tableTitles.innerHTML = `<tr>${ titles }</tr>`;
+  let titles = '';
+  for (const i in titlesTable ) titles += `<th>${ titlesTable[i] }</th>`;
+  tableTitles.innerHTML = `<tr>${ titles }</tr>`;
 }
 
 function consulta  ( url ) {
@@ -61,7 +58,7 @@ async function paginado( paginas, limit = 10){
     for (const i in data ) {
       const { id, name, age, phone, cristal, treatment, frame, professional, date_attention, created_at } = data[i];
       const rowClass  = 'text-right';
-      const customRow = `<td>${ [ id, name, age, `+569${ phone }`, cristal, treatment, frame, professional, date_attention.substring(0,10), created_at.substring(0,10) ].join('</td><td>') }</td>`;
+      const customRow = `<td>${ [ id, age, name, `+569${ phone }`, cristal, treatment, frame, professional, date_attention.substring(0,10), created_at.substring(0,10) ].join('</td><td>') }</td>`;
       const row       = `<tr class="${ rowClass }">${ customRow }</tr>`;
       table.innerHTML += row;
     }

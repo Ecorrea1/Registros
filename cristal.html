@@ -1,0 +1,85 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <script src="js/components/loader.js" type="text/javascript"></script>
+  <script src="js/components/header.js" type="text/javascript"></script>
+  <script src="js/components/table.js" type="text/javascript"></script>
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-T3c6CoIi6uLrA9TneNEoa7RxnatzjcDSCmG1MXxSR1GAsXEV/Dwwykc2MPK8M2HN" crossorigin="anonymous">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/animate.css/4.1.1/animate.min.css"/>
+  <link href="css/style.css" rel="stylesheet" type="text/css">
+  <title>Cristales</title>
+</head>
+<body>
+    <loader-component></loader-component>
+    <div id="alert-msg" class="alert" role="alert" insvisible hidden></div>
+    <header>
+        <header-component></header-component>
+    </header-component>
+    
+    <div class="btn-ingreso container">
+      <button id="btn_create_cristals" type="button" class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#myModal">Ingresa nuevo cristal</button>
+    </div>
+
+    <div class="container">
+        <table-component></table-component>
+        <nav aria-label="...">
+          <ul id="indice" class="pagination justify-content-center"></ul>
+        </nav>
+    </div>
+
+    <!-- Modal -->
+    <div class="modal fade" id="myModal" tabindex="-1" aria-labelledby="myModalLabel" aria-hidden="true">
+      <div class="modal-dialog">
+        <div class="modal-content">
+          <div class="modal-header">
+            <h1 class="modal-title fs-5" id="exampleModalLabel"></h1>
+            <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+          </div>
+          <div class="modal-body">
+
+            <form class="row g-2 container" id="createRegister">
+              <label class="h2">Datos del Cristal</label>
+              <div class="col-md-12">
+                <label for="name" class="form-label">Nombre</label>
+                <input type="text" class="form-control text-uppercase" id="name" name="name" placeholder="Ingrese nombre de Cristal" required>
+                <div id="divErrorName"></div> 
+              </div>
+              <div class="col-md-4">
+                  <label for="description" class="form-label">Descripcion</label>
+                  <textarea class="form-control" placeholder="Ingresa la descripcion de este material" id="description"></textarea>
+                  <!-- <label for="floatingTextarea2">Ingresa la descripcion de este material</label>                       -->
+                  <div id="divErrorDescription"></div>                  
+                </div>
+              <div class="col-md-4">
+                <label for="enabled" class="form-label">Activo</label>
+                <input type="number" min="0" max="1" class="form-control" id="enabled" name="enabled" value="1" required>
+                <div id="divErrorEnabled"></div>
+              </div>
+
+              <input type="text" class="d-none" id="uid" name="uid">
+
+              <div class="col-sm-12 d-grid gap-2">
+                <button class="btn btn-primary btn-lg" type="submit" id="save_register">Crear Registro</button>
+                <button class="btn btn-primary btn-lg d-none" type="button" id="edit_register">Editar Registro</button>
+                <input class="btn btn-secondary btn-lg" type="reset" id="btnReset">
+              </div>
+            </form>
+
+          </div>
+        </div>
+      </div>
+    </div>
+
+
+  <!-- JavaScript Bundle with Popper -->
+  <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js" integrity="sha384-C6RzsynM9kWDrMNeT87bh95OGNyZPhcTNXj1NW7RuBCsyN/o0jlpcV8Qyq46cDfL" crossorigin="anonymous"></script>
+  <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.11.8/dist/umd/popper.min.js" integrity="sha384-I7E8VVD/ismYTF4hNIPjVp/Zjvgyol6VFvRkX/vR+Vc4jQkC+hVqc2pM8ODewa9r" crossorigin="anonymous"></script>
+  <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.min.js" integrity="sha384-BBtl+eGJRgqQAUMxJ7pMwbEyER4l1g+O15P+16Ep7Q9Q+zqX6gSbd85u4mG4QzX+" crossorigin="anonymous"></script>
+
+  <script src="js/config/connection.js" type="text/javascript"></script>
+  <script src="js/cristal.js" type="text/javascript"></script>
+</body>
+</html>
