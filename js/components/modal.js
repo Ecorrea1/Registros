@@ -174,7 +174,6 @@ class Modal extends HTMLElement {
         </div>
         `;
     }
-
 }
 
 customElements.define('modal-component', Modal);
