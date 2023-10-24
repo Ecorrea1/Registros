@@ -11,7 +11,7 @@ let frameValidator = false;
 let professionalValidator = false;
 
 // Show Alert
-const alert = document.getElementById('alert-msg');
+const alertMsg = document.getElementById('alert-msg');
 
 // Formulario de busqueda
 const formSearch = document.getElementById('form-search');
@@ -100,24 +100,23 @@ function consulta  ( url ) {
     .catch( err => { console.log( err ) } )
   });
 }
-const printList = async ( data, limit = 10 ) => {
+const printList = async ( data ) => {
   table.innerHTML = "";
-  console.log(data)
   if( data.length == 0 || !data ) {
     showMessegeAlert( false, 'No se encontraron registros' );
     return table.innerHTML = `<tr><td colspan="${ titlesTable.length + 1 }" class="text-center">No hay registros</td></tr>`;
   }
 
   for (const i in data ) {
-    const { id, name, age, phone, cristal, treatment, frame, professional, date_attention, created_at } = data[i];
+    const { id, name, age, phone, cristal, treatment, frame, professional, date_attention } = data[i];
     const actions = [
       `<button type="button" id='btnShowRegister' onClick='showModalCreateOrEdit(${ id },${true}, "show_register")' value=${ id } class="btn btn-primary">VER</button>`,
       `<button type="button" id='btnEditRegister' onClick='showModalCreateOrEdit(${ id }, ${false}, "edit_register")' value=${ id } class="btn btn-success">EDITAR</button>`,
     ]
 
-    const rowClass  = 'text-right';
-    const customRow = `<td>${ [ id, age,name, `+569${ phone }`, cristal, treatment, frame, professional, date_attention.substring(0,10), actions ].join('</td><td>') }</td>`;
-    const row       = `<tr class="${ rowClass }">${ customRow }</tr>`;
+    const rowClass = 'text-right';
+    const customRow = `<td>${ [ id, age, name, `+569${ phone }`, cristal, treatment, frame, professional, date_attention.substring(0,10), actions ].join('</td><td>') }</td>`;
+    const row = `<tr class="${ rowClass }">${ customRow }</tr>`;
     table.innerHTML += row;
   }
 }
@@ -192,7 +191,7 @@ window.addEventListener("load", async() => {
 
 })
 
-const sendInfo = async (uid = '', btnAction) => {
+const sendInfo = async (uid = '', btnAction = 'edit_register'|'save_register') => {
   nameValidator = validateAllfields(nameInput, divErrorName);
   ageValidator = validateAllfields(ageInput, divErrorAge, true);
   phoneValidator = validateAllfields(phoneInput, divErrorPhone, true);
@@ -275,7 +274,7 @@ document.querySelector(`#edit_register`).addEventListener('click', async (e) => 
   sendInfo(idInput.value, 'edit_register');
 });
 
-async function showModalCreateOrEdit( uid, isReadOnly = true, btnAction ) {
+async function showModalCreateOrEdit( uid, isReadOnly = true, btnAction = 'edit_register'|'save_register' ) {
   myModal.show();
   formRegister.reset();
 
@@ -349,39 +348,22 @@ async function showModalCreateOrEdit( uid, isReadOnly = true, btnAction ) {
 
 //Funciones de muestra de mensajes de alerta
 function showMessegeAlert ( isErro = false, message, time = 3000 ) {
-  if (isErro) {
-    alert.classList.add('alert-danger');
-    alert.classList.remove('alert-success');
-  } else {
-    alert.classList.add('alert-success');
-    alert.classList.remove('alert-danger');
-  }
-  alert.textContent = message;
-  alert.style.display = 'block';
-  setTimeout(() => {
-    alert.style.display = 'none';
-  }, time);
+  alertMsg.classList.add(isErro ? 'alert-danger' : 'alert-success');
+  alertMsg.classList.remove(isErro ? 'alert-success' : 'alert-danger');
+  alertMsg.textContent = message;
+  alertMsg.style.display = 'block';
+  setTimeout(() => alertMsg.style.display = 'none', time);
 }
 
 function showError( divInput, divError, messageError = '', show = true ) {
-  if (show){
-    divError.innerText = messageError;
-    divInput.style.borderColor = '#ff0000';
-  } else {
-    divError.innerText = messageError;
-    divInput.style.borderColor = 'hsl(270, 3%, 87%)';
-  }
+  divInput.style.borderColor = show ? '#ff0000' : 'hsl(270, 3%, 87%)'
+  divError.innerText = messageError;
 }
 
 // Funciones verificadores de campos
 function verifyIsFilled( input, divError ) {
-  if (input.value == '') {
-    divError.style.display = 'block';
-    return false;
-  } else {
-    divError.style.display = 'none';
-    return true;
-  }
+  divError.style.display = input.value == '' ?  'block' : 'none';
+  return input.value == '' ? false : true;
 }
 
 function  validateLetters( input ) {
