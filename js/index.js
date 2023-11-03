@@ -265,7 +265,6 @@ btnCreateRegister.addEventListener('click', () => clearForm());
 
 document.querySelector(`#save_register`).addEventListener('click', async (e) => {
   e.preventDefault();
-  //Verificar que los campos esten llenos
   sendInfo('', 'save_register')
 });
 
