@@ -81,9 +81,6 @@ const showCristals = async () => {
 const sendInfo = async (idCristal = '', action = 'CREATE'|'EDIT') => {
  
   nameValidator = validateAllfields(nameInput, divErrorName);
-//   descriptionValidator = validateAllfields(descriptionInput, divErrorDescription);
-
-//   if (!nameValidator && !descriptionValidator) return console.log('Ingrese Nombre de Cristal');
   if (!nameValidator) return console.log('Ingrese Nombre de Cristal');
   
   const data = {
@@ -134,21 +131,6 @@ async function showModalCreateOrEdit( uid, btnAction ) {
     descriptionInput.value = description;
     enabledInput.value = enabled;
 }
-
-  function showMessegeAlert ( isErro = false, message, time = 3000 ) {
-    if (isErro) {
-      alert.classList.add('alert-danger');
-      alert.classList.remove('alert-success');
-    } else {
-      alert.classList.add('alert-success');
-      alert.classList.remove('alert-danger');
-    }
-    alert.textContent = message;
-    alert.style.display = 'block';
-    setTimeout(() => {
-      alert.style.display = 'none';
-    }, time);
-  }
   
   function showError( divInput, divError, messageError = '', show = true ) {
     if (show){
@@ -258,29 +240,6 @@ function showMessegeAlert ( isErro = false, message, time = 3000 ) {
     // Validar input que solo sean numeros negativos
     const regex = /^[0-9]*$/;
     return regex.test(input.value) ? true : false;
-  }
-  
-  function validateAllfields( divInput, divError, fieldNumber = false ) {
-    if(verifyIsFilled(divInput, divError)){
-      if (fieldNumber) {
-        if (validateNumber(divInput)) {
-          showError(divInput, divError, '', false);
-          return true;
-        } 
-        showError(divInput, divError, 'Solo se permiten numeros', true);
-        return false;
-      } else {
-        if(validateLetters(divInput)) {
-          showError(divInput, divError, '', false);
-          return true;
-        }
-        showError(divInput, divError, 'Solo se permiten letras', true);
-        return false;
-      }
-    } else {
-      showError(divInput, divError, 'Este campo es obligatorio');
-      return false;
-    }
   }
 
 function clearForm() {

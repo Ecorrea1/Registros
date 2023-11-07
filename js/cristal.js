@@ -29,22 +29,6 @@ const idInput = document.getElementById('uid');
 const nameInput = document.getElementById('name');
 const descriptionInput = document.getElementById('description');
 const enabledInput = document.getElementById('enabled');
-
-// Show titles of table
-const showTitlesTable = () => {
-  let titles = '';
-  for (const i in titlesTable ) titles += `<th>${ titlesTable[i] }</th>`;
-  tableTitles.innerHTML = `<tr>${ titles }</tr>`;
-}
-  
-function consulta  ( url ) {
-  return new Promise(( resolve, reject ) => {
-    fetch( url, { method: 'GET', redirect: 'follow' } )
-    .then( response => response.json() )
-    .then( data => { resolve( JSON.parse( JSON.stringify( data ) ) ); })
-    .catch( err => { console.log( err ) } )
-  });
-}
   
 async function paginado( paginas, limit = 10){
   const totalPages =  paginas > 32 ? 32 : paginas
@@ -79,11 +63,7 @@ const showCristals = async () => {
 
 
 const sendInfo = async (idCristal = '', action = 'CREATE'|'EDIT') => {
- 
   nameValidator = validateAllfields(nameInput, divErrorName);
-//   descriptionValidator = validateAllfields(descriptionInput, divErrorDescription);
-
-//   if (!nameValidator && !descriptionValidator) return console.log('Ingrese Nombre de Cristal');
   if (!nameValidator) return console.log('Ingrese Nombre de Cristal');
   
   const data = {
@@ -117,171 +97,19 @@ const createEditCristal = async ( data, uid = '') => {
   });
 }
 
-const toggleMenu = ( id, enabled = false) => enabled ? document.getElementById( id ).classList.remove('d-none') : document.getElementById( id ).classList.add("d-none");
-
 async function showModalCreateOrEdit( uid, btnAction ) {
-    myModal.show();
-    formRegister.reset();
+  myModal.show();
+  formRegister.reset();
+  toggleMenu('edit_register', true);
+  toggleMenu('save_register', false);
   
-    const register = await consulta( api + 'cristals/' + uid );
-    toggleMenu('edit_register', true);
-    toggleMenu('save_register', false);
-    
-    const { name, description, enabled } = register.data;
-  
-    idInput.value = uid;
-    nameInput.value =  name;
-    descriptionInput.value = description;
-    enabledInput.value = enabled;
+  const register = await consulta( api + 'cristals/' + uid );
+  const { name, description, enabled } = register.data;
+  idInput.value = uid;
+  nameInput.value =  name;
+  descriptionInput.value = description;
+  enabledInput.value = enabled;
 }
-
-  function showMessegeAlert ( isErro = false, message, time = 3000 ) {
-    if (isErro) {
-      alert.classList.add('alert-danger');
-      alert.classList.remove('alert-success');
-    } else {
-      alert.classList.add('alert-success');
-      alert.classList.remove('alert-danger');
-    }
-    alert.textContent = message;
-    alert.style.display = 'block';
-    setTimeout(() => {
-      alert.style.display = 'none';
-    }, time);
-  }
-  
-  function showError( divInput, divError, messageError = '', show = true ) {
-    if (show){
-      divError.innerText = messageError;
-      divInput.style.borderColor = '#ff0000';
-    } else {
-      divError.innerText = messageError;
-      divInput.style.borderColor = 'hsl(270, 3%, 87%)';
-    }
-  }
-  
-  // Funciones verificadores de campos
-  function verifyIsFilled( input, divError ) {
-    if (input.value == '') {
-      divError.style.display = 'block';
-      return false;
-    } else {
-      divError.style.display = 'none';
-      return true;
-    }
-  }
-  
-  function  validateLetters( input ) {
-    //Validar que solo sean letras
-    const regex = /[A-z]/g;
-    return regex.test(input.value) ? true : false;
-  }
-  
-  function validateNumber(input) {
-    // Validar input que solo sean numeros negativos
-    const regex = /^[0-9]*$/;
-    return regex.test(input.value) ? true : false;
-  }
-  
-  function validateAllfields( divInput, divError, fieldNumber = false ) {
-    if(verifyIsFilled(divInput, divError)){
-      if (fieldNumber) {
-        if (validateNumber(divInput)) {
-          showError(divInput, divError, '', false);
-          return true;
-        } 
-        showError(divInput, divError, 'Solo se permiten numeros', true);
-        return false;
-      } else {
-        if(validateLetters(divInput)) {
-          showError(divInput, divError, '', false);
-          return true;
-        }
-        showError(divInput, divError, 'Solo se permiten letras', true);
-        return false;
-      }
-    } else {
-      showError(divInput, divError, 'Este campo es obligatorio');
-      return false;
-    }
-  }
-
-const showBadgeBoolean = (enabled = 1) => { 
-    const enabledCristal = enabled ? 'ACTIVADO' : 'DESACTIVADO'
-    return `<span class="badge text-bg-${ enabledCristal == 'ACTIVADO' ? 'success' : 'danger' }">${enabledCristal}</span>`
- }
-
-//Funciones de muestra de mensajes de alerta
-function showMessegeAlert ( isErro = false, message, time = 3000 ) {
-    if (isErro) {
-      alertMessage.classList.add('alert-danger');
-      alertMessage.classList.remove('alert-success');
-    } else {
-      alertMessage.classList.add('alert-success');
-      alertMessage.classList.remove('alert-danger');
-    }
-    alertMessage.textContent = message;
-    alertMessage.style.display = 'block';
-    setTimeout(() => {
-      alertMessage.style.display = 'none';
-    }, time);
-  }
-  
-  function showError( divInput, divError, messageError = '', show = true ) {
-    if (show){
-      divError.innerText = messageError;
-      divInput.style.borderColor = '#ff0000';
-    } else {
-      divError.innerText = messageError;
-      divInput.style.borderColor = 'hsl(270, 3%, 87%)';
-    }
-  }
-  
-  // Funciones verificadores de campos
-  function verifyIsFilled( input, divError ) {
-    if (input.value == '') {
-      divError.style.display = 'block';
-      return false;
-    } else {
-      divError.style.display = 'none';
-      return true;
-    }
-  }
-  
-  function  validateLetters( input ) {
-    //Validar que solo sean letras
-    const regex = /[A-z]/g;
-    return regex.test(input.value) ? true : false;
-  }
-  
-  function validateNumber(input) {
-    // Validar input que solo sean numeros negativos
-    const regex = /^[0-9]*$/;
-    return regex.test(input.value) ? true : false;
-  }
-  
-  function validateAllfields( divInput, divError, fieldNumber = false ) {
-    if(verifyIsFilled(divInput, divError)){
-      if (fieldNumber) {
-        if (validateNumber(divInput)) {
-          showError(divInput, divError, '', false);
-          return true;
-        } 
-        showError(divInput, divError, 'Solo se permiten numeros', true);
-        return false;
-      } else {
-        if(validateLetters(divInput)) {
-          showError(divInput, divError, '', false);
-          return true;
-        }
-        showError(divInput, divError, 'Solo se permiten letras', true);
-        return false;
-      }
-    } else {
-      showError(divInput, divError, 'Este campo es obligatorio');
-      return false;
-    }
-  }
 
 function clearForm() {
   idInput.value = '';
@@ -291,9 +119,9 @@ function clearForm() {
 }
 
 btnNewTreatment.addEventListener('click', () => {
-    clearForm()
-    toggleMenu('edit_register', false);
-    toggleMenu('save_register', true);
+  clearForm()
+  toggleMenu('edit_register', false);
+  toggleMenu('save_register', true);
 });
 
 document.querySelector(`#save_register`).addEventListener('click', async (e) => {

@@ -1,15 +1,9 @@
 class FormSearch extends HTMLElement {
   constructor() {
     super();
-    this.attributesComponents = [
-      //Aqui puedes darle Definiciones por defecto
-       this.btnname = 'Buscar',
-      //  this.classname = 'fader',
-      //  this.message = 'Cargando...'
-     ];
-   }
-   static get observedAttributes(){ return ['btnname']; }
-
+    this.attributesComponents = [ this.btnname = 'Buscar' ];
+  }
+  static get observedAttributes(){ return ['btnname']; }
   attributeChangedCallback(attribute, _, newAttr){
     this.attributesComponents = [...this.attributesComponents, attribute]
     this[attribute] = newAttr;

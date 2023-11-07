@@ -1,5 +1,4 @@
 "use strict";
-
 let nameValidator = false;
 let ageValidator = false;
 let phoneValidator = false;
@@ -11,7 +10,7 @@ let frameValidator = false;
 let professionalValidator = false;
 
 // Show Alert
-const alertMsg = document.getElementById('alert-msg');
+const alertMessage = document.getElementById('alert-msg');
 
 // Formulario de busqueda
 const formSearch = document.getElementById('form-search');
@@ -36,7 +35,6 @@ const pageItem = document.getElementsByClassName('page-item');
 
 // Show modal to create register
 const myModal = new bootstrap.Modal('#myModal', { keyboard: false });
-
 const modalRegister = document.getElementById('myModal');
 const modalTitle = modalRegister.querySelector('.modal-title');
 
@@ -150,19 +148,16 @@ const showOptions = async ( select, url ) => {
     document.getElementById( select ).innerHTML += option;
   }
 }
-
 // Show frames options in select
 const showInitModal = async () => {
   await showOptions('treatment', api + 'registers/table/treatment');
   await showOptions('cristal', api + 'registers/table/cristals');
 }
-
 // Show table with registers with pagination
 const showTablePagination = async ( page = 1, limit = 10 ) => {
   const registers = await consulta( api + 'registers?page=' + page + '&limit=' + limit );
   printList( registers.data );
 }
-
 const searchRegister = async ( searchQuery ) => {
   const register = await consulta( api + 'registers/search?page=1' + searchQuery );
   printList( register.data );
@@ -170,12 +165,9 @@ const searchRegister = async ( searchQuery ) => {
 
 formSearch.addEventListener('submit', async(e) => {
   e.preventDefault();
-  if ( rutSearchInput.value === '' && nameSearchInput.value === '' && phoneSearchInput.value === '' && dateAttentionInputSearch.value === '' ) {
-    await showTablePagination();
-  } else {
-    const searchQuery = '&age=' + parseInt(rutSearchInput.value) + '&name=' + nameSearchInput.value + '&phone=' + phoneSearchInput.value + '&date_attention=' + dateAttentionInputSearch.value;
-    await searchRegister( searchQuery );
-  }
+  if ( rutSearchInput.value === '' && nameSearchInput.value === '' && phoneSearchInput.value === '' && dateAttentionInputSearch.value === '' ) return await showTablePagination(); 
+  const searchQuery = '&age=' + parseInt(rutSearchInput.value) + '&name=' + nameSearchInput.value + '&phone=' + phoneSearchInput.value + '&date_attention=' + dateAttentionInputSearch.value;
+  await searchRegister( searchQuery );
 });
 
 // Al abrir la pagina
@@ -184,11 +176,9 @@ window.addEventListener("load", async() => {
   showTitlesTable();
   await showTablePagination();
   showInitModal();
-
   const fader = document.getElementById('fader');
   fader.classList.add("close");
   fader.style.display = 'none';
-
 })
 
 const sendInfo = async (uid = '', btnAction = 'edit_register'|'save_register') => {
@@ -203,6 +193,7 @@ const sendInfo = async (uid = '', btnAction = 'edit_register'|'save_register') =
   professionalValidator = validateAllfields(professionalInput, divErrorProfessional);
 
   if (!nameValidator, !ageValidator, !phoneValidator, !dateAttentionValidator, !totalValidator, !cristalValidator, !treatmentValidator, !frameValidator, !professionalValidator) {
+    showMessegeAlert( true, 'Hay input con problemas');
     return console.log('Hay input con problemas');
   }
 
@@ -231,10 +222,8 @@ const sendInfo = async (uid = '', btnAction = 'edit_register'|'save_register') =
   createEditRegister(data, 'POST', uid ).then(response => {
     if(response.ok){
       showRegisters();
-      // reset of Formulary
       formRegister.reset();
       modalTitle.textContent = btnAction == 'edit_register' ? `Registro editado de ${data.name}` : 'Registro Creado';
-      //Close modal
       bootstrap.Modal.getInstance(modalRegister).hide();
       modalTitle.textContent = '';
       showMessegeAlert( false, 'edit_register' ? `Registro Editado` : 'Registro Creado');
@@ -245,8 +234,8 @@ const sendInfo = async (uid = '', btnAction = 'edit_register'|'save_register') =
   });
 }
 
-const createEditRegister = async (data, method ='POST', uid = '') => {  
-  const query = uid == '' ? 'registers' : `registers/edit/${ uid }`
+const createEditRegister = async (data, method = 'POST', uid = '') => {  
+  const query = `registers${ uid === '/' ??  `/edit/${ uid }`}`
   return await fetch( api + query , {
     method: method,
     headers: { 'Content-Type': 'application/json'},
@@ -347,11 +336,11 @@ async function showModalCreateOrEdit( uid, isReadOnly = true, btnAction = 'edit_
 
 //Funciones de muestra de mensajes de alerta
 function showMessegeAlert ( isErro = false, message, time = 3000 ) {
-  alertMsg.classList.add(isErro ? 'alert-danger' : 'alert-success');
-  alertMsg.classList.remove(isErro ? 'alert-success' : 'alert-danger');
-  alertMsg.textContent = message;
-  alertMsg.style.display = 'block';
-  setTimeout(() => alertMsg.style.display = 'none', time);
+  alertMessage.classList.add(isErro ? 'alert-danger' : 'alert-success');
+  alertMessage.classList.remove(isErro ? 'alert-success' : 'alert-danger');
+  alertMessage.textContent = message;
+  alertMessage.style.display = 'block';
+  setTimeout(() => alertMessage.style.display = 'none', time);
 }
 
 function showError( divInput, divError, messageError = '', show = true ) {
