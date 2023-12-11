@@ -93,78 +93,60 @@ const showOptions = async ( select, url ) => {
     }
   }
 
-  function downloadCSV(csv, filename) {
-    let csvFile;
-    let downloadLink;
-
-    // CSV file
-    csvFile = new Blob([csv], {type: "text/csv"});
-
-    // Download link
-    downloadLink = document.createElement("a");
-
-    // File name
-    downloadLink.download = filename;
-
-    // Create a link to the file
-    downloadLink.href = window.URL.createObjectURL(csvFile);
-
-    // Hide download link
-    downloadLink.style.display = "none";
-
-    // Add the link to DOM
-    document.body.appendChild(downloadLink);
-
-    // Click download link
-    downloadLink.click();
+function downloadCSV(csv, filename) {
+  let csvFile;
+  let downloadLink;
+  // CSV file
+  csvFile = new Blob([csv], {type: "text/csv"});
+  // Download link
+  downloadLink = document.createElement("a");
+  // File name
+  downloadLink.download = filename;
+  // Create a link to the file
+  downloadLink.href = window.URL.createObjectURL(csvFile);
+  // Hide download link
+  downloadLink.style.display = "none";
+  // Add the link to DOM
+  document.body.appendChild(downloadLink);
+  // Click download link
+  downloadLink.click();
 }
 
 function exportTableToCSV(filename) {
-    const csv = [];
-    const rows = document.querySelectorAll("table tr");
-    
-    for (let i = 0; i < rows.length; i++) {
-        let row = [], cols = rows[i].querySelectorAll("td, th");
-        
-        for (let j = 0; j < cols.length; j++ ) 
-            row.push(cols[j].innerText);
-        
-        csv.push(row.join(","));        
-    }
-
-    // Download CSV file
-    downloadCSV(csv.join("n"), filename);
+  const csv = [];
+  const rows = document.querySelectorAll("table tr");
+  
+  for (let i = 0; i < rows.length; i++) {
+    let row = [], cols = rows[i].querySelectorAll("td, th");
+    for (let j = 0; j < cols.length; j++ ) row.push(cols[j].innerText);
+    csv.push(row.join(","));        
+  }
+  // Download CSV file
+  downloadCSV(csv.join("n"), filename);
 }
 
 function exportTableToExcel(tableID, filename = ''){
-    var downloadLink;
-    var dataType = 'application/vnd.ms-excel';
-    var tableSelect = document.getElementById(tableID);
-    var tableHTML = tableSelect.outerHTML.replace(/ /g, '%20');
-    
-    // Specify file name
-    filename = filename?filename+'.xls':'excel_data.xls';
-    
-    // Create download link element
-    downloadLink = document.createElement("a");
-    
-    document.body.appendChild(downloadLink);
-    
-    if(navigator.msSaveOrOpenBlob){
-        var blob = new Blob(['ufeff', tableHTML], {
-            type: dataType
-        });
-        navigator.msSaveOrOpenBlob( blob, filename);
-    }else{
-        // Create a link to the file
-        downloadLink.href = 'data:' + dataType + ', ' + tableHTML;
-    
-        // Setting the file name
-        downloadLink.download = filename;
-        
-        //triggering the function
-        downloadLink.click();
-    }
+  let downloadLink;
+  const dataType = 'application/vnd.ms-excel';
+  const tableSelect = document.getElementById(tableID);
+  const tableHTML = tableSelect.outerHTML.replace(/ /g, '%20');
+  // Specify file name
+  filename = filename?filename+'.xls':'excel_data.xls';
+  // Create download link element
+  downloadLink = document.createElement("a");
+  document.body.appendChild(downloadLink);
+  
+  if(navigator.msSaveOrOpenBlob){
+    const blob = new Blob(['ufeff', tableHTML], { type: dataType });
+    navigator.msSaveOrOpenBlob( blob, filename);
+  } else {
+    // Create a link to the file
+    downloadLink.href = 'data:' + dataType + ', ' + tableHTML;
+    // Setting the file name
+    downloadLink.download = filename;
+    //triggering the function
+    downloadLink.click();
+  }
 }
 
 // Funcion que limpia los campos de busqeuda
@@ -172,11 +154,8 @@ function exportTableToExcel(tableID, filename = ''){
 
 // Al abrir la pagina
 window.addEventListener("load", async() => {
-
   showTitlesTable();
   await showRegisters();
-
-
   const fader = document.getElementById('fader');
   fader.classList.add("close");
   fader.style.display = 'none';
