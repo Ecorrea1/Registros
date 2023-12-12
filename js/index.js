@@ -229,14 +229,16 @@ const sendInfo = async (uid = '', btnAction) => {
     near_eye_right_sphere: parseFloat(nearEyeRightSphereInput.value)
   };
 
-  createEditRegister(data, 'POST', uid ).then(response => {
+  createEditRegister(data, 'POST', uid )
+  .then(async response => {
     if(response.ok){
-      showRegisters();
+      await showRegisters();
       // reset of Formulary
       formRegister.reset();
       modalTitle.textContent = btnAction == 'edit_register' ? `Registro editado de ${data.name}` : 'Registro Creado';
       //Close modal
       bootstrap.Modal.getInstance(modalRegister).hide();
+      document.querySelector(".modal-backdrop").remove();
       modalTitle.textContent = '';
       showMessegeAlert( false, 'edit_register' ? `Registro Editado` : 'Registro Creado');
     }
