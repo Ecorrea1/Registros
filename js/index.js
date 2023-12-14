@@ -92,14 +92,6 @@ const showTitlesTable = () => {
   tableTitles.innerHTML = `<tr>${ titles }</tr>`;
 }
 
-function consulta  ( url ) {
-  return new Promise(( resolve, reject ) => {
-    fetch( url, { method: 'GET', redirect: 'follow' } )
-    .then( response => response.json() )
-    .then( data => { resolve( JSON.parse( JSON.stringify( data ) ) ); })
-    .catch( err => { console.log( err ) } )
-  });
-}
 const printList = async ( data, limit = 10 ) => {
   table.innerHTML = "";
   console.log(data)
@@ -140,18 +132,6 @@ const showRegistersForFilters = async ( filters ) => {
   printList( register.data );
 }
 
-// Show options in select 
-const showOptions = async ( select, url ) => {
-  document.getElementById(select).innerHTML = "";
-  const result = await consulta( url );
-  const options = result.data;
-  for (const i in options ) {
-    const { id, name } = options[ i ];
-    const option = `<option value="${ id }">${ name }</option>`;
-    document.getElementById( select ).innerHTML += option;
-  }
-}
-
 // Show frames options in select
 const showInitModal = async () => {
   await showOptions('treatment', api + 'registers/table/treatment');
@@ -178,19 +158,6 @@ formSearch.addEventListener('submit', (e) => {
     searchRegister( searchQuery );
   }
 });
-
-// Al abrir la pagina
-window.addEventListener("load", async() => {
-  dateAttentionInputSearch.max = new Date().toISOString().substring(0,10);
-  showTitlesTable();
-  await showTablePagination();
-  showInitModal();
-
-  const fader = document.getElementById('fader');
-  fader.classList.add("close");
-  fader.style.display = 'none';
-
-})
 
 const sendInfo = async (uid = '', btnAction) => {
   nameValidator = validateAllfields(nameInput, divErrorName);
@@ -348,80 +315,6 @@ async function showModalCreateOrEdit( uid, isReadOnly = true, btnAction ) {
   nearEyeRightSphereInput.value = near_eye_right_sphere;
 }
 
-//Funciones de muestra de mensajes de alerta
-function showMessegeAlert ( isErro = false, message, time = 3000 ) {
-  if (isErro) {
-    alert.classList.add('alert-danger');
-    alert.classList.remove('alert-success');
-  } else {
-    alert.classList.add('alert-success');
-    alert.classList.remove('alert-danger');
-  }
-  alert.textContent = message;
-  alert.style.display = 'block';
-  setTimeout(() => {
-    alert.style.display = 'none';
-  }, time);
-}
-
-function showError( divInput, divError, messageError = '', show = true ) {
-  if (show){
-    divError.innerText = messageError;
-    divInput.style.borderColor = '#ff0000';
-  } else {
-    divError.innerText = messageError;
-    divInput.style.borderColor = 'hsl(270, 3%, 87%)';
-  }
-}
-
-// Funciones verificadores de campos
-function verifyIsFilled( input, divError ) {
-  if (input.value == '') {
-    divError.style.display = 'block';
-    return false;
-  } else {
-    divError.style.display = 'none';
-    return true;
-  }
-}
-
-function  validateLetters( input ) {
-  //Validar que solo sean letras
-  const regex = /[A-z]/g;
-  return regex.test(input.value) ? true : false;
-}
-
-function validateNumber(input) {
-  // Validar input que solo sean numeros negativos
-  const regex = /^[0-9]*$/;
-  return regex.test(input.value) ? true : false;
-}
-
-function validateAllfields( divInput, divError, fieldNumber = false ) {
-  if(verifyIsFilled(divInput, divError)){
-    if (fieldNumber) {
-      if (validateNumber(divInput)) {
-        showError(divInput, divError, '', false);
-        return true;
-      } 
-      showError(divInput, divError, 'Solo se permiten numeros', true);
-      return false;
-    } else {
-      if(validateLetters(divInput)) {
-        showError(divInput, divError, '', false);
-        return true;
-      }
-      showError(divInput, divError, 'Solo se permiten letras', true);
-      return false;
-    }
-  } else {
-    showError(divInput, divError, 'Este campo es obligatorio');
-    return false;
-  }
-}
-
-const toggleMenu = ( id, enabled = false) => enabled ? document.getElementById( id ).classList.remove('d-none') : document.getElementById( id ).classList.add("d-none");
-
 function addDisabledOrRemove( disabled = true, attribute = 'readonly' ) {
   disabled ? nameInput.setAttribute(attribute, true) : nameInput.removeAttribute(attribute);
   disabled ? ageInput.setAttribute(attribute, true) : ageInput.removeAttribute(attribute);
@@ -499,3 +392,18 @@ btnCreateRegister.addEventListener('click', () => {
 });
 // Funcion que limpia los campos de busqeuda
 btnClearSearch.addEventListener('click', () => showRegisters());
+
+// Al abrir la pagina
+window.addEventListener("load", async() => {
+  
+  isSession();
+  dateAttentionInputSearch.max = new Date().toISOString().substring(0,10);
+  showTitlesTable();
+  await showTablePagination();
+  showInitModal();
+
+  const fader = document.getElementById('fader');
+  fader.classList.add("close");
+  fader.style.display = 'none';
+
+})

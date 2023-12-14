@@ -1,3 +1,10 @@
+const token = localStorage.getItem("token");
+const rut = localStorage.getItem('rut');
+const user = localStorage.getItem('name');
+const userId = Number(localStorage.getItem('uid'));
+const role = localStorage.getItem('role');
+
+
 function consulta  ( url ) {
   return new Promise(( resolve, reject ) => {
     fetch( url, { method: 'GET', redirect: 'follow' } )
@@ -6,9 +13,6 @@ function consulta  ( url ) {
     .catch( err => { console.log( err ) } )
   });
 }
-    
-
-
 
 //Funciones de muestra de mensajes de alerta
 function showMessegeAlert ( isErro = false, message, time = 3000 ) {
@@ -164,4 +168,21 @@ function showMessegeAlert ( isErro = false, message, time = 3000 ) {
       //triggering the function
       downloadLink.click();
     }
+  }
+
+
+  function closeSession() {
+    localStorage.clear();
+    noLogin();
+  }
+  
+  function isSession(){
+    if (!rut && url !== `${url}/login.html`) return window.location.href = `${url}/login.html`;
+  }
+  
+  function noLogin() {
+    let urlok = location.href.replace(url, "");
+    (localStorage.getItem("token") === null && urlok !==`${url}/login.html`) 
+    ?   location.replace(`${url}/login.html`)
+    :   console.log("LOGEADO");
   }

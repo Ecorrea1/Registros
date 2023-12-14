@@ -306,6 +306,7 @@ btnEditRegister.addEventListener('click', async (e) => await sendInfo(idInput.va
 
 // Al abrir la pagina
 window.addEventListener("load", async() => {
+    isSession();
     showTitlesTable();
     await showCristals();
     const fader = document.getElementById('fader');
