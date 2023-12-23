@@ -13,6 +13,18 @@ function consulta  ( url ) {
     .catch( err => { console.log( err ) } )
   });
 }
+// function paginado( paginas, limit = 10){
+//   const totalPages =  paginas > 32 ? 32 : paginas
+//   for (let index = 0; index < totalPages; index++ ) document.getElementById("indice").innerHTML+= `<li class="page-item"><button class="page-link" onclick="printList(${ index * limit })">${ index + 1}</button></li>`;
+// }
+function paginado( table, limit = 10, bar = true, counter = true){
+  const options = {
+    numberPerPage: limit, 
+    goBar: bar, 
+    pageCounter:counter
+  };
+  paginate.init(table, options);
+}
 
 //Funciones de muestra de mensajes de alerta
 function showMessegeAlert ( isErro = false, message, time = 3000 ) {

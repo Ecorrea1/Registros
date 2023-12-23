@@ -91,20 +91,21 @@ const showTitlesTable = () => {
   for (const i in titlesTable ) titles += `<th>${ titlesTable[i] }</th>`;
   tableTitles.innerHTML = `<tr>${ titles }</tr>`;
 }
-
 const printList = async ( data, limit = 10 ) => {
   table.innerHTML = "";
   console.log(data)
   if( data.length == 0 || !data ) {
-    showMessegeAlert( false, 'No se encontraron registros' );
+    // showMessegeAlert( false, 'No se encontraron registros' );
     return table.innerHTML = `<tr><td colspan="${ titlesTable.length + 1 }" class="text-center">No hay registros</td></tr>`;
   }
 
   for (const i in data ) {
     const { id, name, age, phone, cristal, treatment, frame, professional, date_attention, created_at } = data[i];
     const actions = [
+      '<div class="btn-group" role="group">',
       `<button type="button" id='btnShowRegister' onClick='showModalCreateOrEdit(${ id },${true}, "show_register")' value=${ id } class="btn btn-primary">VER</button>`,
       `<button type="button" id='btnEditRegister' onClick='showModalCreateOrEdit(${ id }, ${false}, "edit_register")' value=${ id } class="btn btn-success">EDITAR</button>`,
+      ,'</div>'
     ]
 
     const rowClass  = 'text-right';
@@ -112,6 +113,7 @@ const printList = async ( data, limit = 10 ) => {
     const row       = `<tr class="${ rowClass }">${ customRow }</tr>`;
     table.innerHTML += row;
   }
+  paginado('#table_registros', 5);
 }
 
 // Show all registers in the table
@@ -151,12 +153,11 @@ const searchRegister = async ( searchQuery ) => {
 
 formSearch.addEventListener('submit', (e) => {
   e.preventDefault();
-  if ( rutSearchInput.value === '' && nameSearchInput.value === '' && phoneSearchInput.value === '' && dateAttentionInputSearch.value === '' ) {
-    showTablePagination();
-  } else {
-    const searchQuery = '&age=' + parseInt(rutSearchInput.value) + '&name=' + nameSearchInput.value + '&phone=' + phoneSearchInput.value + '&date_attention=' + dateAttentionInputSearch.value;
-    searchRegister( searchQuery );
-  }
+  if ( rutSearchInput.value === '' && nameSearchInput.value === '' && phoneSearchInput.value === '' && dateAttentionInputSearch.value === '' ) return showTablePagination();
+  
+  const searchQuery = '&age=' + parseInt(rutSearchInput.value) + '&name=' + nameSearchInput.value + '&phone=' + phoneSearchInput.value + '&date_attention=' + dateAttentionInputSearch.value;
+  return  searchRegister( searchQuery );
+  
 });
 
 const sendInfo = async (uid = '', btnAction) => {

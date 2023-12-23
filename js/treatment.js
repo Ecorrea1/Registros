@@ -36,20 +36,6 @@ const showTitlesTable = () => {
   for (const i in titlesTable ) titles += `<th>${ titlesTable[i] }</th>`;
   tableTitles.innerHTML = `<tr>${ titles }</tr>`;
 }
-  
-function consulta  ( url ) {
-  return new Promise(( resolve, reject ) => {
-    fetch( url, { method: 'GET', redirect: 'follow' } )
-    .then( response => response.json() )
-    .then( data => { resolve( JSON.parse( JSON.stringify( data ) ) ); })
-    .catch( err => { console.log( err ) } )
-  });
-}
-  
-async function paginado( paginas, limit = 10){
-  const totalPages =  paginas > 32 ? 32 : paginas
-  for (let index = 0; index < totalPages; index++ ) document.getElementById("indice").innerHTML+= `<li class="page-item"><button class="page-link" onclick="printList(${ index * limit })">${ index + 1}</button></li>`;
-}
     
 const printList = async ( data, limit = 10 ) => {
   table.innerHTML = "";
@@ -68,7 +54,7 @@ const printList = async ( data, limit = 10 ) => {
     const row       = `<tr class="${ rowClass }">${ customRow }</tr>`;
     table.innerHTML += row;
   }
-  paginado( Math.ceil( data.length / limit ) );
+  paginado('#table_registros');
 }
 
 // Show all registers in the table
@@ -113,9 +99,7 @@ const sendInfo = async (idCristal = '', action = 'CREATE'|'EDIT') => {
   showMessegeAlert( false, action == 'EDIT' ? `Registro Editado` : 'Registro Creado');
 }
 
-const toggleMenu = ( id, enabled = false) => enabled ? document.getElementById( id ).classList.remove('d-none') : document.getElementById( id ).classList.add("d-none");
-
-async function showModalCreateOrEdit( uid, btnAction ) {
+async function showModalCreateOrEdit( uid ) {
     myModal.show();
     formRegister.reset();
   
@@ -130,83 +114,6 @@ async function showModalCreateOrEdit( uid, btnAction ) {
     descriptionInput.value = description;
     enabledInput.value = enabled;
 }
-
-  function showMessegeAlert ( isErro = false, message, time = 3000 ) {
-    if (isErro) {
-      alert.classList.add('alert-danger');
-      alert.classList.remove('alert-success');
-    } else {
-      alert.classList.add('alert-success');
-      alert.classList.remove('alert-danger');
-    }
-    alert.textContent = message;
-    alert.style.display = 'block';
-    setTimeout(() => {
-      alert.style.display = 'none';
-    }, time);
-  }
-  
-  function showError( divInput, divError, messageError = '', show = true ) {
-    if (show){
-      divError.innerText = messageError;
-      divInput.style.borderColor = '#ff0000';
-    } else {
-      divError.innerText = messageError;
-      divInput.style.borderColor = 'hsl(270, 3%, 87%)';
-    }
-  }
-  
-  // Funciones verificadores de campos
-  function verifyIsFilled( input, divError ) {
-    if (input.value == '') {
-      divError.style.display = 'block';
-      return false;
-    } else {
-      divError.style.display = 'none';
-      return true;
-    }
-  }
-  
-  function  validateLetters( input ) {
-    //Validar que solo sean letras
-    const regex = /[A-z]/g;
-    return regex.test(input.value) ? true : false;
-  }
-  
-  function validateNumber(input) {
-    // Validar input que solo sean numeros negativos
-    const regex = /^[0-9]*$/;
-    return regex.test(input.value) ? true : false;
-  }
-  
-  function validateAllfields( divInput, divError, fieldNumber = false ) {
-    if(verifyIsFilled(divInput, divError)){
-      if (fieldNumber) {
-        if (validateNumber(divInput)) {
-          showError(divInput, divError, '', false);
-          return true;
-        } 
-        showError(divInput, divError, 'Solo se permiten numeros', true);
-        return false;
-      } else {
-        if(validateLetters(divInput)) {
-          showError(divInput, divError, '', false);
-          return true;
-        }
-        showError(divInput, divError, 'Solo se permiten letras', true);
-        return false;
-      }
-    } else {
-      showError(divInput, divError, 'Este campo es obligatorio');
-      return false;
-    }
-  }
-
-const showBadgeBoolean = (enabled = 1) => { 
-    const enabledCristal = enabled ? 'ACTIVADO' : 'DESACTIVADO'
-    return `<span class="badge text-bg-${ enabledCristal == 'ACTIVADO' ? 'success' : 'danger' }">${enabledCristal}</span>`
- }
-
 function clearForm() {
   idTreatmentInput.value = '';
   nameInput.value = '';

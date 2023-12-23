@@ -32,13 +32,7 @@ const showTitlesTable = () => {
   for (const i in titlesTable ) titles += `<th>${ titlesTable[i] }</th>`;
   tableTitles.innerHTML = `<tr>${ titles }</tr>`;
 }
-
-async function paginado( paginas, limit = 10){
-  const totalPages =  paginas > 32 ? 32 : paginas
-  for (let index = 0; index < totalPages; index++ ) document.getElementById("indice").innerHTML+= `<li class="page-item"><button class="page-link" onclick="printList(${ index * limit })">${ index + 1}</button></li>`;
-}
-  
-  const printList = async ( data, limit = 10 ) => {
+  const printList = async ( data ) => {
     table.innerHTML = "";
     console.log(data)
     if( data.length == 0 || !data ) {
@@ -53,7 +47,7 @@ async function paginado( paginas, limit = 10){
       const row       = `<tr class="${ rowClass }">${ customRow }</tr>`;
       table.innerHTML += row;
     }
-    paginado( Math.ceil( data.length / limit ) );
+    paginado('#table_registros');
   }
   
   // Show all registers in the table
