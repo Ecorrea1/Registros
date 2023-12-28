@@ -32,29 +32,29 @@ const showTitlesTable = () => {
   for (const i in titlesTable ) titles += `<th>${ titlesTable[i] }</th>`;
   tableTitles.innerHTML = `<tr>${ titles }</tr>`;
 }
-  const printList = async ( data ) => {
-    table.innerHTML = "";
-    console.log(data)
-    if( data.length == 0 || !data ) {
-      showMessegeAlert( false, 'No se encontraron registros' );
-      return table.innerHTML = `<tr><td colspan="${ titlesTable.length + 1 }" class="text-center">No hay registros</td></tr>`;
-    }
-  
-    for (const i in data ) {
-      const { id, name, age, phone, cristal, treatment, frame, professional, date_attention, created_at } = data[i];
-      const rowClass  = 'text-right';
-      const customRow = `<td>${ [ id, age, name, `+569${ phone }`, cristal, treatment, frame, professional, date_attention.substring(0,10), created_at.substring(0,10) ].join('</td><td>') }</td>`;
-      const row       = `<tr class="${ rowClass }">${ customRow }</tr>`;
-      table.innerHTML += row;
-    }
-    paginado('#table_registros');
+const printList = async ( data ) => {
+  table.innerHTML = "";
+  console.log(data)
+  if( data.length == 0 || !data ) {
+    showMessegeAlert( false, 'No se encontraron registros' );
+    return table.innerHTML = `<tr><td colspan="${ titlesTable.length + 1 }" class="text-center">No hay registros</td></tr>`;
   }
-  
-  // Show all registers in the table
-  const showRegisters = async () => {
-    const registers = await consulta( api + 'registers');
-    printList( registers.data );
+
+  for (const i in data ) {
+    const { id, name, age, phone, cristal, treatment, frame, professional, date_attention, created_at } = data[i];
+    const rowClass  = 'text-right';
+    const customRow = `<td>${ [ id, age, name, `+569${ phone }`, cristal, treatment, frame, professional, date_attention.substring(0,10), created_at.substring(0,10) ].join('</td><td>') }</td>`;
+    const row       = `<tr class="${ rowClass }">${ customRow }</tr>`;
+    table.innerHTML += row;
   }
+  paginado('#table_registros');
+}
+  
+// Show all registers in the table
+const showRegisters = async () => {
+  const registers = await consulta( api + 'registers');
+  printList( registers.data );
+}
 
 // Al abrir la pagina
 window.addEventListener("load", async() => {
