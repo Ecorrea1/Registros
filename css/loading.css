@@ -27,13 +27,8 @@ body{
 }
 
 @keyframes loading {
-    0%{
-        transform: rotate(0deg);
-    }
-
-    100%{
-        transform: rotate(360deg);
-    }
+    0%{ transform: rotate(0deg); }
+    100%{ transform: rotate(360deg); }
 }
 
 .pre-loading .message{
@@ -46,13 +41,6 @@ body{
 }
 
 @keyframes message {
-
-    0%{
-        opacity: .2;
-    }
-
-    100%{
-        opacity: 1;
-    }
-    
+    0%{ opacity: .2 }
+    100%{ opacity: 1; }  
 }

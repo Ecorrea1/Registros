@@ -1,5 +1,4 @@
 "use strict";
-
 let nameValidator = false;
 let ageValidator = false;
 let phoneValidator = false;
@@ -11,7 +10,7 @@ let frameValidator = false;
 let professionalValidator = false;
 
 // Show Alert
-const alert = document.getElementById('alert-msg');
+const alertMessage = document.getElementById('alert-msg');
 
 // Formulario de busqueda
 const formSearch = document.getElementById('form-search');
@@ -36,7 +35,6 @@ const pageItem = document.getElementsByClassName('page-item');
 
 // Show modal to create register
 const myModal = new bootstrap.Modal('#myModal', { keyboard: false });
-
 const modalRegister = document.getElementById('myModal');
 const modalTitle = modalRegister.querySelector('.modal-title');
 
@@ -100,24 +98,23 @@ function consulta  ( url ) {
     .catch( err => { console.log( err ) } )
   });
 }
-const printList = async ( data, limit = 10 ) => {
+const printList = async ( data ) => {
   table.innerHTML = "";
-  console.log(data)
   if( data.length == 0 || !data ) {
     showMessegeAlert( false, 'No se encontraron registros' );
     return table.innerHTML = `<tr><td colspan="${ titlesTable.length + 1 }" class="text-center">No hay registros</td></tr>`;
   }
 
   for (const i in data ) {
-    const { id, name, age, phone, cristal, treatment, frame, professional, date_attention, created_at } = data[i];
+    const { id, name, age, phone, cristal, treatment, frame, professional, date_attention } = data[i];
     const actions = [
       `<button type="button" id='btnShowRegister' onClick='showModalCreateOrEdit(${ id },${true}, "show_register")' value=${ id } class="btn btn-primary">VER</button>`,
       `<button type="button" id='btnEditRegister' onClick='showModalCreateOrEdit(${ id }, ${false}, "edit_register")' value=${ id } class="btn btn-success">EDITAR</button>`,
     ]
 
-    const rowClass  = 'text-right';
-    const customRow = `<td>${ [ id, age,name, `+569${ phone }`, cristal, treatment, frame, professional, date_attention.substring(0,10), actions ].join('</td><td>') }</td>`;
-    const row       = `<tr class="${ rowClass }">${ customRow }</tr>`;
+    const rowClass = 'text-right';
+    const customRow = `<td>${ [ id, age, name, `+569${ phone }`, cristal, treatment, frame, professional, date_attention.substring(0,10), actions ].join('</td><td>') }</td>`;
+    const row = `<tr class="${ rowClass }">${ customRow }</tr>`;
     table.innerHTML += row;
   }
 }
@@ -151,19 +148,16 @@ const showOptions = async ( select, url ) => {
     document.getElementById( select ).innerHTML += option;
   }
 }
-
 // Show frames options in select
 const showInitModal = async () => {
   await showOptions('treatment', api + 'registers/table/treatment');
   await showOptions('cristal', api + 'registers/table/cristals');
 }
-
 // Show table with registers with pagination
 const showTablePagination = async ( page = 1, limit = 10 ) => {
   const registers = await consulta( api + 'registers?page=' + page + '&limit=' + limit );
   printList( registers.data );
 }
-
 const searchRegister = async ( searchQuery ) => {
   const register = await consulta( api + 'registers/search?page=1' + searchQuery );
   printList( register.data );
@@ -171,12 +165,9 @@ const searchRegister = async ( searchQuery ) => {
 
 formSearch.addEventListener('submit', async(e) => {
   e.preventDefault();
-  if ( rutSearchInput.value === '' && nameSearchInput.value === '' && phoneSearchInput.value === '' && dateAttentionInputSearch.value === '' ) {
-    await showTablePagination();
-  } else {
-    const searchQuery = '&age=' + parseInt(rutSearchInput.value) + '&name=' + nameSearchInput.value + '&phone=' + phoneSearchInput.value + '&date_attention=' + dateAttentionInputSearch.value;
-    await searchRegister( searchQuery );
-  }
+  if ( rutSearchInput.value === '' && nameSearchInput.value === '' && phoneSearchInput.value === '' && dateAttentionInputSearch.value === '' ) return await showTablePagination(); 
+  const searchQuery = '&age=' + parseInt(rutSearchInput.value) + '&name=' + nameSearchInput.value + '&phone=' + phoneSearchInput.value + '&date_attention=' + dateAttentionInputSearch.value;
+  await searchRegister( searchQuery );
 });
 
 // Al abrir la pagina
@@ -185,14 +176,12 @@ window.addEventListener("load", async() => {
   showTitlesTable();
   await showTablePagination();
   showInitModal();
-
   const fader = document.getElementById('fader');
   fader.classList.add("close");
   fader.style.display = 'none';
-
 })
 
-const sendInfo = async (uid = '', btnAction) => {
+const sendInfo = async (uid = '', btnAction = 'edit_register'|'save_register') => {
   nameValidator = validateAllfields(nameInput, divErrorName);
   ageValidator = validateAllfields(ageInput, divErrorAge, true);
   phoneValidator = validateAllfields(phoneInput, divErrorPhone, true);
@@ -204,6 +193,7 @@ const sendInfo = async (uid = '', btnAction) => {
   professionalValidator = validateAllfields(professionalInput, divErrorProfessional);
 
   if (!nameValidator, !ageValidator, !phoneValidator, !dateAttentionValidator, !totalValidator, !cristalValidator, !treatmentValidator, !frameValidator, !professionalValidator) {
+    showMessegeAlert( true, 'Hay input con problemas');
     return console.log('Hay input con problemas');
   }
 
@@ -232,10 +222,8 @@ const sendInfo = async (uid = '', btnAction) => {
   createEditRegister(data, 'POST', uid ).then(response => {
     if(response.ok){
       showRegisters();
-      // reset of Formulary
       formRegister.reset();
       modalTitle.textContent = btnAction == 'edit_register' ? `Registro editado de ${data.name}` : 'Registro Creado';
-      //Close modal
       bootstrap.Modal.getInstance(modalRegister).hide();
       modalTitle.textContent = '';
       showMessegeAlert( false, 'edit_register' ? `Registro Editado` : 'Registro Creado');
@@ -246,8 +234,8 @@ const sendInfo = async (uid = '', btnAction) => {
   });
 }
 
-const createEditRegister = async (data, method ='POST', uid = '') => {  
-  const query = uid == '' ? 'registers' : `registers/edit/${ uid }`
+const createEditRegister = async (data, method = 'POST', uid = '') => {  
+  const query = `registers${ uid === '/' ??  `/edit/${ uid }`}`
   return await fetch( api + query , {
     method: method,
     headers: { 'Content-Type': 'application/json'},
@@ -266,7 +254,6 @@ btnCreateRegister.addEventListener('click', () => clearForm());
 
 document.querySelector(`#save_register`).addEventListener('click', async (e) => {
   e.preventDefault();
-  //Verificar que los campos esten llenos
   sendInfo('', 'save_register')
 });
 
@@ -275,7 +262,7 @@ document.querySelector(`#edit_register`).addEventListener('click', async (e) => 
   sendInfo(idInput.value, 'edit_register');
 });
 
-async function showModalCreateOrEdit( uid, isReadOnly = true, btnAction ) {
+async function showModalCreateOrEdit( uid, isReadOnly = true, btnAction = 'edit_register'|'save_register' ) {
   myModal.show();
   formRegister.reset();
 
@@ -349,39 +336,22 @@ async function showModalCreateOrEdit( uid, isReadOnly = true, btnAction ) {
 
 //Funciones de muestra de mensajes de alerta
 function showMessegeAlert ( isErro = false, message, time = 3000 ) {
-  if (isErro) {
-    alert.classList.add('alert-danger');
-    alert.classList.remove('alert-success');
-  } else {
-    alert.classList.add('alert-success');
-    alert.classList.remove('alert-danger');
-  }
-  alert.textContent = message;
-  alert.style.display = 'block';
-  setTimeout(() => {
-    alert.style.display = 'none';
-  }, time);
+  alertMessage.classList.add(isErro ? 'alert-danger' : 'alert-success');
+  alertMessage.classList.remove(isErro ? 'alert-success' : 'alert-danger');
+  alertMessage.textContent = message;
+  alertMessage.style.display = 'block';
+  setTimeout(() => alertMessage.style.display = 'none', time);
 }
 
 function showError( divInput, divError, messageError = '', show = true ) {
-  if (show){
-    divError.innerText = messageError;
-    divInput.style.borderColor = '#ff0000';
-  } else {
-    divError.innerText = messageError;
-    divInput.style.borderColor = 'hsl(270, 3%, 87%)';
-  }
+  divInput.style.borderColor = show ? '#ff0000' : 'hsl(270, 3%, 87%)'
+  divError.innerText = messageError;
 }
 
 // Funciones verificadores de campos
 function verifyIsFilled( input, divError ) {
-  if (input.value == '') {
-    divError.style.display = 'block';
-    return false;
-  } else {
-    divError.style.display = 'none';
-    return true;
-  }
+  divError.style.display = input.value == '' ?  'block' : 'none';
+  return input.value == '' ? false : true;
 }
 
 function  validateLetters( input ) {

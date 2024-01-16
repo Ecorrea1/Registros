@@ -1,7 +1,14 @@
 class FormSearch extends HTMLElement {
   constructor() {
     super();
+    this.attributesComponents = [ this.btnname = 'Buscar' ];
   }
+  static get observedAttributes(){ return ['btnname']; }
+  attributeChangedCallback(attribute, _, newAttr){
+    this.attributesComponents = [...this.attributesComponents, attribute]
+    this[attribute] = newAttr;
+  }
+  
   connectedCallback() {
     this.innerHTML = `
     <div class="container-search container">
@@ -10,7 +17,7 @@ class FormSearch extends HTMLElement {
         <input class="form-control me-2" type="search" id="nameSearch" placeholder="Ingresa Nombre" aria-label="Search">
         <input class="form-control me-2" type="number" id="phoneSearch" placeholder="Ingresa Telefono" aria-label="Search">
         <input type="date" class="form-control me-2" id="dateAttentionSearch" placeholder="Atencion" aria-label="Search">
-        <button class="btn btn-primary" type="submit">Buscar</button>
+        <button class="btn btn-primary" type="submit">${this.btnname}</button>
         <button id="btn-clear-search" class="btn btn-secondary" type="reset">Limpiar</button>
       </form>
     </div>`;
