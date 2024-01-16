@@ -17,7 +17,7 @@ function consulta  ( url ) {
 //   const totalPages =  paginas > 32 ? 32 : paginas
 //   for (let index = 0; index < totalPages; index++ ) document.getElementById("indice").innerHTML+= `<li class="page-item"><button class="page-link" onclick="printList(${ index * limit })">${ index + 1}</button></li>`;
 // }
-function paginado( table, limit = 10, bar = true, counter = true){
+function paginado( table, limit = 8, bar = false, counter = false){
   const options = {
     numberPerPage: limit, 
     goBar: bar, 
@@ -98,14 +98,13 @@ function showMessegeAlert ( isErro = false, message, time = 3000 ) {
     }
   }
 
-  const toggleMenu = ( id, enabled = false) => enabled ? document.getElementById( id ).classList.remove('d-none') : document.getElementById( id ).classList.add("d-none");
+const toggleMenu = ( id, enabled = false) => enabled ? document.getElementById( id ).classList.remove('d-none') : document.getElementById( id ).classList.add("d-none");
 
-  const showBadgeBoolean = (enabled = 1) => { 
-    const enabledCristal = enabled ? 'ACTIVADO' : 'DESACTIVADO'
-    return `<span class="badge text-bg-${ enabledCristal == 'ACTIVADO' ? 'success' : 'danger' }">${enabledCristal}</span>`
- }
+const showBadgeBoolean = (enabled = 1) => `<span class="badge text-bg-${ enabled == 1 ? 'success' : 'danger' }">${enabled ? 'ACTIVADO' : 'DESACTIVADO'}</span>`
 
- const showOptions = async ( select, url ) => {
+const btnClass = (data) => `<div class="btn-group" role="group"> ${ data }</div>`
+
+const showOptions = async ( select, url ) => {
 
     let data;
   
