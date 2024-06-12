@@ -107,7 +107,7 @@ const printList = async ( data ) => {
     ]
 
     const rowClass  = 'text-right';
-    const customRow = `<td>${ [ id, age,name, `+569${ phone }`, cristal, treatment, frame, professional, date_attention.substring(0,10), created_at.substring(0,10), btnClass(actions) ].join('</td><td>') }</td>`;
+    const customRow = `<td>${ [ age,name, `+569${ phone }`, cristal, treatment, frame, professional, date_attention.substring(0,10), created_at.substring(0,10), btnClass(actions) ].join('</td><td>') }</td>`;
     const row       = `<tr class="${ rowClass }">${ customRow }</tr>`;
     table.innerHTML += row;
   }
