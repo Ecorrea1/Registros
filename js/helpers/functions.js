@@ -19,7 +19,6 @@ function createPagination(totalPages, currentPage) {
 
   for (let i = 1; i <= totalPages; i++) {
     const pageButton = document.createElement('button');
-    // pageButton.classList.add('page-link');
     pageButton.textContent = i;
     pageButton.onclick = () => showTablePagination(i);
     if (i === currentPage) pageButton.classList.add('active');
@@ -114,17 +113,29 @@ function validateAllfields( divInput, divError, fieldNumber = false ) {
 
 const toggleMenu = ( id, enabled = false) => enabled ? document.getElementById( id ).classList.remove('d-none') : document.getElementById( id ).classList.add("d-none");
 
-const showBadgeBoolean = (enabled = 1) => { 
-    const enabledCristal = enabled ? 'ACTIVADO' : 'DESACTIVADO'
-    return `<span class="badge text-bg-${ enabledCristal == 'ACTIVADO' ? 'success' : 'danger' }">${enabledCristal}</span>`
- }
-const showOptions = async ( select, url ) => {  let data;
+const showBadgeBoolean = (enabled = 1) => `<span class="badge text-bg-${ enabled == 1 ? 'success' : 'danger' }">${enabled ? 'ACTIVADO' : 'DESACTIVADO'}</span>`
 
-  if (!localStorage.getItem(select)) {
-    console.log('Estoy dentro porque no existe en el localStorage');
-    const result = await consulta( url );
-    data = result.data;
-    localStorage.setItem( select, JSON.stringify(result.data) );
+const btnClass = (data) => `<div class="btn-group" role="group"> ${ data }</div>`
+
+const showOptions = async ( select, url ) => {
+
+    let data;
+  
+    if (!localStorage.getItem(select)) {
+      console.log('Estoy dentro porque no existe en el localStorage');
+      const result = await consulta( url );
+      data = result.data;
+      localStorage.setItem( select, JSON.stringify(result.data) );
+    }
+    
+    const options = data ?? JSON.parse( localStorage.getItem( select ) );
+  
+    document.getElementById(select).innerHTML = "";
+    for (const i in options ) {
+      const { id, name } = options[i];
+      const option = `<option value="${id}">${name}</option>`;
+      document.getElementById(select).innerHTML += option;
+    }
   }
   
   const options = data ?? JSON.parse( localStorage.getItem( select ) );
