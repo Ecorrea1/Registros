@@ -119,23 +119,13 @@ const btnClass = (data) => `<div class="btn-group" role="group"> ${ data }</div>
 
 const showOptions = async ( select, url ) => {
 
-    let data;
-  
-    if (!localStorage.getItem(select)) {
-      console.log('Estoy dentro porque no existe en el localStorage');
-      const result = await consulta( url );
-      data = result.data;
-      localStorage.setItem( select, JSON.stringify(result.data) );
-    }
-    
-    const options = data ?? JSON.parse( localStorage.getItem( select ) );
-  
-    document.getElementById(select).innerHTML = "";
-    for (const i in options ) {
-      const { id, name } = options[i];
-      const option = `<option value="${id}">${name}</option>`;
-      document.getElementById(select).innerHTML += option;
-    }
+  let data;
+
+  if (!localStorage.getItem(select)) {
+    console.log('Estoy dentro porque no existe en el localStorage');
+    const result = await consulta( url );
+    data = result.data;
+    localStorage.setItem( select, JSON.stringify(result.data) );
   }
   
   const options = data ?? JSON.parse( localStorage.getItem( select ) );
@@ -147,6 +137,7 @@ const showOptions = async ( select, url ) => {
     document.getElementById(select).innerHTML += option;
   }
 }
+
 function downloadCSV(csv, filename) {
   let csvFile;
   let downloadLink;
