@@ -19,14 +19,14 @@ const formSearch = document.getElementById('form-search');
 const nameSearchInput = document.getElementById('nameSearch');
 const rutSearchInput = document.getElementById('rutSearch');
 const phoneSearchInput = document.getElementById('phoneSearch');
-const dateAttentionInputSearch = document.getElementById('dateAttentionSearch');
+// const dateAttentionInputSearch = document.getElementById('dateAttentionSearch');
 
 const nameSearchError = document.getElementById('nameSearchError');
 const rutSearchError = document.getElementById('rutSearchError');
 const phoneSearchError = document.getElementById('phoneSearchError');
 
 // Show table 
-const titlesTable = [ 'ID', 'Rut', 'Nombre', 'Teléfono', 'Cristal', 'Tratamiento', 'Marco', 'Profesional', 'Fecha de atención', 'Fecha de creación', 'Acciones' ];
+const titlesTable = [ 'Rut', 'Nombre', 'Teléfono', 'Cristal', 'Tratamiento', 'Marco', 'Profesional', 'Fecha de atención', 'Fecha de creación', 'Acciones' ];
 const tableTitles = document.getElementById('list_titles');
 const trTitles = document.getElementById('list_titles_tr');
 const table = document.getElementById('list_row');
@@ -91,11 +91,11 @@ const showTitlesTable = () => {
   for (const i in titlesTable ) titles += `<th>${ titlesTable[i] }</th>`;
   tableTitles.innerHTML = `<tr>${ titles }</tr>`;
 }
-const printList = async ( data, limit = 10 ) => {
+const printList = async ( data ) => {
   table.innerHTML = "";
-  console.log(data)
-  if( data.length == 0 || !data ) {
-    // showMessegeAlert( false, 'No se encontraron registros' );
+  if( data.length == 0 || !data || !Array.isArray(data)) {
+    console.log('No hay datos');
+    // showMessegeAlert(alertMessage, 'No se encontraron registros', true );
     return table.innerHTML = `<tr><td colspan="${ titlesTable.length + 1 }" class="text-center">No hay registros</td></tr>`;
   }
 
@@ -109,11 +109,13 @@ const printList = async ( data, limit = 10 ) => {
     ]
 
     const rowClass  = 'text-right';
-    const customRow = `<td>${ [ id, age,name, `+569${ phone }`, cristal, treatment, frame, professional, date_attention.substring(0,10), created_at.substring(0,10), actions ].join('</td><td>') }</td>`;
+    const customRow = `<td>${ [ age,name, `+569${ phone }`, cristal, treatment, frame, professional, date_attention.length > 10 ? date_attention.substring(0,10) : date_attention, created_at.substring(0,10), actions ].join('</td><td>') }</td>`;
     const row       = `<tr class="${ rowClass }">${ customRow }</tr>`;
     table.innerHTML += row;
   }
-  paginado('#table_registros', 5);
+
+  // paginado( Math.ceil( data.length / limit ), limit);
+  // paginado('#table_registros');
 }
 
 // Show all registers in the table
@@ -140,24 +142,116 @@ const showInitModal = async () => {
   await showOptions('cristal', api + 'registers/table/cristals');
 }
 
-// Show table with registers with pagination
-const showTablePagination = async ( page = 1, limit = 10 ) => {
-  const registers = await consulta( api + 'registers?page=' + page + '&limit=' + limit );
-  printList( registers.data );
+const showTablePagination = async (currentPage = 1, limit = 10) => {
+  try {
+    const registers = await consulta(api + 'registers?page=' + currentPage + '&limit=' + limit);
+    const { data, page, total } = registers;
+    
+    // Guardar registros en Local Storage
+    localStorage.setItem('registros', JSON.stringify(data));
+    
+    // Optimización del DOM usando DocumentFragment
+    const dataContainer = document.getElementById('pagination-container');
+    const fragment = document.createDocumentFragment();
+    
+    data.forEach(item => {
+      const dataElement = document.createElement('div');
+      dataElement.textContent = item.name; // Ejemplo de propiedad
+      fragment.appendChild(dataElement);
+    });
+    
+    // Limpia el contenedor y agrega el fragmento
+    dataContainer.innerHTML = '';
+    dataContainer.appendChild(fragment);
+    
+    // Crear y mostrar paginación
+    createPagination(total, page);
+    
+    // Suponiendo que printList es una función para imprimir la lista
+    return printList(data);
+  } catch (error) {
+    console.error('Hubo un error al obtener los registros:', error);
+  }
 }
 
-const searchRegister = async ( searchQuery ) => {
-  const register = await consulta( api + 'registers/search?page=1' + searchQuery );
-  printList( register.data );
-}
+const searchRegister = async (searchQuery) => {
+  try {
+    console.log('Estoy dentro de la función de búsqueda');
+    // Asegúrate de codificar la consulta para manejar caracteres especiales
+    const encodedQuery = encodeURI(searchQuery);
+    const register = await consulta(api + 'registers/search?page=1' + encodedQuery);
+    const { data, page, total } = register;
+    localStorage.setItem('registros', JSON.stringify(data));
+
+    // Optimización del DOM usando DocumentFragment
+    const dataContainer = document.getElementById('pagination-container');
+    const fragment = document.createDocumentFragment();
+    
+    data.forEach(item => {
+      const dataElement = document.createElement('div');
+      dataElement.textContent = item.name; // Ejemplo de propiedad
+      fragment.appendChild(dataElement);
+    });
+
+    // Limpia el contenedor y agrega el fragmento
+    dataContainer.innerHTML = '';
+    dataContainer.appendChild(fragment);
+
+    // Crear y mostrar paginación
+    createPagination(total, page);
+    return printList(register.data);
+  } catch (error) {
+    console.error('Hubo un error al obtener los registros:', error);
+  }
+  
+};
+// const searchRegister = async (searchQuery) => {
+//   console.log('Estoy dentro de la función de búsqueda');
+//   // Asegúrate de codificar la consulta para manejar caracteres especiales
+//   const encodedQuery = encodeURI(searchQuery);
+//   const register = await consulta(api + 'registers/search?page=1' + encodedQuery);
+//   // Verifica que la respuesta no sea nula antes de intentar imprimirla
+//   if (!register || !register.data) return console.error('No se recibieron datos');
+//   return printList(register.data);
+// };
+const searchRegisterLocal = (searchArray = {}) => {
+  console.log('Estoy dentro de la función de búsqueda local');
+  // Filtra las entradas 'undefined' del objeto 'searchArray'
+  const filteredSearchParams = Object.fromEntries(
+    Object.entries(searchArray ?? {}).filter(([key, value]) => value !== undefined)
+  );
+  
+  // Desestructura con valores por defecto para manejar posibles valores indefinidos
+  const { rut = '', name = '', phone = '' } = filteredSearchParams;
+  
+  // Recupera los registros y maneja la posibilidad de que no haya datos
+  const data = JSON.parse(localStorage.getItem('registros')) || [];
+  if (!data.length) return console.error('No se recibieron datos');  
+  // Utiliza 'toLowerCase()' para hacer la búsqueda insensible a mayúsculas y minúsculas
+  const searchTerm = name.toLowerCase();
+  
+  // Encuentra todos los registros que coincidan con los criterios de búsqueda
+  const registers = data.filter(r => r.name.toLowerCase().includes(searchTerm));
+  
+  if (registers.length <= 0) return console.log('Registro no encontrado');
+  console.log(registers);
+  // Suponiendo que printList es una función definida para imprimir la lista
+  return printList(registers);
+  
+};
+
 
 formSearch.addEventListener('submit', (e) => {
-  e.preventDefault();
-  if ( rutSearchInput.value === '' && nameSearchInput.value === '' && phoneSearchInput.value === '' && dateAttentionInputSearch.value === '' ) return showTablePagination();
-  
-  const searchQuery = '&age=' + parseInt(rutSearchInput.value) + '&name=' + nameSearchInput.value + '&phone=' + phoneSearchInput.value + '&date_attention=' + dateAttentionInputSearch.value;
-  return  searchRegister( searchQuery );
-  
+  e.preventDefault();  
+  // Verifica si todos los campos están vacíos antes de continuar
+  if (!rutSearchInput.value && !nameSearchInput.value && !phoneSearchInput.value && !dateAttentionInputSearch.value) return showTablePagination();
+  const rut = rutSearchInput.value;
+  const name = nameSearchInput.value;
+  const phone = phoneSearchInput.value;
+  // Utiliza template strings para construir la consulta de forma más legible
+  const searchQuery = `&age=${rut}&name=${name}&phone=${phone}`;
+  return searchRegister(searchQuery);
+  // return searchRegisterLocal({ rut, name, phone });
 });
 
 const sendInfo = async (uid = '', btnAction) => {
@@ -215,7 +309,6 @@ const sendInfo = async (uid = '', btnAction) => {
     showMessegeAlert( true, 'Error al editar el registro');
   });
 }
-
 const createEditRegister = async (data, method ='POST', uid = '') => {  
   const query = uid == '' ? 'registers' : `registers/edit/${ uid }`
   return await fetch( api + query , {
@@ -339,7 +432,6 @@ function addDisabledOrRemove( disabled = true, attribute = 'readonly' ) {
   
   disabled ? nearEyeRightSphereInput.setAttribute(attribute, true) : nearEyeRightSphereInput.removeAttribute(attribute);
 }
-
 function clearForm() {
   modalTitle.textContent = ''
   nameInput.value = ''
@@ -398,9 +490,9 @@ btnClearSearch.addEventListener('click', () => showRegisters());
 window.addEventListener("load", async() => {
   
   isSession();
-  dateAttentionInputSearch.max = new Date().toISOString().substring(0,10);
+  // dateAttentionInputSearch.max = new Date().toISOString().substring(0,10);
   showTitlesTable();
-  await showTablePagination();
+  await showTablePagination(1);
   showInitModal();
 
   const fader = document.getElementById('fader');
