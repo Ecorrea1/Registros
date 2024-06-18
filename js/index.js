@@ -9,6 +9,8 @@ let cristalValidator = false;
 let treatmentValidator = false;
 let frameValidator = false;
 let professionalValidator = false;
+let currentPage = 1;
+let limitInfo = 10;
 
 // Show Alert
 const alert = document.getElementById('alert-msg');
@@ -140,9 +142,9 @@ const showInitModal = async () => {
   await showOptions('cristal', api + 'registers/table/cristals');
 }
 
-const showTablePagination = async (currentPage = 1, limit = 10) => {
+const showTablePagination = async (current = currentPage, limit = limitInfo) => {
   try {
-    const registers = await consulta(api + 'registers?page=' + currentPage + '&limit=' + limit);
+    const registers = await consulta(api + 'registers?page=' + current + '&limit=' + limit);
     const { data, page, total } = registers;
     
     // Guardar registros en Local Storage
@@ -203,15 +205,6 @@ const searchRegister = async (searchQuery) => {
   }
   
 };
-// const searchRegister = async (searchQuery) => {
-//   console.log('Estoy dentro de la función de búsqueda');
-//   // Asegúrate de codificar la consulta para manejar caracteres especiales
-//   const encodedQuery = encodeURI(searchQuery);
-//   const register = await consulta(api + 'registers/search?page=1' + encodedQuery);
-//   // Verifica que la respuesta no sea nula antes de intentar imprimirla
-//   if (!register || !register.data) return console.error('No se recibieron datos');
-//   return printList(register.data);
-// };
 const searchRegisterLocal = (searchArray = {}) => {
   console.log('Estoy dentro de la función de búsqueda local');
   // Filtra las entradas 'undefined' del objeto 'searchArray'
@@ -242,7 +235,7 @@ const searchRegisterLocal = (searchArray = {}) => {
 formSearch.addEventListener('submit', (e) => {
   e.preventDefault();  
   // Verifica si todos los campos están vacíos antes de continuar
-  if (!rutSearchInput.value && !nameSearchInput.value && !phoneSearchInput.value && !dateAttentionInputSearch.value) return showTablePagination();
+  if (!rutSearchInput.value && !nameSearchInput.value && !phoneSearchInput.value && !dateAttentionInputSearch.value) return showTablePagination(currentPage, limitInfo);
   const rut = rutSearchInput.value;
   const name = nameSearchInput.value;
   const phone = phoneSearchInput.value;

@@ -1,4 +1,8 @@
 "use strict";
+
+let currentPage = 1;
+let limitInfo = 10;
+
 const btnExportTableToCSV = document.getElementById('export_csv');
 const btnExportTableToExcel = document.getElementById('export_excel');
 
@@ -56,9 +60,12 @@ const printList = async ( data ) => {
 //   printList( registers.data );
 // }
 
-const showTablePagination = async (currentPage = 1, limit = 10) => {
+const showTablePagination = async (current = currentPage, limit = limitInfo) => {
   try {
-    const registers = await consulta(api + 'registers?page=' + currentPage + '&limit=' + limit);
+
+    currentPage = current;
+    limitInfo = limit;
+    const registers = await consulta(api + 'registers?page=' + current + '&limit=' + limit);
     const { data, page, total } = registers;
     
     // Guardar registros en Local Storage

@@ -70,7 +70,7 @@ footer {
 /* Estilos para la paginación */
 .pagination-container {
   text-align: center; /* Centra la paginación */
-  padding: 20px; /* Espaciado alrededor de la paginación */
+  padding: 10px; /* Espaciado alrededor de la paginación */
 }
 
 .pagination-container button {

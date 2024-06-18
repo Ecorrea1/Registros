@@ -12,4 +12,4 @@ function urlAdaptive() {
 }
 
 
-window.onload = setTimeout(() => urlAdaptive(), 500);
+window.onload = setTimeout(() => urlAdaptive(), 500); 
