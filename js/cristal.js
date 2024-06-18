@@ -2,6 +2,8 @@
 
 let nameValidator = false;
 let descriptionValidator = false;
+let currentPage = 1;
+let limitInfo = 10;
 
 const divErrorName = document.getElementById('divErrorName');
 const divErrorDescription = document.getElementById('divErrorDescription');
@@ -39,7 +41,7 @@ const showTitlesTable = () => {
     
 const printList = async ( data ) => {
   table.innerHTML = "";
-  if( data.length === 0 || !data ) {
+  if( data.length == 0 || !data || !Array.isArray(data)) {
     showMessegeAlert( false, 'No se encontraron registros' );
     return table.innerHTML = `<tr><td colspan="${ titlesTable.length + 1 }" class="text-center">No hay registros</td></tr>`;
   }
@@ -55,7 +57,7 @@ const printList = async ( data ) => {
     table.innerHTML += row;
   }
   // paginado( Math.ceil( data.length / limit ) );
-  paginado('#table_registros');
+  paginado('#table_registros', limitInfo);
 }
 
 // Show all registers in the table
@@ -64,6 +66,37 @@ const showCristals = async () => {
   printList( registers.data );
 }
 
+// const showCristals = async (current = currentPage, limit = limitInfo) => {
+//   try {
+//     const registers = await consulta(api + 'cristals?page=' + current + '&limit=' + limit);
+//     const { data, page, total } = registers;
+    
+//     // Guardar registros en Local Storage
+//     localStorage.setItem('registros', JSON.stringify(data));
+    
+//     // Optimización del DOM usando DocumentFragment
+//     const dataContainer = document.getElementById('pagination-container');
+//     const fragment = document.createDocumentFragment();
+    
+//     data.forEach(item => {
+//       const dataElement = document.createElement('div');
+//       dataElement.textContent = item.name; // Ejemplo de propiedad
+//       fragment.appendChild(dataElement);
+//     });
+    
+//     // Limpia el contenedor y agrega el fragmento
+//     dataContainer.innerHTML = '';
+//     dataContainer.appendChild(fragment);
+    
+//     // Crear y mostrar paginación
+//     createPagination(total, page);
+    
+//     // Suponiendo que printList es una función para imprimir la lista
+//     return printList(data);
+//   } catch (error) {
+//     console.error('Hubo un error al obtener los registros:', error);
+//   }
+// }
 
 const sendInfo = async (idCristal = '', action = 'CREATE'|'EDIT') => {
  

@@ -22,7 +22,6 @@ function createPagination(totalPages, currentPage) {
     pageButton.textContent = i;
     pageButton.onclick = () => showTablePagination(i);
     if (i === currentPage) pageButton.classList.add('active');
-
     paginationContainer.appendChild(pageButton);
   }
 }
@@ -31,14 +30,14 @@ function createPagination(totalPages, currentPage) {
 //   const totalPages =  paginas > 32 ? 32 : paginas
 //   for (let index = 0; index < totalPages; index++ ) document.getElementById("indice").innerHTML+= `<li class="page-item"><button class="page-link" onclick="printList(${ index * limit })">${ index + 1}</button></li>`;
 // }
-// function paginado( table, limit = 5,  bar = false, counter = true ){
-//   const options = {
-//     numberPerPage: limit, 
-//     goBar: bar, 
-//     pageCounter: counter
-//   };
-//   paginate.init(table, options);
-// }
+function paginado( table, limit = 5,  bar = false, counter = true ){
+  const options = {
+    numberPerPage: limit, 
+    goBar: bar, 
+    pageCounter: counter
+  };
+  paginate.init(table, options);
+}
 
 //Funciones de muestra de mensajes de alerta
 function showMessegeAlert ( isErro = false, message, time = 3000 ) {
