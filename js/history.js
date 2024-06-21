@@ -36,7 +36,7 @@ const showTitlesTable = () => {
   for (const i in titlesTable ) titles += `<th>${ titlesTable[i] }</th>`;
   tableTitles.innerHTML = `<tr>${ titles }</tr>`;
 }
-const printList = async ( data ) => {
+const printList = async ( data, page = currentPage, total = 1 ) => {
   table.innerHTML = "";
   // console.log(data)
   if( data.length == 0 || !data ) {
@@ -52,6 +52,7 @@ const printList = async ( data ) => {
     table.innerHTML += row;
   }
   // paginado('#table_registros', limit);
+  createPagination(total, page);
 }
   
 // Show all registers in the table
@@ -60,36 +61,35 @@ const printList = async ( data ) => {
 //   printList( registers.data );
 // }
 
-const showTablePagination = async (current = currentPage, limit = limitInfo) => {
+const showTablePagination = async (current = currentPage) => {
   try {
 
     currentPage = current;
-    limitInfo = limit;
-    const registers = await consulta(api + 'registers?page=' + current + '&limit=' + limit);
+    const registers = await consulta(api + 'registers?page=' + current + '&limit=' + limitInfo);
     const { data, page, total } = registers;
     
     // Guardar registros en Local Storage
     localStorage.setItem('registros', JSON.stringify(data));
     
     // Optimización del DOM usando DocumentFragment
-    const dataContainer = document.getElementById('pagination-container');
-    const fragment = document.createDocumentFragment();
+    // const dataContainer = document.getElementById('pagination-container');
+    // const fragment = document.createDocumentFragment();
     
-    data.forEach(item => {
-      const dataElement = document.createElement('div');
-      dataElement.textContent = item.name; // Ejemplo de propiedad
-      fragment.appendChild(dataElement);
-    });
+    // data.forEach(item => {
+      // const dataElement = document.createElement('div');
+      // dataElement.textContent = item.name; // Ejemplo de propiedad
+      // fragment.appendChild(dataElement);
+    // });
     
     // Limpia el contenedor y agrega el fragmento
-    dataContainer.innerHTML = '';
-    dataContainer.appendChild(fragment);
+    // dataContainer.innerHTML = '';
+    // dataContainer.appendChild(fragment);
     
     // Crear y mostrar paginación
-    createPagination(total, page);
+    
     
     // Suponiendo que printList es una función para imprimir la lista
-    return printList(data);
+    return printList(data, page, total);
   } catch (error) {
     console.error('Hubo un error al obtener los registros:', error);
   }
@@ -99,10 +99,10 @@ const showTablePagination = async (current = currentPage, limit = limitInfo) => 
 window.addEventListener("load", async() => {
   isSession();
   showTitlesTable();
-  await showTablePagination();
-  const fader = document.getElementById('fader');
-  fader.classList.add("close");
-  fader.style.display = 'none';
+  await showTablePagination(currentPage);
+  // const fader = document.getElementById('fader');
+  // fader.classList.add("close");
+  // fader.style.display = 'none';
 })
 
 btnExportTableToCSV.addEventListener('click', () => exportTableToCSV('registros-optica.csv'));

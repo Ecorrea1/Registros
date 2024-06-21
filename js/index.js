@@ -93,7 +93,7 @@ const showTitlesTable = () => {
   for (const i in titlesTable ) titles += `<th>${ titlesTable[i] }</th>`;
   tableTitles.innerHTML = `<tr>${ titles }</tr>`;
 }
-const printList = async ( data ) => {
+const printList = ( data, page = currentPage, total = 1 ) => {
   table.innerHTML = "";
   if( data.length == 0 || !data || !Array.isArray(data)) {
     console.log('No hay datos');
@@ -116,6 +116,9 @@ const printList = async ( data ) => {
 
   // paginado( Math.ceil( data.length / limit ), limit);
   // paginado('#table_registros');
+   // Crear y mostrar paginación
+   createPagination(total, page);
+
 }
 
 // Show all registers in the table
@@ -142,33 +145,33 @@ const showInitModal = async () => {
   await showOptions('cristal', api + 'registers/table/cristals');
 }
 
-const showTablePagination = async (current = currentPage, limit = limitInfo) => {
+const showTablePagination = async (current = currentPage) => {
   try {
-    const registers = await consulta(api + 'registers?page=' + current + '&limit=' + limit);
+
+    currentPage = current;
+    
+    const registers = await consulta(api + 'registers?page=' + current + '&limit=' + limitInfo);
     const { data, page, total } = registers;
     
     // Guardar registros en Local Storage
     localStorage.setItem('registros', JSON.stringify(data));
     
     // Optimización del DOM usando DocumentFragment
-    const dataContainer = document.getElementById('pagination-container');
-    const fragment = document.createDocumentFragment();
+    // const dataContainer = document.getElementById('pagination-container');
+    // const fragment = document.createDocumentFragment();
     
-    data.forEach(item => {
-      const dataElement = document.createElement('div');
-      dataElement.textContent = item.name; // Ejemplo de propiedad
-      fragment.appendChild(dataElement);
-    });
+    // data.forEach(item => {
+    //   const dataElement = document.createElement('div');
+    //   dataElement.textContent = item.name; // Ejemplo de propiedad
+    //   fragment.appendChild(dataElement);
+    // });
     
     // Limpia el contenedor y agrega el fragmento
-    dataContainer.innerHTML = '';
-    dataContainer.appendChild(fragment);
-    
-    // Crear y mostrar paginación
-    createPagination(total, page);
+    // dataContainer.innerHTML = '';
+    // dataContainer.appendChild(fragment);
     
     // Suponiendo que printList es una función para imprimir la lista
-    return printList(data);
+    return printList(data, page, total);
   } catch (error) {
     console.error('Hubo un error al obtener los registros:', error);
   }
@@ -184,22 +187,22 @@ const searchRegister = async (searchQuery) => {
     localStorage.setItem('registros', JSON.stringify(data));
 
     // Optimización del DOM usando DocumentFragment
-    const dataContainer = document.getElementById('pagination-container');
-    const fragment = document.createDocumentFragment();
+    // const dataContainer = document.getElementById('pagination-container');
+    // const fragment = document.createDocumentFragment();
     
-    data.forEach(item => {
-      const dataElement = document.createElement('div');
-      dataElement.textContent = item.name; // Ejemplo de propiedad
-      fragment.appendChild(dataElement);
-    });
+    // data.forEach(item => {
+    //   const dataElement = document.createElement('div');
+    //   dataElement.textContent = item.name; // Ejemplo de propiedad
+    //   fragment.appendChild(dataElement);
+    // });
 
     // Limpia el contenedor y agrega el fragmento
-    dataContainer.innerHTML = '';
-    dataContainer.appendChild(fragment);
+    // dataContainer.innerHTML = '';
+    // dataContainer.appendChild(fragment);
 
     // Crear y mostrar paginación
-    createPagination(total, page);
-    return printList(register.data);
+    // createPagination(total, page);
+    return printList(data, page, total);
   } catch (error) {
     console.error('Hubo un error al obtener los registros:', error);
   }
@@ -235,7 +238,7 @@ const searchRegisterLocal = (searchArray = {}) => {
 formSearch.addEventListener('submit', (e) => {
   e.preventDefault();  
   // Verifica si todos los campos están vacíos antes de continuar
-  if (!rutSearchInput.value && !nameSearchInput.value && !phoneSearchInput.value && !dateAttentionInputSearch.value) return showTablePagination(currentPage, limitInfo);
+  if (!rutSearchInput.value && !nameSearchInput.value && !phoneSearchInput.value && !dateAttentionInputSearch.value) return showTablePagination(currentPage);
   const rut = rutSearchInput.value;
   const name = nameSearchInput.value;
   const phone = phoneSearchInput.value;
@@ -475,7 +478,7 @@ btnCreateRegister.addEventListener('click', () => {
   toggleMenu(btnSaveRegister.id, true);
 });
 // Funcion que limpia los campos de busqeuda
-btnClearSearch.addEventListener('click', () => showRegisters());
+btnClearSearch.addEventListener('click', () => showTablePagination(currentPage));
 
 // Al abrir la pagina
 window.addEventListener("load", async() => {
@@ -483,11 +486,11 @@ window.addEventListener("load", async() => {
   isSession();
   // dateAttentionInputSearch.max = new Date().toISOString().substring(0,10);
   showTitlesTable();
-  await showTablePagination(1);
+  await showTablePagination(currentPage);
   showInitModal();
 
-  const fader = document.getElementById('fader');
-  fader.classList.add("close");
-  fader.style.display = 'none';
+  // const fader = document.getElementById('fader');
+  // fader.classList.add("close");
+  // fader.style.display = 'none';
 
 })

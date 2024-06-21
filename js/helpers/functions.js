@@ -3,6 +3,8 @@ const rut = localStorage.getItem('rut');
 const user = localStorage.getItem('name');
 const userId = Number(localStorage.getItem('uid'));
 const role = localStorage.getItem('role');
+// let currentPage = 1;
+// let limitInfo = 10;
 
 function consulta  ( url ) {
   return new Promise(( resolve, reject ) => {
@@ -121,7 +123,7 @@ const showOptions = async ( select, url ) => {
   let data;
 
   if (!localStorage.getItem(select)) {
-    console.log('Estoy dentro porque no existe en el localStorage');
+    // console.log('Estoy dentro porque no existe en el localStorage');
     const result = await consulta( url );
     data = result.data;
     localStorage.setItem( select, JSON.stringify(result.data) );

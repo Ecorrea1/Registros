@@ -177,8 +177,8 @@ window.addEventListener("load", async() => {
     isSession();
     showTitlesTable();
     await showCristals();
-    const fader = document.getElementById('fader');
-    fader.classList.add("close");
-    fader.style.display = 'none';
+    // const fader = document.getElementById('fader');
+    // fader.classList.add("close");
+    // fader.style.display = 'none';
   }
 )

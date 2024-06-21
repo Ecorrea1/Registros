@@ -33,13 +33,13 @@ body{
 
 .container-search{
   width: 85%;
-  padding-top: 2%;
-  padding-bottom: 1%;
+  padding-top: 1%;
+  padding-bottom: 15px;
 }
 
 .btn-ingreso{
-  padding-top: 1%;
-  padding-bottom: 1%;
+  padding-top: 10px;
+  padding-bottom: 15px;
 }
 
 .btn{
@@ -76,7 +76,7 @@ footer {
 .pagination-container button {
   color: black; /* Color del texto */
   float: none; /* Asegura que los botones no floten */
-  padding: 8px 16px; /* Espaciado interno */
+  padding: 4px 8px; /* Espaciado interno */
   text-decoration: none; /* Sin subrayado */
   transition: background-color .3s; /* Transición suave para el fondo */
   margin: 0 4px; /* Espaciado entre botones */

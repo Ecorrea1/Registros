@@ -31,8 +31,6 @@ const sendSession = async ( data) => {
   })
   .then((data)=> data.json())
   .then(response => {
-      console.log(response.ok);
-      
       const { id, rut, name } = response.data[0];
       // console.log(response.data);
       // localStorage.setItem("token", response.token);
@@ -63,8 +61,6 @@ async function sendInfo(){
   
   const result =  await sendSession(data)
   if(!result) return showAlert('Hay problemas para iniciar sesion');
-  console.log(result);
-  
   showAlert('iniciando sistemas');
   location.replace( url + '/index.html');
 }
@@ -85,8 +81,20 @@ btnAccess.addEventListener('click', async (e) => {
 
 //Verificar si el usuario ya ha iniciado sesión
 
-// window.addEventListener("load", async() => {
-//   const userLogged = localStorage.getItem('email');
-//   if(userLogged) return window.location.href = `${url}/index.html`
-//   clearForm()
-// })
+window.addEventListener("load", async() => {
+  const response = await fetch( api + 'configs/SVUP' , {
+    method: 'GET',
+    headers: { 'Content-Type': 'application/json'},
+  });
+
+  if(!response.ok){
+    const userData = await response.json();
+    console.log(userData);
+  }
+
+  console.log('Servidor corriendo');
+
+  const userLogged = localStorage.getItem('email');
+  if(userLogged) return window.location.href = `${url}/index.html`
+  clearForm()
+})
