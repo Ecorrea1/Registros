@@ -332,7 +332,7 @@ document.querySelector(`#edit_register`).addEventListener('click', async (e) => 
 });
 
 async function showModalCreateOrEdit( uid, isReadOnly = true, btnAction ) {
-  myModal.show();
+  
   formRegister.reset();
 
   if ( isReadOnly ) {
@@ -401,6 +401,8 @@ async function showModalCreateOrEdit( uid, isReadOnly = true, btnAction ) {
   farEyeLeftPupillaryDistanceInput.value = far_eye_left_pupillary_distance;
   
   nearEyeRightSphereInput.value = near_eye_right_sphere;
+
+  myModal.show();
 }
 
 function addDisabledOrRemove( disabled = true, attribute = 'readonly' ) {

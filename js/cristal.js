@@ -137,7 +137,7 @@ const createEditCristal = async ( data, uid = '') => {
   });
 }
 async function showModalCreateOrEdit( uid ) {
-  myModal.show();
+  
   formRegister.reset();
 
   const register = await consulta( api + 'cristals/' + uid );
@@ -150,6 +150,7 @@ async function showModalCreateOrEdit( uid ) {
   nameInput.value =  name;
   descriptionInput.value = description;
   enabledInput.value = enabled;
+  myModal.show();
 }
 
 function clearForm() {

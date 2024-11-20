@@ -100,7 +100,7 @@ const sendInfo = async (idCristal = '', action = 'CREATE'|'EDIT') => {
 }
 
 async function showModalCreateOrEdit( uid ) {
-    myModal.show();
+    
     formRegister.reset();
   
     const register = await consulta( api + 'treatment/' + uid );
@@ -113,6 +113,7 @@ async function showModalCreateOrEdit( uid ) {
     nameInput.value =  name;
     descriptionInput.value = description;
     enabledInput.value = enabled;
+    myModal.show();
 }
 function clearForm() {
   idTreatmentInput.value = '';
