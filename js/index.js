@@ -113,9 +113,6 @@ const printList = ( data, page = currentPage, total = 1 ) => {
     const row       = `<tr class="${ rowClass }">${ customRow }</tr>`;
     table.innerHTML += row;
   }
-
-  // paginado( Math.ceil( data.length / limit ), limit);
-  // paginado('#table_registros');
    // Crear y mostrar paginación
    createPagination(total, page);
 
@@ -316,7 +313,7 @@ modalRegister.addEventListener('show.bs.modal', () => {
   dateAttentionInput.max = new Date().toISOString().substring(0,10);
   toggleMenu(btnReset.id);
   addDisabledOrRemove(false, 'disabled');
-  formRegister.reset();
+  // formRegister.reset();
 });
 
 btnCreateRegister.addEventListener('click', () => clearForm());
