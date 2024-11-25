@@ -69,6 +69,9 @@ const nearEyeRightSphereInput = document.getElementById('nearEyeRightSphere');
 
 const idInput = document.getElementById('uid');
 
+
+const btnExportTableToCSV = document.getElementById('export_csv');
+const btnExportTableToExcel = document.getElementById('export_excel');
 const btnCreateRegister = document.getElementById('create_register');
 const btnSaveRegister = document.getElementById('save_register');
 const btnEditRegister = document.getElementById('edit_register');
@@ -478,6 +481,8 @@ btnCreateRegister.addEventListener('click', () => {
 });
 // Funcion que limpia los campos de busqeuda
 btnClearSearch.addEventListener('click', () => showTablePagination(currentPage));
+btnExportTableToCSV.addEventListener('click', () => exportTableToCSV('registros-optica.csv'));
+btnExportTableToExcel.addEventListener('click', () => exportTableToExcel('table_registros','registros-optica.csv'));
 
 // Al abrir la pagina
 window.addEventListener("load", async() => {
@@ -487,9 +492,4 @@ window.addEventListener("load", async() => {
   showTitlesTable();
   await showTablePagination(currentPage);
   showInitModal();
-
-  // const fader = document.getElementById('fader');
-  // fader.classList.add("close");
-  // fader.style.display = 'none';
-
 })
