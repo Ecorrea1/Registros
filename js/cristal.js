@@ -56,47 +56,15 @@ const printList = async ( data ) => {
     const row       = `<tr class="${ rowClass }">${ customRow }</tr>`;
     table.innerHTML += row;
   }
-  // paginado( Math.ceil( data.length / limit ) );
+
   paginado('#table_registros', limitInfo);
 }
 
 // Show all registers in the table
-const showCristals = async () => {
+const showModalCreateOrEdit = async () => {
   const registers = await consulta( api + 'cristals');
   printList( registers.data );
 }
-
-// const showCristals = async (current = currentPage, limit = limitInfo) => {
-//   try {
-//     const registers = await consulta(api + 'cristals?page=' + current + '&limit=' + limit);
-//     const { data, page, total } = registers;
-    
-//     // Guardar registros en Local Storage
-//     localStorage.setItem('registros', JSON.stringify(data));
-    
-//     // Optimización del DOM usando DocumentFragment
-//     const dataContainer = document.getElementById('pagination-container');
-//     const fragment = document.createDocumentFragment();
-    
-//     data.forEach(item => {
-//       const dataElement = document.createElement('div');
-//       dataElement.textContent = item.name; // Ejemplo de propiedad
-//       fragment.appendChild(dataElement);
-//     });
-    
-//     // Limpia el contenedor y agrega el fragmento
-//     dataContainer.innerHTML = '';
-//     dataContainer.appendChild(fragment);
-    
-//     // Crear y mostrar paginación
-//     createPagination(total, page);
-    
-//     // Suponiendo que printList es una función para imprimir la lista
-//     return printList(data);
-//   } catch (error) {
-//     console.error('Hubo un error al obtener los registros:', error);
-//   }
-// }
 
 const sendInfo = async (idCristal = '', action = 'CREATE'|'EDIT') => {
  
@@ -113,7 +81,7 @@ const sendInfo = async (idCristal = '', action = 'CREATE'|'EDIT') => {
 
   const result = await createEditCristal( data, idCristal );
   if (!result) return showMessegeAlert( true, 'Error al editar el registro');
-  await showCristals();
+  await showModalCreateOrEdit();
   bootstrap.Modal.getInstance(modalRegister).hide();
   document.querySelector(".modal-backdrop").remove();
   showMessegeAlert( false, action == 'EDIT' ? `Registro Editado` : 'Registro Creado');
@@ -177,7 +145,7 @@ btnEditRegister.addEventListener('click', async (e) => await sendInfo(idInput.va
 window.addEventListener("load", async() => {
     isSession();
     showTitlesTable();
-    await showCristals();
+    await showModalCreateOrEdit();
     // const fader = document.getElementById('fader');
     // fader.classList.add("close");
     // fader.style.display = 'none';

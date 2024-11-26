@@ -156,20 +156,6 @@ const showTablePagination = async (current = currentPage) => {
     // Guardar registros en Local Storage
     localStorage.setItem('registros', JSON.stringify(data));
     
-    // Optimización del DOM usando DocumentFragment
-    // const dataContainer = document.getElementById('pagination-container');
-    // const fragment = document.createDocumentFragment();
-    
-    // data.forEach(item => {
-    //   const dataElement = document.createElement('div');
-    //   dataElement.textContent = item.name; // Ejemplo de propiedad
-    //   fragment.appendChild(dataElement);
-    // });
-    
-    // Limpia el contenedor y agrega el fragmento
-    // dataContainer.innerHTML = '';
-    // dataContainer.appendChild(fragment);
-    
     // Suponiendo que printList es una función para imprimir la lista
     return printList(data, page, total);
   } catch (error) {
