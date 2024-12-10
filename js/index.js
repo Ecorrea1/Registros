@@ -165,29 +165,12 @@ const showTablePagination = async (current = currentPage) => {
 
 const searchRegister = async (searchQuery) => {
   try {
-    console.log('Estoy dentro de la función de búsqueda');
     // Asegúrate de codificar la consulta para manejar caracteres especiales
     const encodedQuery = encodeURI(searchQuery);
     const register = await consulta(api + 'registers/search?page=1' + encodedQuery);
     const { data, page, total } = register;
     localStorage.setItem('registros', JSON.stringify(data));
 
-    // Optimización del DOM usando DocumentFragment
-    // const dataContainer = document.getElementById('pagination-container');
-    // const fragment = document.createDocumentFragment();
-    
-    // data.forEach(item => {
-    //   const dataElement = document.createElement('div');
-    //   dataElement.textContent = item.name; // Ejemplo de propiedad
-    //   fragment.appendChild(dataElement);
-    // });
-
-    // Limpia el contenedor y agrega el fragmento
-    // dataContainer.innerHTML = '';
-    // dataContainer.appendChild(fragment);
-
-    // Crear y mostrar paginación
-    // createPagination(total, page);
     return printList(data, page, total);
   } catch (error) {
     console.error('Hubo un error al obtener los registros:', error);
@@ -197,9 +180,7 @@ const searchRegister = async (searchQuery) => {
 const searchRegisterLocal = (searchArray = {}) => {
   console.log('Estoy dentro de la función de búsqueda local');
   // Filtra las entradas 'undefined' del objeto 'searchArray'
-  const filteredSearchParams = Object.fromEntries(
-    Object.entries(searchArray ?? {}).filter(([key, value]) => value !== undefined)
-  );
+  const filteredSearchParams = Object.fromEntries(Object.entries(searchArray ?? {}).filter(([key, value]) => value !== undefined));
   
   // Desestructura con valores por defecto para manejar posibles valores indefinidos
   const { rut = '', name = '', phone = '' } = filteredSearchParams;
@@ -208,13 +189,13 @@ const searchRegisterLocal = (searchArray = {}) => {
   const data = JSON.parse(localStorage.getItem('registros')) || [];
   if (!data.length) return console.error('No se recibieron datos');  
   // Utiliza 'toLowerCase()' para hacer la búsqueda insensible a mayúsculas y minúsculas
-  const searchTerm = name.toLowerCase();
-  
-  // Encuentra todos los registros que coincidan con los criterios de búsqueda
-  const registers = data.filter(r => r.name.toLowerCase().includes(searchTerm));
+  const registers = data.filter((r) => {
+    r.name.toLowerCase().includes(name.toLowerCase())
+    r.age.toLowerCase().includes(rut.toLowerCase())
+    r.phone.toLowerCase().includes(phone.toLowerCase())
+  });
   
   if (registers.length <= 0) return console.log('Registro no encontrado');
-  console.log(registers);
   // Suponiendo que printList es una función definida para imprimir la lista
   return printList(registers);
   
@@ -235,6 +216,7 @@ formSearch.addEventListener('submit', (e) => {
 });
 
 const sendInfo = async (uid = '', btnAction) => {
+
   nameValidator = validateAllfields(nameInput, divErrorName);
   ageValidator = validateAllfields(ageInput, divErrorAge, true);
   phoneValidator = validateAllfields(phoneInput, divErrorPhone, true);
@@ -245,10 +227,8 @@ const sendInfo = async (uid = '', btnAction) => {
   frameValidator = validateAllfields(frameInput, divErrorFrame);
   professionalValidator = validateAllfields(professionalInput, divErrorProfessional);
 
-  if (!nameValidator, !ageValidator, !phoneValidator, !dateAttentionValidator, !totalValidator, !cristalValidator, !treatmentValidator, !frameValidator, !professionalValidator) {
-    return console.log('Hay input con problemas');
-  }
-
+  if (!nameValidator, !ageValidator, !phoneValidator, !dateAttentionValidator, !totalValidator, !cristalValidator, !treatmentValidator, !frameValidator, !professionalValidator) return console.log('Hay input con problemas');
+  
   const data = {
     name: nameInput.value.toUpperCase(),
     age: parseInt(ageInput.value),
@@ -272,18 +252,17 @@ const sendInfo = async (uid = '', btnAction) => {
   };
 
   createEditRegister(data, 'POST', uid )
-  .then(async response => {
-    if(response.ok){
-      await showRegisters();
-      // reset of Formulary
-      formRegister.reset();
-      modalTitle.textContent = btnAction == 'edit_register' ? `Registro editado de ${data.name}` : 'Registro Creado';
-      //Close modal
-      bootstrap.Modal.getInstance(modalRegister).hide();
-      document.querySelector(".modal-backdrop").remove();
-      modalTitle.textContent = '';
-      showMessegeAlert( false, 'edit_register' ? `Registro Editado` : 'Registro Creado');
-    }
+  .then( async response => {
+    const { ok, data } = response;
+    if(ok == false) return showMessegeAlert( true, 'Error al editar el registro');
+    formRegister.reset();
+    modalTitle.textContent = btnAction == 'edit_register' ? `Registro editado de ${data.name}` : 'Registro Creado';
+    bootstrap.Modal.getInstance(modalRegister).hide();
+    document.querySelector(".modal-backdrop").remove();
+    modalTitle.textContent = '';
+    showMessegeAlert( false, 'edit_register' ? `Registro Editado` : 'Registro Creado');
+    await showRegisters();
+    
   }).catch(err => {
     console.log(err)
     showMessegeAlert( true, 'Error al editar el registro');
@@ -302,7 +281,6 @@ modalRegister.addEventListener('show.bs.modal', () => {
   dateAttentionInput.max = new Date().toISOString().substring(0,10);
   toggleMenu(btnReset.id);
   addDisabledOrRemove(false, 'disabled');
-  // formRegister.reset();
 });
 
 btnCreateRegister.addEventListener('click', () => clearForm());
@@ -342,28 +320,10 @@ async function showModalCreateOrEdit( uid, isReadOnly = true, btnAction ) {
   addDisabledOrRemove( isReadOnly ?? false , 'disabled');
 
   const register = await consulta( api + 'registers/' + uid );
+
+  const { data } = register;
   
-  const { 
-    name, 
-    age, 
-    phone,
-    total,
-    cristal, 
-    treatment, 
-    frame, 
-    observation, 
-    professional, 
-    date_attention,
-    far_eye_right_sphere,
-    far_eye_left_sphere,
-    far_eye_right_cylinder,
-    far_eye_left_cylinder,
-    far_eye_right_grade,
-    far_eye_left_grade,
-    far_eye_right_pupillary_distance,
-    far_eye_left_pupillary_distance,
-    near_eye_right_sphere
- } = register.data;
+  const { name, age, phone, total, cristal, treatment, frame, observation, professional, date_attention, far_eye_right_sphere, far_eye_left_sphere, far_eye_right_cylinder, far_eye_left_cylinder, far_eye_right_grade, far_eye_left_grade, far_eye_right_pupillary_distance, far_eye_left_pupillary_distance, near_eye_right_sphere } = data;
 
   idInput.value = uid;
   nameInput.value =  name;
@@ -376,7 +336,6 @@ async function showModalCreateOrEdit( uid, isReadOnly = true, btnAction ) {
   frameInput.value = frame;
   observationInput.value = observation;
   professionalInput.value = professional;
-
   farEyeRightSphereInput.value = far_eye_right_sphere;
   farEyeLeftSphereInput.value = far_eye_left_sphere;
   farEyeRightCylinderInput.value = far_eye_right_cylinder;
@@ -389,9 +348,11 @@ async function showModalCreateOrEdit( uid, isReadOnly = true, btnAction ) {
   nearEyeRightSphereInput.value = near_eye_right_sphere;
 
   myModal.show();
+
 }
 
 function addDisabledOrRemove( disabled = true, attribute = 'readonly' ) {
+
   disabled ? nameInput.setAttribute(attribute, true) : nameInput.removeAttribute(attribute);
   disabled ? ageInput.setAttribute(attribute, true) : ageInput.removeAttribute(attribute);
   disabled ? dateAttentionInput.setAttribute(attribute, true) : dateAttentionInput.removeAttribute(attribute);
@@ -415,6 +376,7 @@ function addDisabledOrRemove( disabled = true, attribute = 'readonly' ) {
   disabled ? nearEyeRightSphereInput.setAttribute(attribute, true) : nearEyeRightSphereInput.removeAttribute(attribute);
 }
 function clearForm() {
+
   modalTitle.textContent = ''
   nameInput.value = ''
   ageInput.value = ''
@@ -465,6 +427,7 @@ btnCreateRegister.addEventListener('click', () => {
   toggleMenu(btnEditRegister.id, false);
   toggleMenu(btnSaveRegister.id, true);
 });
+
 // Funcion que limpia los campos de busqeuda
 btnClearSearch.addEventListener('click', () => showTablePagination(currentPage));
 btnExportTableToCSV.addEventListener('click', () => exportTableToCSV('registros-optica.csv'));
@@ -472,9 +435,7 @@ btnExportTableToExcel.addEventListener('click', () => exportTableToExcel('table_
 
 // Al abrir la pagina
 window.addEventListener("load", async() => {
-  
   isSession();
-  // dateAttentionInputSearch.max = new Date().toISOString().substring(0,10);
   showTitlesTable();
   await showTablePagination(currentPage);
   showInitModal();

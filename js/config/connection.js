@@ -11,5 +11,4 @@ function urlAdaptive() {
     });
 }
 
-
 window.onload = setTimeout(() => urlAdaptive(), 500); 

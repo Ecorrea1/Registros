@@ -5,7 +5,7 @@ class Footer extends HTMLElement {
     this.attributesComponents = [
       this.copyright = '© Derechos Reservados',
       this.year = `${ new Date().getFullYear() }`,
-      this.company = 'OPTICA MONTENCARLOS',
+      this.company = 'Optica Montecarlos',
       this.classnamemessage = 'copyright'
     ];
   }
@@ -27,7 +27,7 @@ class Footer extends HTMLElement {
           color: #fff;
           width: 100%;
           bottom: 0;
-          position:fixed;
+          position:absolute;
         }
       </style>
     `;
