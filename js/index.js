@@ -324,10 +324,11 @@ async function showModalCreateOrEdit( uid, isReadOnly = true, btnAction ) {
   const { data } = register;
   
   const { name, age, phone, total, cristal, treatment, frame, observation, professional, date_attention, far_eye_right_sphere, far_eye_left_sphere, far_eye_right_cylinder, far_eye_left_cylinder, far_eye_right_grade, far_eye_left_grade, far_eye_right_pupillary_distance, far_eye_left_pupillary_distance, near_eye_right_sphere } = data;
+  
 
   idInput.value = uid;
   nameInput.value =  name;
-  dateAttentionInput.value = date_attention.substring(0,10);
+  dateAttentionInput.value = date_attention;
   ageInput.value = age;
   phoneInput.value = phone;
   totalInput.value = total;
@@ -384,7 +385,7 @@ function clearForm() {
   phoneInput.value = ''
   totalInput.value = ''
   professionalInput.value = ''
-  frameInput.value = ''
+  // frameInput.value = ''
   observationInput.value = ''
   farEyeRightSphereInput.value = ''
   farEyeRightCylinderInput.value = ''
